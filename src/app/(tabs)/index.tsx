@@ -26,6 +26,7 @@ const HOME_GLOW = [
 ];
 
 const BADGE_SIZE = 124;
+const APP_ICON = require('@/assets/images/icon.png');
 
 export default function HomeScreen() {
   const { dados, derivado, registrarRecaida, carregando } = useAppData();
@@ -88,6 +89,11 @@ export default function HomeScreen() {
     <ThemedView style={styles.container}>
       <AmbientGlow blobs={HOME_GLOW} />
       <SafeAreaView style={styles.safe}>
+        <View style={styles.brandRow}>
+          <Image source={APP_ICON} style={styles.brandIcon} resizeMode="contain" />
+          <ThemedText type="smallBold" style={styles.brandText}>FORJA</ThemedText>
+        </View>
+
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
 
           <View style={styles.header}>
@@ -189,6 +195,22 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   safe: { flex: 1 },
+  brandRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.one,
+    paddingHorizontal: Spacing.three,
+    paddingTop: Spacing.one,
+  },
+  brandIcon: {
+    width: 22,
+    height: 22,
+    borderRadius: 5,
+  },
+  brandText: {
+    color: Accent.gold,
+    letterSpacing: 2,
+  },
   content: {
     padding: Spacing.three,
     gap: Spacing.three,

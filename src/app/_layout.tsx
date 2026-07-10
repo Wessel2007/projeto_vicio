@@ -5,9 +5,12 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
+import { IntroScreen } from '@/components/intro-screen';
 import { Colors } from '@/constants/theme';
+
+const INTRO_DURATION_MS = 2000;
 
 SplashScreen.preventAutoHideAsync();
 
@@ -33,9 +36,13 @@ export default function RootLayout() {
     SpaceGrotesk_700Bold,
   });
 
+  const [showIntro, setShowIntro] = useState(true);
+
   useEffect(() => {
     if (fontsLoaded) {
       SplashScreen.hideAsync();
+      const timer = setTimeout(() => setShowIntro(false), INTRO_DURATION_MS);
+      return () => clearTimeout(timer);
     }
   }, [fontsLoaded]);
 
@@ -46,21 +53,25 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={NavigationDarkTheme}>
       <StatusBar style="light" />
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="onboarding" />
-        <Stack.Screen
-          name="panico"
-          options={{
-            presentation: 'modal',
-            headerShown: true,
-            headerTitle: '',
-            headerShadowVisible: false,
-            headerTintColor: Colors.text,
-            headerStyle: { backgroundColor: Colors.background },
-          }}
-        />
-      </Stack>
+      {showIntro ? (
+        <IntroScreen />
+      ) : (
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="onboarding" />
+          <Stack.Screen
+            name="panico"
+            options={{
+              presentation: 'modal',
+              headerShown: true,
+              headerTitle: '',
+              headerShadowVisible: false,
+              headerTintColor: Colors.text,
+              headerStyle: { backgroundColor: Colors.background },
+            }}
+          />
+        </Stack>
+      )}
     </ThemeProvider>
   );
 }
