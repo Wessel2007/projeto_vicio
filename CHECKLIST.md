@@ -1,0 +1,53 @@
+# Checklist de Funcionalidades — Implementação
+
+## FREE
+
+- [ ] Contador de streak (dias sem recair)
+- [ ] Sistema de patente/XP (Recruta → Guerreiro, trava após e sinaliza upgrade)
+- [ ] Frase do dia (1 por dia, sem histórico)
+- [ ] Botão de pânico com respiração guiada
+- [ ] Diário de gatilhos — registro (sem insights)
+- [ ] Notificação diária de lembrete
+- [ ] Widget de tela inicial (streak visível sem abrir o app)
+
+## PRO (assinatura)
+
+- [ ] Patentes completas (Guerreiro → Imortal) + conquistas extras/secretas
+- [ ] Histórico completo de frases + biblioteca pesquisável por tema
+- [ ] Frases em áudio narrado
+- [ ] Insights do diário de gatilhos (gráficos de horário/gatilho recorrente, tendências)
+- [ ] Botão de pânico expandido (meditação guiada, playlist de foco, contato rápido accountability partner)
+- [ ] Backup em nuvem (sync entre dispositivos)
+- [ ] Temas visuais alternativos de patente (personalização)
+- [ ] Relatório semanal/mensal de progresso
+- [ ] Notificação diária com horário customizável
+
+## Diferenciais / Pós-MVP
+
+- [ ] Accountability partner (convite + notificação discreta de recaída/marco)
+- [ ] Modo "SOS gatilho específico" (pergunta contexto situacional: casa/trabalho/cama)
+- [ ] Guia de configuração de bloqueadores de conteúdo (Screen Time, apps terceiros)
+- [ ] Modo "recaída controlada" (fluxo de reflexão pós-recaída, não só reset)
+- [ ] Tela de upgrade Free → Pro (copy definida, ver seção abaixo)
+
+## Estrutura de dados a implementar (lógica base)
+
+- [ ] Streak atual (reseta na recaída)
+- [ ] XP total (nunca reseta, só acumula)
+- [ ] Tabela de patentes/sublevels (ver CLAUDE.md)
+- [ ] Lista de gatilhos selecionáveis (usada no onboarding, diário e botão de pânico)
+- [ ] Registro de eventos do botão de pânico ("resisti" vs "recaí")
+- [ ] Flag de usuário Free/Pro (controla acesso às features acima)
+
+## Monetização / Loja
+
+- [ ] Definir preço mensal e anual (referência: R$14,90-29,90/mês ou R$99-149/ano)
+- [ ] Copy da tela de upgrade: "Leve sua disciplina além" / "Desbloqueie todo o caminho até Imortal — e as ferramentas que fazem a diferença nos momentos mais difíceis"
+- [ ] Integração de pagamento in-app (RevenueCat ou nativo Apple/Google)
+
+## Pendências de planejamento (fora do código, mas bloqueiam decisões)
+
+- [ ] Nome/marca do app
+- [ ] Identidade visual (cores, ícone — lembrar das restrições da App Store: nada de referência visual/textual explícita a pornografia)
+- [ ] Categoria de submissão nas lojas (Saúde e Fitness / Estilo de vida)
+- [ ] Termos de uso e política de privacidade
