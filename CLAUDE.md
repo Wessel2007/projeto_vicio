@@ -108,12 +108,19 @@ secundária:
 - [x] Definição da árvore de patentes
 - [x] Escolha de stack (React Native + Expo)
 - [x] Esboço das telas do MVP
-- [ ] Nome/marca do app — ainda não definido
-- [ ] Setup inicial do projeto Expo
-- [ ] Implementação das telas (sem estilização)
-- [ ] Estilização/design visual
-- [ ] Lógica de XP/patente/streak
-- [ ] Storage local (AsyncStorage)
-- [ ] Notificações push
+- [x] Nome/marca do app — **FORJA**
+- [x] Setup inicial do projeto Expo (Expo Router, TypeScript, fontes)
+- [x] Implementação das telas (onboarding, home, pânico, diário, conquistas,
+      perfil — as 6 telas do MVP existem em `src/app/`)
+- [x] Estilização/design visual (redesign "dark-fogo" com animações,
+      Reanimated, gradientes, glass cards — ver `design/`)
+- [x] Lógica de XP/patente/streak (`src/utils/gamification.ts`,
+      `src/hooks/useAppData.ts`)
+- [x] Storage local (AsyncStorage, `src/storage/index.ts`)
+- [x] Notificações push locais (lembrete diário agendável, `src/notifications/`)
+- [ ] Criptografia/proteção de dados sensíveis (diário de gatilhos hoje é
+      salvo em texto puro no AsyncStorage — pendente, ver seção Privacidade)
 - [ ] Testes em dispositivo real
-- [ ] Preparação para submissão nas lojas
+- [ ] Monetização (paywall/IAP) — modelo definido, não implementado
+- [ ] Preparação para submissão nas lojas (política de privacidade,
+      screenshots, descrição)

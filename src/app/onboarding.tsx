@@ -15,10 +15,13 @@ import { AmbientGlow } from '@/components/ambient-glow';
 import { Chip } from '@/components/chip';
 import { GlassCard } from '@/components/glass-card';
 import { GradientButton } from '@/components/gradient-button';
+import { GradientSwitch } from '@/components/gradient-switch';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { GATILHOS_COMUNS } from '@/constants/gatilhos';
 import { Accent, Colors, Spacing } from '@/constants/theme';
+import { DEFAULT_DATA } from '@/types';
+import { ativarNotificacoes } from '@/notifications';
 import { carregarDados, salvarDados } from '@/storage';
 
 const TOTAL_STEPS = 3;
@@ -36,6 +39,9 @@ export default function OnboardingScreen() {
   // Step 2 state
   const [gatilhosSelecionados, setGatilhosSelecionados] = useState<string[]>([]);
 
+  // Step 3 state
+  const [notificacoesAtivadas, setNotificacoesAtivadas] = useState(true);
+
   function toggleGatilho(g: string) {
     setGatilhosSelecionados((prev) =>
       prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g]
@@ -48,12 +54,17 @@ export default function OnboardingScreen() {
       Date.now() - dias * 24 * 60 * 60 * 1000
     ).toISOString();
 
+    const notificationsEnabled = notificacoesAtivadas
+      ? await ativarNotificacoes(DEFAULT_DATA.dailyQuoteHour, DEFAULT_DATA.dailyQuoteMinute)
+      : false;
+
     const dados = await carregarDados();
     await salvarDados({
       ...dados,
       onboardingDone: true,
       streakStartDate,
       selectedTriggers: gatilhosSelecionados,
+      notificationsEnabled,
     });
 
     router.replace('/(tabs)' as Href);
@@ -139,6 +150,18 @@ export default function OnboardingScreen() {
                   {'\n\n'}
                   A batalha começa na mente. Você já está ganhando por estar aqui.
                 </ThemedText>
+
+                <GlassCard style={styles.card}>
+                  <View style={styles.notifRow}>
+                    <View style={styles.notifTextos}>
+                      <ThemedText type="default">Lembrete diário</ThemedText>
+                      <ThemedText type="small" themeColor="textSecondary">
+                        Receba sua frase do dia às 8h
+                      </ThemedText>
+                    </View>
+                    <GradientSwitch value={notificacoesAtivadas} onValueChange={setNotificacoesAtivadas} />
+                  </View>
+                </GlassCard>
               </View>
             )}
           </ScrollView>
@@ -200,6 +223,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   gatilhosGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
+  notifRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Spacing.two,
+  },
+  notifTextos: { flex: 1, gap: 2 },
   botoes: {
     flexDirection: 'row',
     alignItems: 'center',

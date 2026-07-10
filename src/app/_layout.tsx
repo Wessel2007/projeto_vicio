@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 
 import { IntroScreen } from '@/components/intro-screen';
 import { Colors } from '@/constants/theme';
+import '@/notifications';
 
 const INTRO_DURATION_MS = 2000;
 

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AppData, DEFAULT_DATA, TriggerEntry } from '@/types';
 import { carregarDados, salvarDados } from '@/storage';
 import { calcPatente, calcStreakDias, calcTotalXP } from '@/utils/gamification';
+import { agendarLembreteDiario } from '@/notifications';
 
 export function useAppData() {
   const [dados, setDados] = useState<AppData | null>(null);
@@ -11,6 +12,11 @@ export function useAppData() {
     carregarDados().then((d) => {
       setDados(d);
       setCarregando(false);
+      // Re-agenda o lembrete a cada abertura do app: o Android pode limpar
+      // notificações agendadas após reinício do aparelho.
+      if (d.notificationsEnabled) {
+        agendarLembreteDiario(d.dailyQuoteHour, d.dailyQuoteMinute);
+      }
     });
   }, []);
 

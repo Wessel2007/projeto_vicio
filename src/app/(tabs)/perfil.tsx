@@ -1,5 +1,7 @@
+import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Alert, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AmbientGlow } from '@/components/ambient-glow';
@@ -9,6 +11,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Accent, Colors, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
+import { agendarLembreteDiario, ativarNotificacoes, desativarNotificacoes } from '@/notifications';
 
 const PERFIL_GLOW = [{ color: Accent.fireMid, top: '4%' as const, left: '90%' as const, size: 500, opacity: 0.16 }];
 
@@ -40,6 +43,7 @@ function ItemConfig({
 
 export default function PerfilScreen() {
   const { dados, atualizar, resetarApp, derivado, carregando } = useAppData();
+  const [mostrarSeletorHora, setMostrarSeletorHora] = useState(false);
 
   if (carregando || !dados || !derivado) {
     return (
@@ -52,6 +56,37 @@ export default function PerfilScreen() {
   const sublevelLabel = derivado.patente.nivel.sublevel
     ? ` ${['I', 'II', 'III'][derivado.patente.nivel.sublevel - 1]}`
     : '';
+
+  const horaFormatada = `${String(dados.dailyQuoteHour).padStart(2, '0')}:${String(dados.dailyQuoteMinute).padStart(2, '0')}`;
+
+  async function alternarNotificacoes(ativar: boolean) {
+    if (!dados) return;
+    if (ativar) {
+      const permitido = await ativarNotificacoes(dados.dailyQuoteHour, dados.dailyQuoteMinute);
+      if (!permitido) {
+        Alert.alert(
+          'Permissão negada',
+          'Para receber lembretes diários, permita notificações para o FORJA nas configurações do aparelho.',
+        );
+        return;
+      }
+      atualizar({ notificationsEnabled: true });
+    } else {
+      await desativarNotificacoes();
+      atualizar({ notificationsEnabled: false });
+    }
+  }
+
+  function onMudarHora(event: DateTimePickerEvent, date?: Date) {
+    setMostrarSeletorHora(Platform.OS === 'ios');
+    if (event.type !== 'set' || !date || !dados) return;
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    atualizar({ dailyQuoteHour: hour, dailyQuoteMinute: minute });
+    if (dados.notificationsEnabled) {
+      agendarLembreteDiario(hour, minute);
+    }
+  }
 
   function confirmarReset() {
     Alert.alert(
@@ -108,10 +143,30 @@ export default function PerfilScreen() {
               <ThemedText type="default">Notificações diárias</ThemedText>
               <GradientSwitch
                 value={dados.notificationsEnabled}
-                onValueChange={(v) => atualizar({ notificationsEnabled: v })}
+                onValueChange={alternarNotificacoes}
               />
             </View>
+
+            {dados.notificationsEnabled && (
+              <>
+                <View style={styles.divisor} />
+                <Pressable onPress={() => setMostrarSeletorHora(true)} style={styles.switchRow}>
+                  <ThemedText type="default">Horário do lembrete</ThemedText>
+                  <ThemedText type="default" themeColor="textSecondary">{horaFormatada}</ThemedText>
+                </Pressable>
+              </>
+            )}
           </GlassCard>
+
+          {mostrarSeletorHora && (
+            <DateTimePicker
+              value={new Date(2000, 0, 1, dados.dailyQuoteHour, dados.dailyQuoteMinute)}
+              mode="time"
+              is24Hour
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onChange={onMudarHora}
+            />
+          )}
 
           <SecaoHeader titulo="Dados" />
 
@@ -166,6 +221,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: Spacing.three,
+  },
+  divisor: {
+    height: 1,
+    backgroundColor: Colors.border,
+    marginHorizontal: Spacing.three,
   },
   textoDestrutivo: { color: Accent.dangerText },
   rodape: {
