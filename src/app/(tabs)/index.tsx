@@ -6,29 +6,49 @@ import { Alert, Image, Pressable, ScrollView, StyleSheet, View } from 'react-nat
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { AmbientGlow } from '@/components/ambient-glow';
+import { GlassCard } from '@/components/glass-card';
+import { GlowRing } from '@/components/glow-ring';
+import { ParticleField } from '@/components/particle-field';
+import { ShineSweep } from '@/components/shine-sweep';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { getFraseDoDia } from '@/constants/frases';
 import { getPatenteBadge } from '@/constants/patente-badges';
-import { Accent, Spacing } from '@/constants/theme';
+import { Accent, Colors, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
-import { useTheme } from '@/hooks/use-theme';
 
 const SUBLEVEL_LABEL = ['I', 'II', 'III'];
+const EMBER_COLORS = ['#FFE7B0', '#FFD27A', '#FFF0C8', '#FFB347', '#FFCF8A'];
+const HOME_GLOW = [
+  { color: '#FF5A22', top: '8%' as const, left: '20%' as const, size: 560, opacity: 0.28 },
+  { color: '#7846DC', top: '45%' as const, left: '92%' as const, size: 600, opacity: 0.24 },
+];
+
+const BADGE_SIZE = 124;
 
 export default function HomeScreen() {
   const { dados, derivado, registrarRecaida, carregando } = useAppData();
-  const theme = useTheme();
 
   const flamePulse = useSharedValue(1);
+  const panicoGlow = useSharedValue(0);
   useEffect(() => {
     flamePulse.value = withRepeat(
       withTiming(1.14, { duration: 950, easing: Easing.inOut(Easing.ease) }),
       -1,
       true,
     );
-  }, [flamePulse]);
+    panicoGlow.value = withRepeat(
+      withTiming(1, { duration: 1300, easing: Easing.inOut(Easing.ease) }),
+      -1,
+      true,
+    );
+  }, [flamePulse, panicoGlow]);
   const flameStyle = useAnimatedStyle(() => ({ transform: [{ scale: flamePulse.value }] }));
+  const panicoGlowStyle = useAnimatedStyle(() => ({
+    opacity: 0.3 + panicoGlow.value * 0.4,
+    transform: [{ scale: 0.96 + panicoGlow.value * 0.08 }],
+  }));
 
   if (carregando || !dados || !derivado) {
     return (
@@ -66,27 +86,28 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
+      <AmbientGlow blobs={HOME_GLOW} />
       <SafeAreaView style={styles.safe}>
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
 
           <View style={styles.header}>
-            <ThemedText type="small" themeColor="textSecondary" style={styles.headerEyebrow}>
-              JORNADA DO GUERREIRO
-            </ThemedText>
+            <ThemedText type="eyebrow" style={{ color: Accent.violet }}>Jornada do Guerreiro</ThemedText>
             <ThemedText type="subtitle" style={styles.headerTitle}>Sua disciplina, hoje</ThemedText>
           </View>
 
           {/* Streak */}
           <LinearGradient
-            colors={[Accent.fireStart, Accent.fireEnd]}
+            colors={[Accent.fireStart, Accent.fireMid, Accent.fireEnd]}
+            locations={Accent.fireLocations}
             start={{ x: 0.1, y: 0 }}
             end={{ x: 0.9, y: 1 }}
             style={[styles.card, styles.streakCard]}>
-            <ThemedText type="small" style={styles.eyebrowOnColor}>SEQUÊNCIA ATUAL</ThemedText>
+            <ParticleField mode="rise" count={6} colors={EMBER_COLORS} style={styles.emberArea} />
+            <ThemedText type="eyebrow" style={styles.eyebrowOnColor}>Sequência atual</ThemedText>
             <Animated.View style={[styles.flameBadge, flameStyle]}>
               <Ionicons name="flame" size={36} color="#FFFFFF" />
             </Animated.View>
-            <ThemedText style={styles.streakNumber}>{streakDias}</ThemedText>
+            <ThemedText type="heroNumber" style={styles.streakNumber}>{streakDias}</ThemedText>
             <ThemedText style={styles.onColorText}>
               {streakDias === 1 ? 'dia sem recair' : 'dias sem recair'}
             </ThemedText>
@@ -98,14 +119,17 @@ export default function HomeScreen() {
             start={{ x: 0.1, y: 0 }}
             end={{ x: 0.9, y: 1 }}
             style={[styles.card, styles.patenteCard]}>
-            <ThemedText type="small" style={styles.eyebrowGold}>SUA PATENTE</ThemedText>
+            <ThemedText type="eyebrow" style={styles.eyebrowGold}>Sua patente</ThemedText>
 
             <View style={styles.patenteBadgeWrap}>
-              <View style={styles.patenteBadgeGlow} />
-              <Image source={patenteBadge} style={styles.patenteBadgeImage} resizeMode="contain" />
+              <GlowRing size={BADGE_SIZE} color={Accent.gold} />
+              <View style={styles.patenteBadgeClip}>
+                <Image source={patenteBadge} style={styles.patenteBadgeImage} resizeMode="contain" />
+                <ShineSweep size={BADGE_SIZE} />
+              </View>
             </View>
 
-            <ThemedText style={styles.patenteNome}>{patente.nivel.nome}{sublevelLabel}</ThemedText>
+            <ThemedText type="cardTitle" style={styles.patenteNome}>{patente.nivel.nome}{sublevelLabel}</ThemedText>
             <ThemedText style={styles.patenteXP}>{totalXP} XP total acumulado</ThemedText>
 
             <View style={styles.progressContainer}>
@@ -130,29 +154,32 @@ export default function HomeScreen() {
           </LinearGradient>
 
           {/* Frase do dia */}
-          <ThemedView type="backgroundElement" style={[styles.card, styles.fraseCard, { borderColor: theme.backgroundSelected }]}>
-            <Ionicons name="chatbox-ellipses-outline" size={22} color={theme.textSecondary} style={styles.fraseIcon} />
-            <ThemedText type="small" themeColor="textSecondary" style={styles.eyebrow}>FRASE DO DIA</ThemedText>
-            <ThemedText type="default" style={styles.fraseTexto}>"{frase.texto}"</ThemedText>
-            <View style={[styles.fraseDivider, { backgroundColor: theme.backgroundSelected }]} />
+          <GlassCard style={[styles.card, styles.fraseCard]}>
+            <Ionicons name="chatbox-ellipses-outline" size={22} color={Colors.textSecondary} style={styles.fraseIcon} />
+            <ThemedText type="eyebrow" themeColor="textSecondary">Frase do dia</ThemedText>
+            <ThemedText type="quote" style={styles.fraseTexto}>"{frase.texto}"</ThemedText>
+            <View style={styles.fraseDivider} />
             <ThemedText type="smallBold" themeColor="textSecondary">{frase.autor}</ThemedText>
-          </ThemedView>
+          </GlassCard>
 
           {/* Registrar recaída */}
           <Pressable onPress={confirmarRecaida} style={styles.recaidaBtn}>
-            <Ionicons name="refresh-outline" size={16} color={theme.textSecondary} />
+            <Ionicons name="refresh-outline" size={16} color={Colors.textSecondary} />
             <ThemedText type="small" themeColor="textSecondary">Registrar recaída</ThemedText>
           </Pressable>
 
         </ScrollView>
 
         {/* Botão de pânico fixo */}
-        <Pressable
-          style={({ pressed }) => [styles.panicoBtn, pressed && styles.panicoBtnPressed]}
-          onPress={() => router.push('/panico' as Href)}>
-          <Ionicons name="hand-left" size={20} color="#FFFFFF" />
-          <ThemedText style={styles.panicoBtnText}>Preciso de Ajuda</ThemedText>
-        </Pressable>
+        <View style={styles.panicoWrap}>
+          <Animated.View style={[styles.panicoGlow, panicoGlowStyle]} />
+          <Pressable
+            style={({ pressed }) => [styles.panicoBtn, pressed && styles.panicoBtnPressed]}
+            onPress={() => router.push('/panico' as Href)}>
+            <Ionicons name="hand-left" size={20} color="#FFFFFF" />
+            <ThemedText style={styles.panicoBtnText}>Preciso de Ajuda</ThemedText>
+          </Pressable>
+        </View>
       </SafeAreaView>
     </ThemedView>
   );
@@ -174,9 +201,6 @@ const styles = StyleSheet.create({
     gap: Spacing.half,
     marginBottom: Spacing.half,
   },
-  headerEyebrow: {
-    letterSpacing: 1.5,
-  },
   headerTitle: {
     textAlign: 'center',
   },
@@ -187,16 +211,11 @@ const styles = StyleSheet.create({
     padding: Spacing.four,
     alignItems: 'center',
   },
-  eyebrow: {
-    letterSpacing: 1.2,
-  },
   eyebrowOnColor: {
-    color: 'rgba(255,255,255,0.85)',
-    letterSpacing: 1.2,
+    color: 'rgba(255,255,255,0.9)',
   },
   eyebrowGold: {
     color: Accent.goldMuted,
-    letterSpacing: 1.2,
   },
   onColorText: {
     color: 'rgba(255,255,255,0.9)',
@@ -205,11 +224,17 @@ const styles = StyleSheet.create({
   },
   streakCard: {
     gap: Spacing.one,
+    overflow: 'hidden',
     shadowColor: Accent.fireEnd,
     shadowOpacity: 0.35,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
     elevation: 6,
+  },
+  emberArea: {
+    height: 120,
+    top: undefined,
+    bottom: 14,
   },
   flameBadge: {
     width: 64,
@@ -221,10 +246,10 @@ const styles = StyleSheet.create({
     marginTop: Spacing.one,
   },
   streakNumber: {
-    fontSize: 64,
-    lineHeight: 68,
-    fontWeight: '800',
     color: '#FFFFFF',
+    textShadowColor: 'rgba(0,0,0,0.25)',
+    textShadowOffset: { width: 0, height: 4 },
+    textShadowRadius: 20,
   },
   patenteCard: {
     gap: Spacing.one,
@@ -235,29 +260,24 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   patenteBadgeWrap: {
-    width: 108,
-    height: 108,
+    width: BADGE_SIZE,
+    height: BADGE_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: Spacing.one,
+    marginTop: Spacing.two,
     marginBottom: Spacing.half,
   },
-  patenteBadgeGlow: {
-    position: 'absolute',
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    backgroundColor: Accent.gold,
-    opacity: 0.22,
+  patenteBadgeClip: {
+    width: BADGE_SIZE,
+    height: BADGE_SIZE,
+    borderRadius: BADGE_SIZE / 2,
+    overflow: 'hidden',
   },
   patenteBadgeImage: {
-    width: 108,
-    height: 108,
+    width: BADGE_SIZE,
+    height: BADGE_SIZE,
   },
   patenteNome: {
-    fontSize: 28,
-    lineHeight: 34,
-    fontWeight: '700',
     color: '#FFFFFF',
     textAlign: 'center',
   },
@@ -287,14 +307,11 @@ const styles = StyleSheet.create({
   },
   fraseCard: {
     gap: Spacing.two,
-    borderWidth: 1,
   },
   fraseIcon: {
     marginBottom: -Spacing.one,
   },
   fraseTexto: {
-    fontStyle: 'italic',
-    lineHeight: 26,
     textAlign: 'center',
   },
   fraseDivider: {
@@ -302,6 +319,7 @@ const styles = StyleSheet.create({
     height: 2,
     borderRadius: 1,
     marginTop: Spacing.half,
+    backgroundColor: Colors.border,
   },
   recaidaBtn: {
     flexDirection: 'row',
@@ -309,11 +327,22 @@ const styles = StyleSheet.create({
     gap: Spacing.one,
     paddingVertical: Spacing.two,
   },
-  panicoBtn: {
+  panicoWrap: {
     position: 'absolute',
     bottom: Spacing.four,
     left: Spacing.three,
     right: Spacing.three,
+  },
+  panicoGlow: {
+    position: 'absolute',
+    top: -6,
+    left: -6,
+    right: -6,
+    bottom: -6,
+    borderRadius: Spacing.three + 6,
+    backgroundColor: Accent.danger,
+  },
+  panicoBtn: {
     flexDirection: 'row',
     gap: Spacing.two,
     backgroundColor: Accent.danger,

@@ -1,16 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs, router, type Href } from 'expo-router';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
 
-import { Colors } from '@/constants/theme';
+import { Accent, Colors } from '@/constants/theme';
 import { carregarDados } from '@/storage';
 
 export default function TabsLayout() {
-  const scheme = useColorScheme();
-  const colorScheme = scheme === 'dark' ? 'dark' : 'light';
-  const cores = Colors[colorScheme];
-
   useEffect(() => {
     carregarDados().then((dados) => {
       if (!dados.onboardingDone) {
@@ -22,9 +17,14 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#3C87F7',
-        tabBarInactiveTintColor: cores.textSecondary,
-        tabBarStyle: { backgroundColor: cores.background },
+        tabBarActiveTintColor: Accent.orange,
+        tabBarInactiveTintColor: Colors.textTertiary,
+        tabBarStyle: {
+          backgroundColor: 'rgba(11,10,13,0.92)',
+          borderTopColor: Colors.border,
+          borderTopWidth: 1,
+        },
+        tabBarLabelStyle: { fontWeight: '700' },
         headerShown: false,
       }}>
       <Tabs.Screen

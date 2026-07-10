@@ -11,17 +11,23 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { AmbientGlow } from '@/components/ambient-glow';
+import { Chip } from '@/components/chip';
+import { GlassCard } from '@/components/glass-card';
+import { GradientButton } from '@/components/gradient-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { GATILHOS_COMUNS } from '@/constants/gatilhos';
-import { Spacing } from '@/constants/theme';
+import { Accent, Colors, Spacing } from '@/constants/theme';
 import { carregarDados, salvarDados } from '@/storage';
-import { useTheme } from '@/hooks/use-theme';
 
 const TOTAL_STEPS = 3;
+const ONBOARDING_GLOW = [
+  { color: Accent.fireMid, top: '10%' as const, left: '20%' as const, size: 560, opacity: 0.2 },
+  { color: '#7846DC', top: '80%' as const, left: '90%' as const, size: 520, opacity: 0.16 },
+];
 
 export default function OnboardingScreen() {
-  const theme = useTheme();
   const [step, setStep] = useState(1);
 
   // Step 1 state
@@ -55,6 +61,7 @@ export default function OnboardingScreen() {
 
   return (
     <ThemedView style={styles.container}>
+      <AmbientGlow blobs={ONBOARDING_GLOW} />
       <SafeAreaView style={styles.safe}>
         <KeyboardAvoidingView
           style={styles.flex}
@@ -81,7 +88,7 @@ export default function OnboardingScreen() {
                   progresso está preservado.
                 </ThemedText>
 
-                <ThemedView type="backgroundElement" style={styles.card}>
+                <GlassCard style={styles.card}>
                   <ThemedText type="small" themeColor="textSecondary">
                     Há quantos dias você está sem recair?
                   </ThemedText>
@@ -89,14 +96,14 @@ export default function OnboardingScreen() {
                     value={diasInput}
                     onChangeText={setDiasInput}
                     keyboardType="number-pad"
-                    style={[styles.input, { color: theme.text, borderColor: theme.backgroundElement }]}
+                    style={styles.input}
                     maxLength={4}
                     selectTextOnFocus
                   />
                   <ThemedText type="small" themeColor="textSecondary">
                     Se acabou de começar, deixe 0.
                   </ThemedText>
-                </ThemedView>
+                </GlassCard>
               </View>
             )}
 
@@ -109,25 +116,14 @@ export default function OnboardingScreen() {
                 </ThemedText>
 
                 <View style={styles.gatilhosGrid}>
-                  {GATILHOS_COMUNS.map((g) => {
-                    const selecionado = gatilhosSelecionados.includes(g);
-                    return (
-                      <Pressable
-                        key={g}
-                        onPress={() => toggleGatilho(g)}
-                        style={[
-                          styles.gatilhoChip,
-                          { borderColor: theme.backgroundElement },
-                          selecionado && styles.gatilhoChipSelecionado,
-                        ]}>
-                        <ThemedText
-                          type="small"
-                          style={selecionado ? styles.gatilhoChipTextSelecionado : undefined}>
-                          {g}
-                        </ThemedText>
-                      </Pressable>
-                    );
-                  })}
+                  {GATILHOS_COMUNS.map((g) => (
+                    <Chip
+                      key={g}
+                      label={g}
+                      selected={gatilhosSelecionados.includes(g)}
+                      onPress={() => toggleGatilho(g)}
+                    />
+                  ))}
                 </View>
               </View>
             )}
@@ -154,13 +150,11 @@ export default function OnboardingScreen() {
                 <ThemedText type="default" themeColor="textSecondary">Voltar</ThemedText>
               </Pressable>
             )}
-            <Pressable
-              style={[styles.btnAvancar, step === 1 && styles.btnAvancarFull]}
-              onPress={step < TOTAL_STEPS ? () => setStep((s) => s + 1) : finalizar}>
-              <ThemedText style={styles.btnAvancarText}>
-                {step < TOTAL_STEPS ? 'Continuar' : 'Começar'}
-              </ThemedText>
-            </Pressable>
+            <GradientButton
+              label={step < TOTAL_STEPS ? 'Continuar' : 'Começar'}
+              onPress={step < TOTAL_STEPS ? () => setStep((s) => s + 1) : finalizar}
+              style={step === 1 ? styles.btnAvancarFull : styles.btnAvancar}
+            />
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
@@ -182,41 +176,33 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#C0C0C8',
+    backgroundColor: Colors.backgroundSelected,
   },
-  dotAtivo: { backgroundColor: '#3C87F7' },
+  dotAtivo: { backgroundColor: Accent.orange },
   content: { padding: Spacing.three, paddingBottom: Spacing.six },
   stepContainer: { gap: Spacing.three },
   titulo: { fontSize: 36, lineHeight: 44 },
   descricao: { lineHeight: 26 },
   card: {
-    borderRadius: Spacing.two,
     padding: Spacing.three,
     gap: Spacing.two,
   },
   input: {
     borderWidth: 1,
+    borderColor: Colors.border,
+    backgroundColor: 'rgba(0,0,0,0.2)',
     borderRadius: Spacing.two,
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.two,
     fontSize: 32,
     fontWeight: '700',
+    color: Colors.text,
     textAlign: 'center',
   },
   gatilhosGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
-  gatilhoChip: {
-    borderWidth: 1,
-    borderRadius: 20,
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.two,
-  },
-  gatilhoChipSelecionado: {
-    backgroundColor: '#3C87F7',
-    borderColor: '#3C87F7',
-  },
-  gatilhoChipTextSelecionado: { color: '#FFFFFF' },
   botoes: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: Spacing.two,
     padding: Spacing.three,
     paddingBottom: Spacing.four,
@@ -228,13 +214,6 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.three,
     borderRadius: Spacing.three,
   },
-  btnAvancar: {
-    flex: 2,
-    backgroundColor: '#3C87F7',
-    borderRadius: Spacing.three,
-    paddingVertical: Spacing.three,
-    alignItems: 'center',
-  },
+  btnAvancar: { flex: 2 },
   btnAvancarFull: { flex: 1 },
-  btnAvancarText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
 });

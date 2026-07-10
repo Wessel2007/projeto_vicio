@@ -1,20 +1,51 @@
+import { DarkTheme, ThemeProvider } from '@react-navigation/native';
+import { Manrope_400Regular, Manrope_500Medium, Manrope_600SemiBold, Manrope_700Bold, Manrope_800ExtraBold } from '@expo-google-fonts/manrope';
+import { SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
 import { Stack } from 'expo-router';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
+import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+
+import { Colors } from '@/constants/theme';
 
 SplashScreen.preventAutoHideAsync();
 
+const NavigationDarkTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    background: Colors.background,
+    card: Colors.background,
+    border: Colors.border,
+    text: Colors.text,
+  },
+};
+
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const [fontsLoaded] = useFonts({
+    Manrope_400Regular,
+    Manrope_500Medium,
+    Manrope_600SemiBold,
+    Manrope_700Bold,
+    Manrope_800ExtraBold,
+    SpaceGrotesk_600SemiBold,
+    SpaceGrotesk_700Bold,
+  });
 
   useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={NavigationDarkTheme}>
+      <StatusBar style="light" />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="onboarding" />
@@ -23,8 +54,10 @@ export default function RootLayout() {
           options={{
             presentation: 'modal',
             headerShown: true,
-            title: 'Modo de Emergencia',
-            headerBackTitle: 'Voltar',
+            headerTitle: '',
+            headerShadowVisible: false,
+            headerTintColor: Colors.text,
+            headerStyle: { backgroundColor: Colors.background },
           }}
         />
       </Stack>

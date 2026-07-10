@@ -1,28 +1,31 @@
-import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { AmbientGlow } from '@/components/ambient-glow';
+import { GlassCard } from '@/components/glass-card';
+import { GradientSwitch } from '@/components/gradient-switch';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { Accent, Colors, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
-import { useTheme } from '@/hooks/use-theme';
+
+const PERFIL_GLOW = [{ color: Accent.fireMid, top: '4%' as const, left: '90%' as const, size: 500, opacity: 0.16 }];
 
 function SecaoHeader({ titulo }: { titulo: string }) {
   return (
-    <ThemedText type="small" themeColor="textSecondary" style={styles.secaoHeader}>
-      {titulo.toUpperCase()}
+    <ThemedText type="eyebrow" themeColor="textSecondary" style={styles.secaoHeader}>
+      {titulo}
     </ThemedText>
   );
 }
 
 function ItemConfig({
   label,
-  valor,
   onPress,
   destrutivo,
 }: {
   label: string;
-  valor?: string;
   onPress?: () => void;
   destrutivo?: boolean;
 }) {
@@ -31,16 +34,12 @@ function ItemConfig({
       <ThemedText type="default" style={destrutivo ? styles.textoDestrutivo : undefined}>
         {label}
       </ThemedText>
-      {valor !== undefined && (
-        <ThemedText type="small" themeColor="textSecondary">{valor}</ThemedText>
-      )}
     </Pressable>
   );
 }
 
 export default function PerfilScreen() {
   const { dados, atualizar, resetarApp, derivado, carregando } = useAppData();
-  const theme = useTheme();
 
   if (carregando || !dados || !derivado) {
     return (
@@ -71,21 +70,26 @@ export default function PerfilScreen() {
 
   return (
     <ThemedView style={styles.container}>
+      <AmbientGlow blobs={PERFIL_GLOW} />
       <SafeAreaView style={styles.safe}>
         <View style={styles.header}>
-          <ThemedText type="subtitle">Perfil</ThemedText>
+          <ThemedText type="title">Perfil</ThemedText>
         </View>
 
         <View style={styles.content}>
           {/* Stats */}
-          <ThemedView type="backgroundElement" style={styles.statsCard}>
+          <LinearGradient
+            colors={['rgba(255,122,61,0.14)', 'rgba(120,70,220,0.12)']}
+            start={{ x: 0.1, y: 0 }}
+            end={{ x: 0.9, y: 1 }}
+            style={styles.statsCard}>
             <View style={styles.statItem}>
-              <ThemedText type="title">{derivado.streakDias}</ThemedText>
+              <ThemedText type="cardTitle" style={styles.statStreak}>{derivado.streakDias}</ThemedText>
               <ThemedText type="small" themeColor="textSecondary">dias de streak</ThemedText>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <ThemedText type="title">{derivado.totalXP}</ThemedText>
+              <ThemedText type="cardTitle">{derivado.totalXP}</ThemedText>
               <ThemedText type="small" themeColor="textSecondary">XP total</ThemedText>
             </View>
             <View style={styles.statDivider} />
@@ -95,32 +99,27 @@ export default function PerfilScreen() {
               </ThemedText>
               <ThemedText type="small" themeColor="textSecondary">patente</ThemedText>
             </View>
-          </ThemedView>
+          </LinearGradient>
 
           <SecaoHeader titulo="Configurações" />
 
-          <ThemedView type="backgroundElement" style={styles.secaoCard}>
+          <GlassCard style={styles.secaoCard}>
             <View style={styles.switchRow}>
               <ThemedText type="default">Notificações diárias</ThemedText>
-              <Switch
+              <GradientSwitch
                 value={dados.notificationsEnabled}
                 onValueChange={(v) => atualizar({ notificationsEnabled: v })}
-                trackColor={{ true: '#3C87F7' }}
               />
             </View>
-          </ThemedView>
+          </GlassCard>
 
           <SecaoHeader titulo="Dados" />
 
-          <ThemedView type="backgroundElement" style={styles.secaoCard}>
-            <ItemConfig
-              label="Apagar todos os dados"
-              destrutivo
-              onPress={confirmarReset}
-            />
-          </ThemedView>
+          <GlassCard style={styles.secaoCard}>
+            <ItemConfig label="Apagar todos os dados" destrutivo onPress={confirmarReset} />
+          </GlassCard>
 
-          <ThemedText type="small" themeColor="textSecondary" style={styles.rodape}>
+          <ThemedText type="small" themeColor="textTertiary" style={styles.rodape}>
             Este app é um apoio de hábito, não substitui acompanhamento terapêutico profissional.
           </ThemedText>
         </View>
@@ -140,18 +139,20 @@ const styles = StyleSheet.create({
   },
   content: { padding: Spacing.three, gap: Spacing.three },
   statsCard: {
-    borderRadius: Spacing.two,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: Colors.border,
     padding: Spacing.three,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
   },
   statItem: { alignItems: 'center', gap: 2, flex: 1 },
-  statDivider: { width: 1, height: 40, backgroundColor: '#C0C0C8' },
-  patenteText: { fontSize: 20, lineHeight: 28 },
-  secaoHeader: { marginBottom: -Spacing.two },
+  statStreak: { color: '#FF9D4D' },
+  statDivider: { width: 1, height: 40, backgroundColor: 'rgba(255,255,255,0.1)' },
+  patenteText: { color: '#C9A6FF', fontSize: 19, lineHeight: 24 },
+  secaoHeader: { marginLeft: Spacing.one },
   secaoCard: {
-    borderRadius: Spacing.two,
     overflow: 'hidden',
   },
   switchRow: {
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: Spacing.three,
   },
-  textoDestrutivo: { color: '#D93025' },
+  textoDestrutivo: { color: Accent.dangerText },
   rodape: {
     textAlign: 'center',
     lineHeight: 20,

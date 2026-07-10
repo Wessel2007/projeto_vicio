@@ -1,55 +1,40 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Paleta dark-only do app — "Jornada do Guerreiro", direção 1a (Fogo).
+ * Extraída de design/redesign/Redesign.dc.html. O app não segue mais o tema
+ * do sistema: é sempre escuro, como no mockup.
  */
 
 import '@/global.css';
 
-import { Platform } from 'react-native';
-
 export const Colors = {
-  light: {
-    text: '#000000',
-    background: '#ffffff',
-    backgroundElement: '#F0F0F3',
-    backgroundSelected: '#E0E1E6',
-    textSecondary: '#60646C',
-  },
-  dark: {
-    text: '#ffffff',
-    background: '#000000',
-    backgroundElement: '#212225',
-    backgroundSelected: '#2E3135',
-    textSecondary: '#B0B4BA',
-  },
+  background: '#0B0A0D',
+  backgroundElement: 'rgba(255,255,255,0.045)',
+  backgroundSelected: 'rgba(255,255,255,0.09)',
+  border: 'rgba(255,255,255,0.08)',
+  text: '#F2F2F5',
+  textSecondary: '#9A9AA4',
+  textTertiary: '#6A6A74',
 } as const;
 
-export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
+export type ThemeColor = keyof typeof Colors;
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
+// Fontes estáticas (uma família por peso) carregadas via @expo-google-fonts
+// no _layout raiz. Como não são fontes variáveis, a seleção de peso é feita
+// trocando `fontFamily`, não `fontWeight`.
+export const Fonts = {
+  display: {
+    semibold: 'SpaceGrotesk_600SemiBold',
+    bold: 'SpaceGrotesk_700Bold',
   },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
+  body: {
+    regular: 'Manrope_400Regular',
+    medium: 'Manrope_500Medium',
+    semibold: 'Manrope_600SemiBold',
+    bold: 'Manrope_700Bold',
+    extrabold: 'Manrope_800ExtraBold',
   },
-  web: {
-    sans: 'var(--font-display)',
-    serif: 'var(--font-serif)',
-    rounded: 'var(--font-rounded)',
-    mono: 'var(--font-mono)',
-  },
-});
+  mono: 'ui-monospace',
+} as const;
 
 export const Spacing = {
   half: 2,
@@ -61,19 +46,40 @@ export const Spacing = {
   six: 64,
 } as const;
 
-export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
+export const BottomTabInset = 24;
 export const MaxContentWidth = 800;
 
-// Semantic accent colors for gamification widgets (streak, patente, ações).
-// Independent of light/dark theme — these live on top of gradient/colored
-// surfaces where text is always light.
+// Cores semânticas de gamificação (streak, patente, ações). Vivem em cima de
+// superfícies em gradiente onde o texto é sempre claro.
 export const Accent = {
-  fireStart: '#FFB347',
-  fireEnd: '#E8452C',
-  rankStart: '#1B1F3F',
-  rankEnd: '#4B3D8F',
+  // Streak — gradiente de fogo de 3 stops (linear-gradient(160deg,#FF9D4D 0%,#FF5722 52%,#C1300F 100%))
+  fireStart: '#FF9D4D',
+  fireMid: '#FF5722',
+  fireEnd: '#C1300F',
+  fireLocations: [0, 0.52, 1] as [number, number, number],
+
+  // Patente — violeta nobre (linear-gradient(160deg,#241B4A 0%,#4B2E86 100%))
+  rankStart: '#241B4A',
+  rankEnd: '#4B2E86',
+
   gold: '#F2C572',
   goldMuted: 'rgba(242, 197, 114, 0.7)',
-  danger: '#D93025',
-  dangerDark: '#A81F17',
+
+  // Botão de pânico
+  danger: '#F0392B',
+  dangerDark: '#B01810',
+
+  // Eyebrows de seção
+  violet: '#9A6BFF',
+  teal: '#2BB6A8',
+
+  // Laranja de destaque (links, chip selecionado, tab ativa)
+  orange: '#FF7A3D',
+  orangeLight: '#FFB37D',
+
+  // Badges do diário (resisti / recaída)
+  success: '#4ADE80',
+  successBg: 'rgba(46,190,110,0.16)',
+  dangerText: '#F87171',
+  dangerBg: 'rgba(217,48,37,0.16)',
 } as const;

@@ -5,18 +5,27 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Text,
   TextInput,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { AmbientGlow } from '@/components/ambient-glow';
+import { Chip } from '@/components/chip';
+import { GlassCard } from '@/components/glass-card';
+import { GradientButton } from '@/components/gradient-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { GATILHOS_COMUNS } from '@/constants/gatilhos';
-import { Spacing } from '@/constants/theme';
+import { Accent, Colors, Fonts, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
-import { useTheme } from '@/hooks/use-theme';
 import { TriggerEntry } from '@/types';
+
+const DIARIO_GLOW = [
+  { color: Accent.fireMid, top: '4%' as const, left: '10%' as const, size: 480, opacity: 0.16 },
+  { color: '#7846DC', top: '35%' as const, left: '96%' as const, size: 520, opacity: 0.14 },
+];
 
 function formatarData(isoDate: string) {
   const d = new Date(isoDate);
@@ -24,26 +33,24 @@ function formatarData(isoDate: string) {
 }
 
 function EntradaItem({ entry }: { entry: TriggerEntry }) {
-  const theme = useTheme();
   return (
-    <ThemedView type="backgroundElement" style={styles.entradaCard}>
+    <GlassCard style={styles.entradaCard}>
       <View style={styles.entradaHeader}>
         <ThemedText type="small" themeColor="textSecondary">{formatarData(entry.date)}</ThemedText>
-        {entry.resisted && (
-          <View style={[styles.resistiuBadge, { backgroundColor: '#1B8A4E' }]}>
-            <ThemedText style={styles.resistiuText}>Resisti</ThemedText>
-          </View>
-        )}
+        <View style={[styles.badge, entry.resisted ? styles.badgeSuccess : styles.badgeDanger]}>
+          <Text style={[styles.badgeText, entry.resisted ? styles.badgeTextSuccess : styles.badgeTextDanger]}>
+            {entry.resisted ? 'RESISTI' : 'RECAÍDA'}
+          </Text>
+        </View>
       </View>
-      <ThemedText type="smallBold">{entry.trigger}</ThemedText>
+      <Text style={styles.entradaTrigger}>{entry.trigger}</Text>
       {entry.notes ? <ThemedText type="small" themeColor="textSecondary">{entry.notes}</ThemedText> : null}
-    </ThemedView>
+    </GlassCard>
   );
 }
 
 export default function DiarioScreen() {
   const { dados, adicionarEntrada, carregando } = useAppData();
-  const theme = useTheme();
   const [modalAberto, setModalAberto] = useState(false);
   const [gatilhoSelecionado, setGatilhoSelecionado] = useState('');
   const [notas, setNotas] = useState('');
@@ -66,11 +73,12 @@ export default function DiarioScreen() {
 
   return (
     <ThemedView style={styles.container}>
+      <AmbientGlow blobs={DIARIO_GLOW} />
       <SafeAreaView style={styles.safe}>
         <View style={styles.header}>
-          <ThemedText type="subtitle">Diário de Gatilhos</ThemedText>
+          <ThemedText type="title">Diário</ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
-            {dados.entries.length} {dados.entries.length === 1 ? 'entrada' : 'entradas'}
+            {dados.entries.length} {dados.entries.length === 1 ? 'entrada registrada' : 'entradas registradas'}
           </ThemedText>
         </View>
 
@@ -89,9 +97,7 @@ export default function DiarioScreen() {
           />
         )}
 
-        <Pressable style={styles.addBtn} onPress={() => setModalAberto(true)}>
-          <ThemedText style={styles.addBtnText}>+ Registrar gatilho</ThemedText>
-        </Pressable>
+        <GradientButton label="+ Registrar gatilho" onPress={() => setModalAberto(true)} style={styles.addBtn} />
       </SafeAreaView>
 
       {/* Modal para nova entrada */}
@@ -107,18 +113,11 @@ export default function DiarioScreen() {
           <ScrollView contentContainerStyle={styles.modalContent}>
             <ThemedText type="small" themeColor="textSecondary">O que aconteceu?</ThemedText>
 
-            {GATILHOS_COMUNS.map((g) => (
-              <Pressable
-                key={g}
-                onPress={() => setGatilhoSelecionado(g)}
-                style={[
-                  styles.opcaoGatilho,
-                  { borderColor: theme.backgroundElement },
-                  gatilhoSelecionado === g && styles.opcaoSelecionada,
-                ]}>
-                <ThemedText type="small">{g}</ThemedText>
-              </Pressable>
-            ))}
+            <View style={styles.gatilhosGrid}>
+              {GATILHOS_COMUNS.map((g) => (
+                <Chip key={g} label={g} selected={gatilhoSelecionado === g} onPress={() => setGatilhoSelecionado(g)} />
+              ))}
+            </View>
 
             <ThemedText type="small" themeColor="textSecondary" style={{ marginTop: Spacing.three }}>
               Observações (opcional)
@@ -127,17 +126,17 @@ export default function DiarioScreen() {
               value={notas}
               onChangeText={setNotas}
               placeholder="O que você estava fazendo? Como se sentiu?"
-              placeholderTextColor={theme.textSecondary}
+              placeholderTextColor={Colors.textTertiary}
               multiline
-              style={[styles.textInput, { color: theme.text, borderColor: theme.backgroundElement }]}
+              style={styles.textInput}
             />
 
-            <Pressable
-              style={[styles.salvarBtn, !gatilhoSelecionado && styles.salvarBtnDisabled]}
+            <GradientButton
+              label="Salvar"
+              disabled={!gatilhoSelecionado}
               onPress={salvarEntrada}
-              disabled={!gatilhoSelecionado}>
-              <ThemedText style={styles.salvarBtnText}>Salvar</ThemedText>
-            </Pressable>
+              style={styles.salvarBtn}
+            />
           </ScrollView>
         </ThemedView>
       </Modal>
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingTop: Spacing.three,
     paddingBottom: Spacing.two,
-    gap: Spacing.one,
+    gap: Spacing.half,
   },
   vazio: {
     flex: 1,
@@ -162,30 +161,37 @@ const styles = StyleSheet.create({
     padding: Spacing.four,
   },
   vazioTexto: { textAlign: 'center', lineHeight: 24 },
-  lista: { padding: Spacing.three, gap: Spacing.two, paddingBottom: 100 },
+  lista: { padding: Spacing.three, gap: Spacing.two, paddingBottom: 110 },
   entradaCard: {
-    borderRadius: Spacing.two,
     padding: Spacing.three,
     gap: Spacing.one,
   },
-  entradaHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  resistiuBadge: {
-    borderRadius: 4,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
+  entradaHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 },
+  badge: {
+    borderRadius: 8,
+    paddingHorizontal: 9,
+    paddingVertical: 3,
   },
-  resistiuText: { color: '#FFFFFF', fontSize: 11, fontWeight: '700' },
+  badgeSuccess: { backgroundColor: Accent.successBg },
+  badgeDanger: { backgroundColor: Accent.dangerBg },
+  badgeText: {
+    fontFamily: Fonts.body.extrabold,
+    fontSize: 11,
+    letterSpacing: 0.4,
+  },
+  badgeTextSuccess: { color: Accent.success },
+  badgeTextDanger: { color: Accent.dangerText },
+  entradaTrigger: {
+    fontFamily: Fonts.display.semibold,
+    fontSize: 16,
+    color: Colors.text,
+  },
   addBtn: {
     position: 'absolute',
     bottom: Spacing.four,
     left: Spacing.three,
     right: Spacing.three,
-    backgroundColor: '#3C87F7',
-    borderRadius: Spacing.three,
-    paddingVertical: Spacing.three,
-    alignItems: 'center',
   },
-  addBtnText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
   modal: { flex: 1 },
   modalHeader: {
     flexDirection: 'row',
@@ -195,28 +201,20 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.four,
   },
   modalContent: { padding: Spacing.three, gap: Spacing.two, paddingBottom: 40 },
-  opcaoGatilho: {
-    borderWidth: 1,
-    borderRadius: Spacing.two,
-    padding: Spacing.three,
-  },
-  opcaoSelecionada: { borderColor: '#3C87F7', backgroundColor: '#EBF3FF' },
+  gatilhosGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
   textInput: {
     borderWidth: 1,
+    borderColor: Colors.border,
+    backgroundColor: Colors.backgroundElement,
     borderRadius: Spacing.two,
     padding: Spacing.three,
     minHeight: 80,
     textAlignVertical: 'top',
     fontSize: 16,
+    color: Colors.text,
     marginTop: Spacing.one,
   },
   salvarBtn: {
-    backgroundColor: '#3C87F7',
-    borderRadius: Spacing.three,
-    paddingVertical: Spacing.three,
-    alignItems: 'center',
     marginTop: Spacing.three,
   },
-  salvarBtnDisabled: { opacity: 0.4 },
-  salvarBtnText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
 });

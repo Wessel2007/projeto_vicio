@@ -13,16 +13,23 @@ import Animated, {
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { AmbientGlow } from '@/components/ambient-glow';
+import { GlowRing } from '@/components/glow-ring';
+import { ParticleField } from '@/components/particle-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { NIVEIS, NivelPatente } from '@/constants/gamification';
 import { getPatenteBadge } from '@/constants/patente-badges';
-import { Accent, Spacing } from '@/constants/theme';
+import { Accent, Colors, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
-import { useTheme } from '@/hooks/use-theme';
 
 const SUBLEVEL_LABEL = ['I', 'II', 'III'];
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const CONFETTI_COLORS = ['#F2C572', '#FFFFFF', '#9D6BF0', '#CFFAFE'];
+const CONQUISTAS_GLOW = [
+  { color: Accent.teal, top: '4%' as const, left: '50%' as const, size: 520, opacity: 0.22 },
+  { color: '#9D6BF0', top: '60%' as const, left: '90%' as const, size: 560, opacity: 0.18 },
+];
 
 // Color identity per patente, progressing from cool/muted (início da jornada)
 // para tons cada vez mais quentes e nobres (fim da jornada).
@@ -31,7 +38,7 @@ const TIER_THEME: Record<string, { colors: [string, string]; glow: string }> = {
   Aprendiz: { colors: ['#4C93FB', '#2260C9'], glow: '#4C93FB' },
   Guerreiro: { colors: ['#2BB6A8', '#157A72'], glow: '#2BB6A8' },
   Guardião: { colors: ['#43BE5C', '#237B38'], glow: '#43BE5C' },
-  Espartano: { colors: [Accent.fireStart, Accent.fireEnd], glow: Accent.fireEnd },
+  Espartano: { colors: [Accent.fireStart, Accent.fireEnd], glow: Accent.fireMid },
   Monge: { colors: ['#9D6BF0', '#5E38A8'], glow: '#9D6BF0' },
   Mestre: { colors: ['#E0447A', '#9C1F52'], glow: '#E0447A' },
   Lenda: { colors: [Accent.gold, '#B8862E'], glow: Accent.gold },
@@ -51,7 +58,6 @@ const GRUPOS = NIVEIS.reduce<{ nome: string; niveis: NivelPatente[] }[]>((acc, n
 
 export default function ConquistasScreen() {
   const { dados, derivado, carregando } = useAppData();
-  const theme = useTheme();
 
   const badgePulse = useSharedValue(1);
   const shimmerX = useSharedValue(-1);
@@ -93,10 +99,12 @@ export default function ConquistasScreen() {
 
   return (
     <ThemedView style={styles.container}>
+      <AmbientGlow blobs={CONQUISTAS_GLOW} />
       <SafeAreaView style={styles.safe}>
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
-            <ThemedText type="subtitle">Jornada do Guerreiro</ThemedText>
+            <ThemedText type="eyebrow" style={{ color: Accent.teal }}>Jornada do Guerreiro</ThemedText>
+            <ThemedText type="title">Conquistas</ThemedText>
           </View>
 
           {/* Hero: patente atual */}
@@ -106,12 +114,14 @@ export default function ConquistasScreen() {
             end={{ x: 0.9, y: 1 }}
             style={[styles.heroCard, { shadowColor: heroTheme.glow }]}>
             <View style={styles.heroShimmerClip} pointerEvents="none">
+              <ParticleField mode="fall" count={10} colors={CONFETTI_COLORS} />
               <Animated.View style={[styles.heroShimmer, shimmerStyle]} />
             </View>
 
-            <ThemedText type="small" style={styles.heroEyebrow}>SUA PATENTE ATUAL</ThemedText>
+            <ThemedText type="eyebrow" style={styles.heroEyebrow}>Sua patente atual</ThemedText>
 
             <Animated.View style={[styles.heroBadgeWrap, badgeGlowStyle]}>
+              <GlowRing size={136} color="#FFFFFF" />
               <View style={[styles.heroBadgeGlow, { backgroundColor: heroTheme.glow }]} />
               <Image
                 source={getPatenteBadge(nomeAtual, sublevelAtual)}
@@ -120,7 +130,7 @@ export default function ConquistasScreen() {
               />
             </Animated.View>
 
-            <ThemedText style={styles.heroNome}>{nomeAtual}{sublevelLabelAtual}</ThemedText>
+            <ThemedText type="cardTitle" style={styles.heroNome}>{nomeAtual}{sublevelLabelAtual}</ThemedText>
             <ThemedText style={styles.heroStats}>{totalXP} XP total • {streakDias} dias de streak</ThemedText>
 
             <View style={styles.heroProgressTrack}>
@@ -150,10 +160,10 @@ export default function ConquistasScreen() {
               <>
                 <View style={styles.grupoHeaderRow}>
                   <ThemedText
-                    type="smallBold"
+                    type="eyebrow"
                     style={isGrupoAtual ? styles.grupoNomeOnColor : undefined}
-                    themeColor={isGrupoAtual ? undefined : isGrupoPassado ? 'text' : 'textSecondary'}>
-                    {grupo.nome.toUpperCase()}
+                    themeColor={isGrupoAtual ? undefined : isGrupoPassado ? 'text' : 'textTertiary'}>
+                    {grupo.nome}
                   </ThemedText>
                   {isGrupoPassado && !isGrupoAtual && (
                     <Ionicons name="checkmark-circle" size={16} color={tier.colors[0]} />
@@ -185,7 +195,7 @@ export default function ConquistasScreen() {
                           <ThemedText
                             type="small"
                             style={isGrupoAtual ? styles.subLabelOnColor : undefined}
-                            themeColor={isGrupoAtual ? undefined : atingido ? 'text' : 'textSecondary'}>
+                            themeColor={isGrupoAtual ? undefined : atingido ? 'text' : 'textTertiary'}>
                             {SUBLEVEL_LABEL[i]}
                           </ThemedText>
                         )}
@@ -218,11 +228,11 @@ export default function ConquistasScreen() {
                 ) : (
                   <ThemedView
                     type="backgroundElement"
-                    style={[styles.grupoCard, !isGrupoPassado && styles.grupoBloqueado]}>
+                    style={[styles.grupoCard, styles.grupoCardBorder, !isGrupoPassado && styles.grupoBloqueado]}>
                     <View
                       style={[
                         styles.grupoAccentBar,
-                        { backgroundColor: isGrupoPassado ? tier.colors[0] : theme.backgroundSelected },
+                        { backgroundColor: isGrupoPassado ? tier.colors[0] : Colors.backgroundSelected },
                       ]}
                     />
                     {conteudo}
@@ -245,6 +255,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingTop: Spacing.three,
     paddingBottom: Spacing.two,
+    gap: Spacing.half,
   },
   content: { padding: Spacing.three, gap: Spacing.two, paddingBottom: 40 },
 
@@ -253,7 +264,6 @@ const styles = StyleSheet.create({
     padding: Spacing.four,
     alignItems: 'center',
     marginBottom: Spacing.two,
-    overflow: 'hidden',
     shadowOpacity: 0.4,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },
@@ -270,11 +280,10 @@ const styles = StyleSheet.create({
   },
   heroEyebrow: {
     color: 'rgba(255,255,255,0.85)',
-    letterSpacing: 1.2,
   },
   heroBadgeWrap: {
-    width: 128,
-    height: 128,
+    width: 136,
+    height: 136,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: Spacing.two,
@@ -292,9 +301,6 @@ const styles = StyleSheet.create({
     height: 128,
   },
   heroNome: {
-    fontSize: 30,
-    lineHeight: 36,
-    fontWeight: '700',
     color: '#FFFFFF',
     textAlign: 'center',
   },
@@ -324,6 +330,11 @@ const styles = StyleSheet.create({
     padding: Spacing.three,
     gap: Spacing.two,
     marginBottom: Spacing.two,
+    overflow: 'hidden',
+  },
+  grupoCardBorder: {
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   grupoAtualCard: {
     shadowOpacity: 0.4,
@@ -340,8 +351,6 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: 4,
-    borderTopLeftRadius: Spacing.two,
-    borderBottomLeftRadius: Spacing.two,
   },
   grupoHeaderRow: {
     flexDirection: 'row',
@@ -350,9 +359,6 @@ const styles = StyleSheet.create({
   },
   grupoNomeOnColor: {
     color: '#FFFFFF',
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: '700',
   },
   grupoDiasOnColor: {
     color: 'rgba(255,255,255,0.8)',
@@ -371,17 +377,17 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.05)',
   },
   badgeChipLocked: {
-    opacity: 0.4,
+    opacity: 0.55,
   },
   badgeChipAtual: {
     borderWidth: 2,
     shadowOpacity: 0.8,
     shadowRadius: 8,
     elevation: 6,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: 'rgba(255,255,255,0.18)',
   },
   badgeChipImage: {
     width: 44,
@@ -391,7 +397,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.25)',
+    backgroundColor: 'rgba(0,0,0,0.42)',
     borderRadius: 28,
   },
   subLabelOnColor: {
