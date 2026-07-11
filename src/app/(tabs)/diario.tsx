@@ -54,13 +54,19 @@ export default function DiarioScreen() {
   const [modalAberto, setModalAberto] = useState(false);
   const [gatilhoSelecionado, setGatilhoSelecionado] = useState('');
   const [notas, setNotas] = useState('');
+  const [resistedSelecionado, setResistedSelecionado] = useState<boolean | null>(null);
 
-  function salvarEntrada() {
-    if (!gatilhoSelecionado) return;
-    adicionarEntrada({ trigger: gatilhoSelecionado, notes: notas, resisted: false });
+  function fecharModal() {
     setGatilhoSelecionado('');
     setNotas('');
+    setResistedSelecionado(null);
     setModalAberto(false);
+  }
+
+  function salvarEntrada() {
+    if (!gatilhoSelecionado || resistedSelecionado === null) return;
+    adicionarEntrada({ trigger: gatilhoSelecionado, notes: notas, resisted: resistedSelecionado });
+    fecharModal();
   }
 
   if (carregando || !dados) {
@@ -105,18 +111,40 @@ export default function DiarioScreen() {
         <ThemedView style={styles.modal}>
           <View style={styles.modalHeader}>
             <ThemedText type="subtitle">Novo registro</ThemedText>
-            <Pressable onPress={() => setModalAberto(false)}>
+            <Pressable onPress={fecharModal}>
               <ThemedText type="small" themeColor="textSecondary">Cancelar</ThemedText>
             </Pressable>
           </View>
 
           <ScrollView contentContainerStyle={styles.modalContent}>
-            <ThemedText type="small" themeColor="textSecondary">O que aconteceu?</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">Qual gatilho?</ThemedText>
 
             <View style={styles.gatilhosGrid}>
               {GATILHOS_COMUNS.map((g) => (
                 <Chip key={g} label={g} selected={gatilhoSelecionado === g} onPress={() => setGatilhoSelecionado(g)} />
               ))}
+            </View>
+
+            <ThemedText type="small" themeColor="textSecondary" style={{ marginTop: Spacing.three }}>
+              O que aconteceu?
+            </ThemedText>
+            <View style={styles.resultadoRow}>
+              <Pressable
+                onPress={() => setResistedSelecionado(true)}
+                style={[styles.resultadoBtn, resistedSelecionado === true && styles.resultadoBtnResistiAtivo]}>
+                <Text
+                  style={[styles.resultadoBtnText, resistedSelecionado === true && styles.badgeTextSuccess]}>
+                  Resisti
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setResistedSelecionado(false)}
+                style={[styles.resultadoBtn, resistedSelecionado === false && styles.resultadoBtnRecaiAtivo]}>
+                <Text
+                  style={[styles.resultadoBtnText, resistedSelecionado === false && styles.badgeTextDanger]}>
+                  Recaí
+                </Text>
+              </Pressable>
             </View>
 
             <ThemedText type="small" themeColor="textSecondary" style={{ marginTop: Spacing.three }}>
@@ -133,7 +161,7 @@ export default function DiarioScreen() {
 
             <GradientButton
               label="Salvar"
-              disabled={!gatilhoSelecionado}
+              disabled={!gatilhoSelecionado || resistedSelecionado === null}
               onPress={salvarEntrada}
               style={styles.salvarBtn}
             />
@@ -202,6 +230,23 @@ const styles = StyleSheet.create({
   },
   modalContent: { padding: Spacing.three, gap: Spacing.two, paddingBottom: 40 },
   gatilhosGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
+  resultadoRow: { flexDirection: 'row', gap: Spacing.two },
+  resultadoBtn: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: Spacing.two,
+    paddingVertical: Spacing.two,
+    alignItems: 'center',
+  },
+  resultadoBtnResistiAtivo: { backgroundColor: Accent.successBg, borderColor: Accent.success },
+  resultadoBtnRecaiAtivo: { backgroundColor: Accent.dangerBg, borderColor: Accent.dangerText },
+  resultadoBtnText: {
+    fontFamily: Fonts.body.extrabold,
+    fontSize: 13,
+    letterSpacing: 0.3,
+    color: Colors.textSecondary,
+  },
   textInput: {
     borderWidth: 1,
     borderColor: Colors.border,

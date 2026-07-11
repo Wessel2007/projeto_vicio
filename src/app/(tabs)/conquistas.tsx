@@ -18,7 +18,7 @@ import { GlowRing } from '@/components/glow-ring';
 import { ParticleField } from '@/components/particle-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { NIVEIS, NivelPatente } from '@/constants/gamification';
+import { FREE_MAX_RANK_INDEX, NIVEIS, NivelPatente } from '@/constants/gamification';
 import { getPatenteBadge } from '@/constants/patente-badges';
 import { Accent, Colors, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
@@ -92,6 +92,7 @@ export default function ConquistasScreen() {
   }
 
   const { patente, totalXP, streakDias } = derivado;
+  const isPro = dados.isPro;
   const nomeAtual = patente.nivel.nome;
   const sublevelAtual = patente.nivel.sublevel;
   const heroTheme = TIER_THEME[nomeAtual];
@@ -146,14 +147,30 @@ export default function ConquistasScreen() {
                 {patente.proxNivel.minDias - patente.diasEfetivos} dias para {patente.proxNivel.nome}
                 {patente.proxNivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.proxNivel.sublevel - 1]}` : ''}
               </ThemedText>
+            ) : patente.bloqueadoPorPlano ? (
+              <ThemedText type="small" style={styles.heroProgressLabel}>
+                Guerreiro III é o teto do plano Free — assine o PRO para continuar até Imortal
+              </ThemedText>
             ) : (
               <ThemedText type="small" style={styles.heroProgressLabel}>Nível máximo atingido 🏆</ThemedText>
             )}
           </LinearGradient>
 
+          {!isPro && (
+            <View style={styles.proBanner}>
+              <Ionicons name="star" size={16} color={Accent.gold} />
+              <ThemedText type="small" themeColor="textSecondary" style={styles.proBannerText}>
+                Guardião em diante é exclusivo do plano PRO
+              </ThemedText>
+            </View>
+          )}
+
           {GRUPOS.map((grupo, idx) => {
+            const grupoMinIdx = NIVEIS.findIndex((n) => n.nome === grupo.nome);
+            const grupoBloqueadoPorPlano = !isPro && grupoMinIdx > FREE_MAX_RANK_INDEX;
             const isGrupoAtual = grupo.nome === nomeAtual;
-            const isGrupoPassado = NIVEIS.find((n) => n.nome === grupo.nome)!.minDias <= patente.diasEfetivos;
+            const isGrupoPassado =
+              !grupoBloqueadoPorPlano && NIVEIS.find((n) => n.nome === grupo.nome)!.minDias <= patente.diasEfetivos;
             const tier = TIER_THEME[grupo.nome];
 
             const conteudo = (
@@ -172,7 +189,9 @@ export default function ConquistasScreen() {
 
                 <View style={styles.badgeRow}>
                   {grupo.niveis.map((nivel, i) => {
-                    const atingido = patente.diasEfetivos >= nivel.minDias;
+                    const nivelIdx = NIVEIS.indexOf(nivel);
+                    const bloqueadoPorPlanoNivel = !isPro && nivelIdx > FREE_MAX_RANK_INDEX;
+                    const atingido = patente.diasEfetivos >= nivel.minDias && !bloqueadoPorPlanoNivel;
                     const ehAtual = isGrupoAtual && sublevelAtual === nivel.sublevel;
                     const badge = getPatenteBadge(grupo.nome, nivel.sublevel);
                     return (
@@ -186,8 +205,12 @@ export default function ConquistasScreen() {
                           ]}>
                           <Image source={badge} style={styles.badgeChipImage} resizeMode="contain" />
                           {!atingido && (
-                            <View style={styles.lockOverlay}>
-                              <Ionicons name="lock-closed" size={12} color="rgba(255,255,255,0.9)" />
+                            <View style={[styles.lockOverlay, bloqueadoPorPlanoNivel && styles.lockOverlayPro]}>
+                              <Ionicons
+                                name={bloqueadoPorPlanoNivel ? 'star' : 'lock-closed'}
+                                size={12}
+                                color={bloqueadoPorPlanoNivel ? Accent.gold : 'rgba(255,255,255,0.9)'}
+                              />
                             </View>
                           )}
                         </Animated.View>
@@ -325,6 +348,19 @@ const styles = StyleSheet.create({
     marginTop: Spacing.two,
   },
 
+  proBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.one,
+    paddingVertical: Spacing.two,
+    paddingHorizontal: Spacing.three,
+    borderRadius: Spacing.two,
+    backgroundColor: 'rgba(242,197,114,0.12)',
+    marginBottom: Spacing.two,
+  },
+  proBannerText: {
+    flex: 1,
+  },
   grupoCard: {
     borderRadius: Spacing.two,
     padding: Spacing.three,
@@ -399,6 +435,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.42)',
     borderRadius: 28,
+  },
+  lockOverlayPro: {
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
   subLabelOnColor: {
     color: 'rgba(255,255,255,0.85)',

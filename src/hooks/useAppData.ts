@@ -67,7 +67,7 @@ export function useAppData() {
     ? {
         streakDias: calcStreakDias(dados.streakStartDate),
         totalXP: calcTotalXP(dados),
-        patente: calcPatente(calcTotalXP(dados)),
+        patente: calcPatente(calcTotalXP(dados), dados.isPro),
       }
     : null;
 

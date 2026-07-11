@@ -35,3 +35,11 @@ export const NIVEIS: NivelPatente[] = [
   { nome: 'Lenda',     sublevel: 3, minDias: 365 },
   { nome: 'Imortal',   sublevel: null, minDias: 366 },
 ];
+
+// Teto de patente para usuários do plano Free (checklist: "Recruta → Guerreiro,
+// trava após e sinaliza upgrade"). Guardião em diante é exclusivo do plano PRO.
+export const FREE_MAX_RANK_NOME = 'Guerreiro';
+export const FREE_MAX_RANK_INDEX = NIVEIS.reduce(
+  (acc, n, i) => (n.nome === FREE_MAX_RANK_NOME ? i : acc),
+  -1,
+);

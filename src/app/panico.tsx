@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -24,7 +24,7 @@ import { GATILHOS_COMUNS, getAcaoPorGatilho } from '@/constants/gatilhos';
 import { Accent, Fonts, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
 
-type Step = 'respiracao' | 'gatilho' | 'acao' | 'vitoria';
+type Step = 'respiracao' | 'gatilho' | 'acao' | 'vitoria' | 'recaida';
 
 // 4-4-4 box breathing: inhale 4s, hold 4s, exhale 4s = 12s per cycle
 const FASE_DURACAO = 4000;
@@ -119,7 +119,7 @@ function Respiracao({ onConcluir }: { onConcluir: () => void }) {
 }
 
 export default function PanicoScreen() {
-  const { dados, adicionarEntrada } = useAppData();
+  const { dados, adicionarEntrada, registrarRecaida } = useAppData();
   const [step, setStep] = useState<Step>('respiracao');
   const [gatilhoSelecionado, setGatilhoSelecionado] = useState('');
 
@@ -148,6 +148,27 @@ export default function PanicoScreen() {
       adicionarEntrada({ trigger: gatilhoSelecionado, notes: '', resisted: true });
     }
     setStep('vitoria');
+  }
+
+  function confirmarRecaidaPanico() {
+    Alert.alert(
+      'Registrar recaída',
+      'Isso vai zerar seu streak atual, mas seu XP e patente são mantidos. Isso realmente aconteceu?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Sim, aconteceu',
+          style: 'destructive',
+          onPress: () => {
+            if (gatilhoSelecionado) {
+              adicionarEntrada({ trigger: gatilhoSelecionado, notes: '', resisted: false });
+            }
+            registrarRecaida();
+            setStep('recaida');
+          },
+        },
+      ],
+    );
   }
 
   return (
@@ -195,9 +216,24 @@ export default function PanicoScreen() {
 
             <GradientButton label="Resisti! Registrar vitória" onPress={confirmarResistencia} style={styles.btnMargin} />
 
+            <Pressable onPress={confirmarRecaidaPanico} style={styles.btnSecundario}>
+              <ThemedText type="small" themeColor="textTertiary">Recaí dessa vez</ThemedText>
+            </Pressable>
+
             <Pressable onPress={() => router.back()} style={styles.btnSecundario}>
               <ThemedText type="small" themeColor="textSecondary">Sair sem registrar</ThemedText>
             </Pressable>
+          </View>
+        )}
+
+        {step === 'recaida' && (
+          <View style={[styles.content, styles.vitoriaContent]}>
+            <ThemedText type="cardTitle" style={styles.vitoriaTitulo}>Tudo bem. Continue.</ThemedText>
+            <ThemedText type="default" themeColor="textSecondary" style={styles.vitoriaTexto}>
+              Seu streak foi zerado, mas seu XP e sua patente estão preservados.
+              Cada dia é uma nova escolha — a jornada continua.
+            </ThemedText>
+            <GradientButton label="Voltar" onPress={() => router.back()} style={styles.btnMargin} />
           </View>
         )}
 

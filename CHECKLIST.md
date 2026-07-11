@@ -2,12 +2,12 @@
 
 ## FREE
 
-- [ ] Contador de streak (dias sem recair)
-- [ ] Sistema de patente/XP (Recruta → Guerreiro, trava após e sinaliza upgrade)
-- [ ] Frase do dia (1 por dia, sem histórico)
-- [ ] Botão de pânico com respiração guiada
-- [ ] Diário de gatilhos — registro (sem insights)
-- [ ] Notificação diária de lembrete
+- [x] Contador de streak (dias sem recair)
+- [x] Sistema de patente/XP (Recruta → Guerreiro, trava após e sinaliza upgrade)
+- [x] Frase do dia (1 por dia, sem histórico)
+- [x] Botão de pânico com respiração guiada
+- [x] Diário de gatilhos — registro (sem insights)
+- [x] Notificação diária de lembrete
 - [ ] Widget de tela inicial (streak visível sem abrir o app)
 
 ## PRO (assinatura)
@@ -32,12 +32,12 @@
 
 ## Estrutura de dados a implementar (lógica base)
 
-- [ ] Streak atual (reseta na recaída)
-- [ ] XP total (nunca reseta, só acumula)
-- [ ] Tabela de patentes/sublevels (ver CLAUDE.md)
-- [ ] Lista de gatilhos selecionáveis (usada no onboarding, diário e botão de pânico)
-- [ ] Registro de eventos do botão de pânico ("resisti" vs "recaí")
-- [ ] Flag de usuário Free/Pro (controla acesso às features acima)
+- [x] Streak atual (reseta na recaída)
+- [x] XP total (nunca reseta, só acumula)
+- [x] Tabela de patentes/sublevels (ver CLAUDE.md)
+- [x] Lista de gatilhos selecionáveis (usada no onboarding, diário e botão de pânico)
+- [x] Registro de eventos do botão de pânico ("resisti" vs "recaí")
+- [x] Flag de usuário Free/Pro (controla acesso às features acima)
 
 ## Monetização / Loja
 

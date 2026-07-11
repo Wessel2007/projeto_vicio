@@ -1,5 +1,5 @@
 import { AppData } from '@/types';
-import { NIVEIS, NivelPatente, XP_POR_DIA } from '@/constants/gamification';
+import { FREE_MAX_RANK_INDEX, NIVEIS, NivelPatente, XP_POR_DIA } from '@/constants/gamification';
 
 export function calcStreakDias(streakStartDate: string | null): number {
   if (!streakStartDate) return 0;
@@ -17,23 +17,28 @@ export interface InfoPatente {
   proxNivel: NivelPatente | null;
   diasEfetivos: number;
   progressoPercent: number; // 0–100 toward next level
+  // true quando o usuário Free já acumulou dias/XP suficientes para passar de
+  // Guerreiro, mas a progressão fica travada em Guerreiro III até assinar PRO.
+  bloqueadoPorPlano: boolean;
 }
 
-export function calcPatente(totalXP: number): InfoPatente {
+export function calcPatente(totalXP: number, isPro: boolean = true): InfoPatente {
   const diasEfetivos = Math.floor(totalXP / XP_POR_DIA);
 
-  // Find the highest level the user has reached
-  let nivelAtual = NIVEIS[0];
-  for (const nivel of NIVEIS) {
-    if (diasEfetivos >= nivel.minDias) {
-      nivelAtual = nivel;
+  // Find the highest level the user has actually reached (independente do plano)
+  let idxReal = 0;
+  for (let i = 0; i < NIVEIS.length; i++) {
+    if (diasEfetivos >= NIVEIS[i].minDias) {
+      idxReal = i;
     } else {
       break;
     }
   }
 
-  const idxAtual = NIVEIS.indexOf(nivelAtual);
-  const proxNivel = NIVEIS[idxAtual + 1] ?? null;
+  const bloqueadoPorPlano = !isPro && idxReal > FREE_MAX_RANK_INDEX;
+  const idxAtual = bloqueadoPorPlano ? FREE_MAX_RANK_INDEX : idxReal;
+  const nivelAtual = NIVEIS[idxAtual];
+  const proxNivel = bloqueadoPorPlano ? null : (NIVEIS[idxAtual + 1] ?? null);
 
   let progressoPercent = 100;
   if (proxNivel) {
@@ -42,7 +47,7 @@ export function calcPatente(totalXP: number): InfoPatente {
     progressoPercent = Math.min(100, Math.floor((diasNoNivel / diasParaProx) * 100));
   }
 
-  return { nivel: nivelAtual, proxNivel, diasEfetivos, progressoPercent };
+  return { nivel: nivelAtual, proxNivel, diasEfetivos, progressoPercent, bloqueadoPorPlano };
 }
 
 export function formatarStreak(dias: number): string {

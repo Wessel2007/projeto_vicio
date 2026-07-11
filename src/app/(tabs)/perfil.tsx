@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
@@ -58,6 +59,17 @@ export default function PerfilScreen() {
     : '';
 
   const horaFormatada = `${String(dados.dailyQuoteHour).padStart(2, '0')}:${String(dados.dailyQuoteMinute).padStart(2, '0')}`;
+
+  function abrirSeletorHora() {
+    if (!dados?.isPro) {
+      Alert.alert(
+        'Recurso PRO',
+        'Personalizar o horário do lembrete é exclusivo do plano PRO. No plano Free, o lembrete é enviado às 08:00.',
+      );
+      return;
+    }
+    setMostrarSeletorHora(true);
+  }
 
   async function alternarNotificacoes(ativar: boolean) {
     if (!dados) return;
@@ -150,8 +162,11 @@ export default function PerfilScreen() {
             {dados.notificationsEnabled && (
               <>
                 <View style={styles.divisor} />
-                <Pressable onPress={() => setMostrarSeletorHora(true)} style={styles.switchRow}>
-                  <ThemedText type="default">Horário do lembrete</ThemedText>
+                <Pressable onPress={abrirSeletorHora} style={styles.switchRow}>
+                  <View style={styles.horarioLabelRow}>
+                    <ThemedText type="default">Horário do lembrete</ThemedText>
+                    {!dados.isPro && <Ionicons name="lock-closed" size={13} color={Colors.textTertiary} />}
+                  </View>
                   <ThemedText type="default" themeColor="textSecondary">{horaFormatada}</ThemedText>
                 </Pressable>
               </>
@@ -215,6 +230,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: Spacing.three,
+  },
+  horarioLabelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.one,
   },
   itemConfig: {
     flexDirection: 'row',

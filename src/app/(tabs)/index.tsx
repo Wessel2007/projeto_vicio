@@ -153,6 +153,8 @@ export default function HomeScreen() {
                   {patente.proxNivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.proxNivel.sublevel - 1]}` : ''} em{' '}
                   {patente.proxNivel.minDias - patente.diasEfetivos} dias
                 </ThemedText>
+              ) : patente.bloqueadoPorPlano ? (
+                <ThemedText type="small" style={styles.progressLabel}>Teto do Free — assine o PRO para continuar</ThemedText>
               ) : (
                 <ThemedText type="small" style={styles.progressLabel}>Nível máximo atingido</ThemedText>
               )}
