@@ -3,7 +3,7 @@ import DateTimePicker, { type DateTimePickerEvent } from '@react-native-communit
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, type Href } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AmbientGlow } from '@/components/ambient-glow';
@@ -140,7 +140,7 @@ export default function PerfilScreen() {
           <ThemedText type="title">Perfil</ThemedText>
         </View>
 
-        <View style={styles.content}>
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
           {/* Stats */}
           <LinearGradient
             colors={['rgba(255,122,61,0.14)', 'rgba(120,70,220,0.12)']}
@@ -281,7 +281,7 @@ export default function PerfilScreen() {
           <ThemedText type="small" themeColor="textTertiary" style={styles.rodape}>
             Este app é um apoio de hábito, não substitui acompanhamento terapêutico profissional.
           </ThemedText>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </ThemedView>
   );
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.three,
     paddingBottom: Spacing.two,
   },
-  content: { padding: Spacing.three, gap: Spacing.three },
+  content: { padding: Spacing.three, gap: Spacing.three, paddingBottom: 40 },
   statsCard: {
     borderRadius: 22,
     borderWidth: 1,
