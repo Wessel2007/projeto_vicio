@@ -15,8 +15,11 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { getFraseDoDia } from '@/constants/frases';
 import { getPatenteBadge } from '@/constants/patente-badges';
+import { PATENTE_THEMES } from '@/constants/patente-themes';
 import { Accent, Colors, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
+import { falarFrase } from '@/utils/audio-frases';
+import { mostrarPaywall } from '@/utils/paywall';
 
 const SUBLEVEL_LABEL = ['I', 'II', 'III'];
 const EMBER_COLORS = ['#FFE7B0', '#FFD27A', '#FFF0C8', '#FFB347', '#FFCF8A'];
@@ -63,6 +66,22 @@ export default function HomeScreen() {
   const { streakDias, totalXP, patente } = derivado;
   const sublevelLabel = patente.nivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.nivel.sublevel - 1]}` : '';
   const patenteBadge = getPatenteBadge(patente.nivel.nome, patente.nivel.sublevel);
+
+  function ouvirFraseDoDia() {
+    if (!dados?.isPro) {
+      mostrarPaywall('Narração em áudio das frases');
+      return;
+    }
+    falarFrase(frase.texto, frase.autor);
+  }
+
+  function abrirBiblioteca() {
+    if (!dados?.isPro) {
+      mostrarPaywall('A biblioteca de frases');
+      return;
+    }
+    router.push('/frases' as Href);
+  }
 
   function confirmarRecaida() {
     Alert.alert(
@@ -128,7 +147,7 @@ export default function HomeScreen() {
             <ThemedText type="eyebrow" style={styles.eyebrowGold}>Sua patente</ThemedText>
 
             <View style={styles.patenteBadgeWrap}>
-              <GlowRing size={BADGE_SIZE} color={Accent.gold} />
+              <GlowRing size={BADGE_SIZE} color={PATENTE_THEMES[dados.patenteTheme].cor} />
               <View style={styles.patenteBadgeClip}>
                 <Image source={patenteBadge} style={styles.patenteBadgeImage} resizeMode="contain" />
                 <ShineSweep size={BADGE_SIZE} />
@@ -165,9 +184,22 @@ export default function HomeScreen() {
           <GlassCard style={[styles.card, styles.fraseCard]}>
             <Ionicons name="chatbox-ellipses-outline" size={22} color={Colors.textSecondary} style={styles.fraseIcon} />
             <ThemedText type="eyebrow" themeColor="textSecondary">Frase do dia</ThemedText>
-            <ThemedText type="quote" style={styles.fraseTexto}>"{frase.texto}"</ThemedText>
+            <ThemedText type="quote" style={styles.fraseTexto}>&ldquo;{frase.texto}&rdquo;</ThemedText>
             <View style={styles.fraseDivider} />
             <ThemedText type="smallBold" themeColor="textSecondary">{frase.autor}</ThemedText>
+
+            <View style={styles.fraseAcoes}>
+              <Pressable onPress={ouvirFraseDoDia} style={styles.fraseAcaoBtn}>
+                <Ionicons name="volume-medium-outline" size={16} color={Colors.textSecondary} />
+                <ThemedText type="small" themeColor="textSecondary">Ouvir</ThemedText>
+                {!dados.isPro && <Ionicons name="lock-closed" size={11} color={Colors.textTertiary} />}
+              </Pressable>
+              <Pressable onPress={abrirBiblioteca} style={styles.fraseAcaoBtn}>
+                <Ionicons name="library-outline" size={16} color={Colors.textSecondary} />
+                <ThemedText type="small" themeColor="textSecondary">Biblioteca</ThemedText>
+                {!dados.isPro && <Ionicons name="lock-closed" size={11} color={Colors.textTertiary} />}
+              </Pressable>
+            </View>
           </GlassCard>
 
           {/* Registrar recaída */}
@@ -344,6 +376,16 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     marginTop: Spacing.half,
     backgroundColor: Colors.border,
+  },
+  fraseAcoes: {
+    flexDirection: 'row',
+    gap: Spacing.three,
+    marginTop: Spacing.two,
+  },
+  fraseAcaoBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   recaidaBtn: {
     flexDirection: 'row',

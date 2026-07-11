@@ -12,15 +12,15 @@
 
 ## PRO (assinatura)
 
-- [ ] Patentes completas (Guerreiro → Imortal) + conquistas extras/secretas
-- [ ] Histórico completo de frases + biblioteca pesquisável por tema
-- [ ] Frases em áudio narrado
-- [ ] Insights do diário de gatilhos (gráficos de horário/gatilho recorrente, tendências)
-- [ ] Botão de pânico expandido (meditação guiada, playlist de foco, contato rápido accountability partner)
-- [ ] Backup em nuvem (sync entre dispositivos)
-- [ ] Temas visuais alternativos de patente (personalização)
-- [ ] Relatório semanal/mensal de progresso
-- [ ] Notificação diária com horário customizável
+- [x] Patentes completas (Guerreiro → Imortal) + conquistas extras/secretas
+- [x] Histórico completo de frases + biblioteca pesquisável por tema
+- [x] Frases em áudio narrado (TTS do sistema via `expo-speech`; sem voz humana gravada)
+- [x] Insights do diário de gatilhos (gráficos de horário/gatilho recorrente, tendências)
+- [x] Botão de pânico expandido (meditação guiada, playlist de foco, contato rápido accountability partner)
+- [ ] Backup em nuvem (sync entre dispositivos) — adiado: depende da decisão de backend (Firebase vs FastAPI, ver CLAUDE.md)
+- [x] Temas visuais alternativos de patente (personalização)
+- [x] Relatório semanal/mensal de progresso
+- [x] Notificação diária com horário customizável
 
 ## Diferenciais / Pós-MVP
 

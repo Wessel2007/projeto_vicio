@@ -1,7 +1,8 @@
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Linking, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -21,10 +22,26 @@ import { RippleRings } from '@/components/ripple-rings';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { GATILHOS_COMUNS, getAcaoPorGatilho } from '@/constants/gatilhos';
-import { Accent, Fonts, Spacing } from '@/constants/theme';
+import { Accent, Colors, Fonts, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
+import { falarFrase, pararFala } from '@/utils/audio-frases';
+import { mostrarPaywall } from '@/utils/paywall';
 
 type Step = 'respiracao' | 'gatilho' | 'acao' | 'vitoria' | 'recaida';
+type Ferramenta = 'meditacao' | 'playlist' | 'contato' | null;
+
+const MEDITACAO_TEXTO =
+  'Feche os olhos, se puder. Sinta o peso do seu corpo apoiado onde você está. ' +
+  'Perceba o ar entrando e saindo, sem forçar nada. O desejo que você sente agora é uma onda: ' +
+  'ela sobe, atinge um pico e sempre desce — mesmo que você não faça nada. Você não precisa agir agora. ' +
+  'Você só precisa esperar a onda passar. Repita mentalmente: isso vai passar, e eu escolho quem eu sou.';
+
+const PLAYLISTS_FOCO = [
+  { label: 'Foco profundo', url: 'https://open.spotify.com/search/foco%20profundo' },
+  { label: 'Lo-fi para estudo', url: 'https://open.spotify.com/search/lo-fi%20estudo' },
+  { label: 'Música calma', url: 'https://open.spotify.com/search/musica%20calma' },
+  { label: 'Instrumental sem letra (YouTube)', url: 'https://www.youtube.com/results?search_query=musica+para+foco+sem+letra' },
+];
 
 // 4-4-4 box breathing: inhale 4s, hold 4s, exhale 4s = 12s per cycle
 const FASE_DURACAO = 4000;
@@ -122,6 +139,38 @@ export default function PanicoScreen() {
   const { dados, adicionarEntrada, registrarRecaida } = useAppData();
   const [step, setStep] = useState<Step>('respiracao');
   const [gatilhoSelecionado, setGatilhoSelecionado] = useState('');
+  const [ferramentaAberta, setFerramentaAberta] = useState<Ferramenta>(null);
+
+  useEffect(() => () => pararFala(), []);
+
+  function abrirFerramenta(f: Exclude<Ferramenta, null>) {
+    if (!dados?.isPro) {
+      mostrarPaywall('As ferramentas expandidas do botão de pânico');
+      return;
+    }
+    setFerramentaAberta(f);
+  }
+
+  function fecharFerramenta() {
+    pararFala();
+    setFerramentaAberta(null);
+  }
+
+  function ligarContato() {
+    if (!dados?.accountabilityPhone) {
+      Alert.alert('Nenhum contato salvo', 'Cadastre um contato de confiança em Perfil > Contato de confiança.');
+      return;
+    }
+    Linking.openURL(`tel:${dados.accountabilityPhone}`);
+  }
+
+  function mandarMensagem() {
+    if (!dados?.accountabilityPhone) {
+      Alert.alert('Nenhum contato salvo', 'Cadastre um contato de confiança em Perfil > Contato de confiança.');
+      return;
+    }
+    Linking.openURL(`sms:${dados.accountabilityPhone}`);
+  }
 
   const badgeFloat = useSharedValue(0);
   useEffect(() => {
@@ -216,6 +265,24 @@ export default function PanicoScreen() {
 
             <GradientButton label="Resisti! Registrar vitória" onPress={confirmarResistencia} style={styles.btnMargin} />
 
+            <View style={styles.ferramentasRow}>
+              <Pressable onPress={() => abrirFerramenta('meditacao')} style={styles.ferramentaBtn}>
+                <Ionicons name="leaf-outline" size={18} color={Colors.textSecondary} />
+                <ThemedText type="small" themeColor="textSecondary">Meditação</ThemedText>
+                {!dados?.isPro && <Ionicons name="lock-closed" size={10} color={Colors.textTertiary} />}
+              </Pressable>
+              <Pressable onPress={() => abrirFerramenta('playlist')} style={styles.ferramentaBtn}>
+                <Ionicons name="musical-notes-outline" size={18} color={Colors.textSecondary} />
+                <ThemedText type="small" themeColor="textSecondary">Playlist</ThemedText>
+                {!dados?.isPro && <Ionicons name="lock-closed" size={10} color={Colors.textTertiary} />}
+              </Pressable>
+              <Pressable onPress={() => abrirFerramenta('contato')} style={styles.ferramentaBtn}>
+                <Ionicons name="call-outline" size={18} color={Colors.textSecondary} />
+                <ThemedText type="small" themeColor="textSecondary">Contato</ThemedText>
+                {!dados?.isPro && <Ionicons name="lock-closed" size={10} color={Colors.textTertiary} />}
+              </Pressable>
+            </View>
+
             <Pressable onPress={confirmarRecaidaPanico} style={styles.btnSecundario}>
               <ThemedText type="small" themeColor="textTertiary">Recaí dessa vez</ThemedText>
             </Pressable>
@@ -264,6 +331,70 @@ export default function PanicoScreen() {
           </View>
         )}
       </SafeAreaView>
+
+      <Modal visible={ferramentaAberta !== null} animationType="slide" presentationStyle="pageSheet" onRequestClose={fecharFerramenta}>
+        <ThemedView style={styles.modal}>
+          <View style={styles.modalHeader}>
+            <ThemedText type="subtitle">
+              {ferramentaAberta === 'meditacao' && 'Meditação guiada'}
+              {ferramentaAberta === 'playlist' && 'Playlist de foco'}
+              {ferramentaAberta === 'contato' && 'Contato rápido'}
+            </ThemedText>
+            <Pressable onPress={fecharFerramenta}>
+              <ThemedText type="small" themeColor="textSecondary">Fechar</ThemedText>
+            </Pressable>
+          </View>
+
+          <ScrollView contentContainerStyle={styles.modalContent}>
+            {ferramentaAberta === 'meditacao' && (
+              <>
+                <ThemedText type="default" style={styles.meditacaoTexto}>{MEDITACAO_TEXTO}</ThemedText>
+                <GradientButton
+                  label="Ouvir narração"
+                  icon={<Ionicons name="volume-medium-outline" size={18} color="#FFFFFF" />}
+                  onPress={() => falarFrase(MEDITACAO_TEXTO)}
+                  style={styles.btnMargin}
+                />
+              </>
+            )}
+
+            {ferramentaAberta === 'playlist' && (
+              <View style={{ gap: Spacing.two }}>
+                <ThemedText type="small" themeColor="textSecondary">
+                  Abre em um app externo (Spotify ou YouTube).
+                </ThemedText>
+                {PLAYLISTS_FOCO.map((p) => (
+                  <Pressable key={p.url} onPress={() => Linking.openURL(p.url)} style={styles.playlistItem}>
+                    <Ionicons name="play-circle-outline" size={20} color={Accent.orange} />
+                    <ThemedText type="default">{p.label}</ThemedText>
+                  </Pressable>
+                ))}
+              </View>
+            )}
+
+            {ferramentaAberta === 'contato' && (
+              <View style={{ gap: Spacing.two }}>
+                {dados?.accountabilityPhone ? (
+                  <>
+                    <ThemedText type="default">
+                      {dados.accountabilityName || 'Seu contato de confiança'}
+                    </ThemedText>
+                    <GradientButton label="Ligar agora" onPress={ligarContato} />
+                    <Pressable onPress={mandarMensagem} style={styles.playlistItem}>
+                      <Ionicons name="chatbubble-outline" size={20} color={Accent.orange} />
+                      <ThemedText type="default">Enviar mensagem</ThemedText>
+                    </Pressable>
+                  </>
+                ) : (
+                  <ThemedText type="small" themeColor="textSecondary">
+                    Nenhum contato salvo. Cadastre em Perfil {'>'} Contato de confiança.
+                  </ThemedText>
+                )}
+              </View>
+            )}
+          </ScrollView>
+        </ThemedView>
+      </Modal>
     </ThemedView>
   );
 }
@@ -327,6 +458,31 @@ const styles = StyleSheet.create({
   acaoTexto: { lineHeight: 28, fontSize: 18 },
   acaoInstrucao: { textAlign: 'center' },
   btnSecundario: { alignItems: 'center', paddingVertical: Spacing.two },
+  ferramentasRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: Spacing.three,
+  },
+  ferramentaBtn: {
+    alignItems: 'center',
+    gap: 4,
+  },
+  modal: { flex: 1 },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: Spacing.three,
+    paddingTop: Spacing.four,
+  },
+  modalContent: { padding: Spacing.three, gap: Spacing.two, paddingBottom: 40 },
+  meditacaoTexto: { lineHeight: 26, fontSize: 17 },
+  playlistItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+    paddingVertical: Spacing.two,
+  },
   vitoriaContent: {
     alignItems: 'center',
     justifyContent: 'center',

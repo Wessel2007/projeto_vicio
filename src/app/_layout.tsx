@@ -71,6 +71,28 @@ export default function RootLayout() {
               headerStyle: { backgroundColor: Colors.background },
             }}
           />
+          <Stack.Screen
+            name="frases"
+            options={{
+              presentation: 'modal',
+              headerShown: true,
+              headerTitle: 'Biblioteca de frases',
+              headerShadowVisible: false,
+              headerTintColor: Colors.text,
+              headerStyle: { backgroundColor: Colors.background },
+            }}
+          />
+          <Stack.Screen
+            name="relatorio"
+            options={{
+              presentation: 'modal',
+              headerShown: true,
+              headerTitle: 'Relatório de progresso',
+              headerShadowVisible: false,
+              headerTintColor: Colors.text,
+              headerStyle: { backgroundColor: Colors.background },
+            }}
+          />
         </Stack>
       )}
     </ThemeProvider>

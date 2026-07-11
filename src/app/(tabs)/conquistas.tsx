@@ -18,8 +18,10 @@ import { GlowRing } from '@/components/glow-ring';
 import { ParticleField } from '@/components/particle-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CONQUISTAS_SECRETAS } from '@/constants/conquistas-secretas';
 import { FREE_MAX_RANK_INDEX, NIVEIS, NivelPatente } from '@/constants/gamification';
 import { getPatenteBadge } from '@/constants/patente-badges';
+import { PATENTE_THEMES } from '@/constants/patente-themes';
 import { Accent, Colors, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
 
@@ -122,7 +124,7 @@ export default function ConquistasScreen() {
             <ThemedText type="eyebrow" style={styles.heroEyebrow}>Sua patente atual</ThemedText>
 
             <Animated.View style={[styles.heroBadgeWrap, badgeGlowStyle]}>
-              <GlowRing size={136} color="#FFFFFF" />
+              <GlowRing size={136} color={PATENTE_THEMES[dados.patenteTheme].cor} />
               <View style={[styles.heroBadgeGlow, { backgroundColor: heroTheme.glow }]} />
               <Image
                 source={getPatenteBadge(nomeAtual, sublevelAtual)}
@@ -264,6 +266,42 @@ export default function ConquistasScreen() {
               </Animated.View>
             );
           })}
+
+          <View style={styles.secretasHeader}>
+            <ThemedText type="eyebrow" themeColor="textSecondary">Conquistas Secretas</ThemedText>
+            {!isPro && <Ionicons name="lock-closed" size={13} color={Colors.textTertiary} />}
+          </View>
+
+          {isPro ? (
+            <View style={styles.secretasGrid}>
+              {CONQUISTAS_SECRETAS.map((c) => {
+                const desbloqueada = c.condicao({ dados, streakDias, totalXP });
+                return (
+                  <View key={c.id} style={styles.secretaCard}>
+                    <View style={[styles.secretaIconWrap, desbloqueada && styles.secretaIconWrapAtivo]}>
+                      <Ionicons
+                        name={(desbloqueada ? c.icone : 'lock-closed') as never}
+                        size={22}
+                        color={desbloqueada ? Accent.gold : Colors.textTertiary}
+                      />
+                    </View>
+                    <ThemedText type="smallBold" themeColor={desbloqueada ? 'text' : 'textTertiary'} style={styles.secretaNome}>
+                      {c.nome}
+                    </ThemedText>
+                    <ThemedText type="small" themeColor="textTertiary" style={styles.secretaDescricao}>
+                      {desbloqueada ? c.descricao : '???'}
+                    </ThemedText>
+                  </View>
+                );
+              })}
+            </View>
+          ) : (
+            <ThemedView type="backgroundElement" style={styles.secretasBloqueadas}>
+              <ThemedText type="small" themeColor="textSecondary" style={styles.secretasBloqueadasTexto}>
+                Assine o PRO para desbloquear {CONQUISTAS_SECRETAS.length} conquistas secretas.
+              </ThemedText>
+            </ThemedView>
+          )}
         </ScrollView>
       </SafeAreaView>
     </ThemedView>
@@ -441,5 +479,56 @@ const styles = StyleSheet.create({
   },
   subLabelOnColor: {
     color: 'rgba(255,255,255,0.85)',
+  },
+  secretasHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.one,
+    marginTop: Spacing.two,
+    marginLeft: Spacing.one,
+  },
+  secretasGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.two,
+  },
+  secretaCard: {
+    width: '31%',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: Spacing.two,
+    paddingHorizontal: Spacing.one,
+    borderRadius: Spacing.two,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    backgroundColor: Colors.backgroundElement,
+  },
+  secretaIconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+  },
+  secretaIconWrapAtivo: {
+    backgroundColor: 'rgba(242,197,114,0.14)',
+  },
+  secretaNome: {
+    textAlign: 'center',
+  },
+  secretaDescricao: {
+    textAlign: 'center',
+    fontSize: 11,
+    lineHeight: 15,
+  },
+  secretasBloqueadas: {
+    borderRadius: Spacing.two,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    padding: Spacing.three,
+  },
+  secretasBloqueadasTexto: {
+    textAlign: 'center',
   },
 });

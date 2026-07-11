@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
   FlatList,
@@ -21,6 +22,13 @@ import { GATILHOS_COMUNS } from '@/constants/gatilhos';
 import { Accent, Colors, Fonts, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
 import { TriggerEntry } from '@/types';
+import {
+  calcTaxaResistencia,
+  calcTendenciaSemanal,
+  contarGatilhos,
+  contarPorHorario,
+} from '@/utils/insights';
+import { mostrarPaywall } from '@/utils/paywall';
 
 const DIARIO_GLOW = [
   { color: Accent.fireMid, top: '4%' as const, left: '10%' as const, size: 480, opacity: 0.16 },
@@ -49,12 +57,35 @@ function EntradaItem({ entry }: { entry: TriggerEntry }) {
   );
 }
 
+function BarraInsight({ label, total, percent }: { label: string; total: number; percent: number }) {
+  return (
+    <View style={styles.insightLinha}>
+      <View style={styles.insightLinhaTopo}>
+        <ThemedText type="small">{label}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">{total}</ThemedText>
+      </View>
+      <View style={styles.insightTrack}>
+        <View style={[styles.insightFill, { width: `${Math.max(4, percent)}%` }]} />
+      </View>
+    </View>
+  );
+}
+
 export default function DiarioScreen() {
   const { dados, adicionarEntrada, carregando } = useAppData();
   const [modalAberto, setModalAberto] = useState(false);
+  const [insightsAberto, setInsightsAberto] = useState(false);
   const [gatilhoSelecionado, setGatilhoSelecionado] = useState('');
   const [notas, setNotas] = useState('');
   const [resistedSelecionado, setResistedSelecionado] = useState<boolean | null>(null);
+
+  function abrirInsights() {
+    if (!dados?.isPro) {
+      mostrarPaywall('Insights do diário de gatilhos');
+      return;
+    }
+    setInsightsAberto(true);
+  }
 
   function fecharModal() {
     setGatilhoSelecionado('');
@@ -82,7 +113,14 @@ export default function DiarioScreen() {
       <AmbientGlow blobs={DIARIO_GLOW} />
       <SafeAreaView style={styles.safe}>
         <View style={styles.header}>
-          <ThemedText type="title">Diário</ThemedText>
+          <View style={styles.headerTopo}>
+            <ThemedText type="title">Diário</ThemedText>
+            <Pressable onPress={abrirInsights} style={styles.insightsBtn}>
+              <Ionicons name="stats-chart-outline" size={16} color={Colors.textSecondary} />
+              <ThemedText type="small" themeColor="textSecondary">Insights</ThemedText>
+              {!dados.isPro && <Ionicons name="lock-closed" size={11} color={Colors.textTertiary} />}
+            </Pressable>
+          </View>
           <ThemedText type="small" themeColor="textSecondary">
             {dados.entries.length} {dados.entries.length === 1 ? 'entrada registrada' : 'entradas registradas'}
           </ThemedText>
@@ -168,6 +206,74 @@ export default function DiarioScreen() {
           </ScrollView>
         </ThemedView>
       </Modal>
+
+      {/* Modal de insights (PRO) */}
+      <Modal visible={insightsAberto} animationType="slide" presentationStyle="pageSheet">
+        <ThemedView style={styles.modal}>
+          <View style={styles.modalHeader}>
+            <ThemedText type="subtitle">Insights</ThemedText>
+            <Pressable onPress={() => setInsightsAberto(false)}>
+              <ThemedText type="small" themeColor="textSecondary">Fechar</ThemedText>
+            </Pressable>
+          </View>
+
+          <ScrollView contentContainerStyle={styles.modalContent}>
+            {dados.entries.length === 0 ? (
+              <ThemedText type="small" themeColor="textSecondary">
+                Registre entradas no diário para ver seus padrões aqui.
+              </ThemedText>
+            ) : (
+              <>
+                {(() => {
+                  const taxa = calcTaxaResistencia(dados.entries);
+                  const tendencia = calcTendenciaSemanal(dados.entries);
+                  const gatilhos = contarGatilhos(dados.entries);
+                  const horarios = contarPorHorario(dados.entries);
+                  return (
+                    <>
+                      <GlassCard style={styles.insightCard}>
+                        <ThemedText type="eyebrow" themeColor="textSecondary">Taxa de resistência</ThemedText>
+                        <ThemedText type="cardTitle" style={{ color: Accent.success }}>{taxa.percentResistencia}%</ThemedText>
+                        <ThemedText type="small" themeColor="textSecondary">
+                          {taxa.resistidas} resistidas • {taxa.recaidas} recaídas
+                        </ThemedText>
+                      </GlassCard>
+
+                      <GlassCard style={styles.insightCard}>
+                        <ThemedText type="eyebrow" themeColor="textSecondary">Tendência semanal</ThemedText>
+                        <ThemedText type="default">
+                          {tendencia.semanaAtual} registros nos últimos 7 dias
+                          {tendencia.semanaAnterior > 0 || tendencia.semanaAtual > 0
+                            ? ` (${tendencia.semanaAnterior} na semana anterior)`
+                            : ''}
+                        </ThemedText>
+                      </GlassCard>
+
+                      <GlassCard style={styles.insightCard}>
+                        <ThemedText type="eyebrow" themeColor="textSecondary" style={{ marginBottom: Spacing.one }}>
+                          Gatilhos mais comuns
+                        </ThemedText>
+                        {gatilhos.map((g) => (
+                          <BarraInsight key={g.gatilho} label={g.gatilho} total={g.total} percent={g.percent} />
+                        ))}
+                      </GlassCard>
+
+                      <GlassCard style={styles.insightCard}>
+                        <ThemedText type="eyebrow" themeColor="textSecondary" style={{ marginBottom: Spacing.one }}>
+                          Horário mais recorrente
+                        </ThemedText>
+                        {horarios.map((h) => (
+                          <BarraInsight key={h.label} label={h.label} total={h.total} percent={h.percent} />
+                        ))}
+                      </GlassCard>
+                    </>
+                  );
+                })()}
+              </>
+            )}
+          </ScrollView>
+        </ThemedView>
+      </Modal>
     </ThemedView>
   );
 }
@@ -181,6 +287,44 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.three,
     paddingBottom: Spacing.two,
     gap: Spacing.half,
+  },
+  headerTopo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  insightsBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: Spacing.one,
+    paddingHorizontal: Spacing.two,
+    borderRadius: Spacing.two,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  insightCard: {
+    padding: Spacing.three,
+    gap: 2,
+  },
+  insightLinha: {
+    marginTop: Spacing.one,
+    gap: 4,
+  },
+  insightLinhaTopo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  insightTrack: {
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.backgroundSelected,
+    overflow: 'hidden',
+  },
+  insightFill: {
+    height: '100%',
+    borderRadius: 4,
+    backgroundColor: Accent.orange,
   },
   vazio: {
     flex: 1,
