@@ -53,6 +53,7 @@ export default function OnboardingScreen() {
     const streakStartDate = new Date(
       Date.now() - dias * 24 * 60 * 60 * 1000
     ).toISOString();
+    const trackingStartDate = new Date().toISOString();
 
     const notificationsEnabled = notificacoesAtivadas
       ? await ativarNotificacoes(DEFAULT_DATA.dailyQuoteHour, DEFAULT_DATA.dailyQuoteMinute)
@@ -63,6 +64,7 @@ export default function OnboardingScreen() {
       ...dados,
       onboardingDone: true,
       streakStartDate,
+      trackingStartDate,
       selectedTriggers: gatilhosSelecionados,
       notificationsEnabled,
     });

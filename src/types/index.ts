@@ -11,6 +11,13 @@ export type PatenteTheme = 'ouro' | 'prata' | 'carmesim';
 export interface AppData {
   onboardingDone: boolean;
   streakStartDate: string | null;
+  // Data real (nunca retroativa) de quando o usuário terminou o onboarding —
+  // usada para saber a partir de quando o calendário de streak pode pintar
+  // dias, já que streakStartDate pode ser retroativo ("há X dias sem recair").
+  trackingStartDate: string | null;
+  // Histórico de recaídas (um ISO string por toque em "Registrar recaída"),
+  // usado para pintar os dias vermelhos no calendário de streak.
+  relapseDates: string[];
   savedXP: number;
   entries: TriggerEntry[];
   selectedTriggers: string[];
@@ -32,6 +39,8 @@ export interface AppData {
 export const DEFAULT_DATA: AppData = {
   onboardingDone: false,
   streakStartDate: null,
+  trackingStartDate: null,
+  relapseDates: [],
   savedXP: 0,
   entries: [],
   selectedTriggers: [],

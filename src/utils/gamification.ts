@@ -55,3 +55,23 @@ export function formatarStreak(dias: number): string {
   if (dias === 1) return '1 dia';
   return `${dias} dias`;
 }
+
+export function calcMaiorStreak(
+  data: Pick<AppData, 'trackingStartDate' | 'streakStartDate' | 'relapseDates'>,
+): number {
+  const inicio = data.trackingStartDate ?? data.streakStartDate;
+  if (!inicio) return 0;
+
+  const marcos = [
+    new Date(inicio).getTime(),
+    ...data.relapseDates.map((d) => new Date(d).getTime()),
+    Date.now(),
+  ].sort((a, b) => a - b);
+
+  let maior = 0;
+  for (let i = 1; i < marcos.length; i++) {
+    const diasSegmento = Math.floor((marcos[i] - marcos[i - 1]) / (1000 * 60 * 60 * 24));
+    maior = Math.max(maior, diasSegmento);
+  }
+  return maior;
+}

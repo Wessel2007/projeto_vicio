@@ -93,6 +93,17 @@ export default function RootLayout() {
               headerStyle: { backgroundColor: Colors.background },
             }}
           />
+          <Stack.Screen
+            name="streak-detalhe"
+            options={{
+              presentation: 'modal',
+              headerShown: true,
+              headerTitle: 'Sua jornada',
+              headerShadowVisible: false,
+              headerTintColor: Colors.text,
+              headerStyle: { backgroundColor: Colors.background },
+            }}
+          />
         </Stack>
       )}
     </ThemeProvider>

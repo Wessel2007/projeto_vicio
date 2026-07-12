@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AppData, DEFAULT_DATA, TriggerEntry } from '@/types';
 import { carregarDados, salvarDados } from '@/storage';
 import { RECAIDA_PENALIDADE_PERCENT, XP_POR_DIA } from '@/constants/gamification';
-import { calcPatente, calcStreakDias, calcTotalXP } from '@/utils/gamification';
+import { calcMaiorStreak, calcPatente, calcStreakDias, calcTotalXP } from '@/utils/gamification';
 import { agendarLembreteDiario } from '@/notifications';
 
 export function useAppData() {
@@ -36,10 +36,12 @@ export function useAppData() {
       const streakAtual = calcStreakDias(prev.streakStartDate);
       const xpStreak = streakAtual * XP_POR_DIA;
       const xpRetido = Math.round(xpStreak * (1 - RECAIDA_PENALIDADE_PERCENT));
+      const agora = new Date().toISOString();
       const next: AppData = {
         ...prev,
         savedXP: prev.savedXP + xpRetido,
-        streakStartDate: new Date().toISOString(),
+        streakStartDate: agora,
+        relapseDates: [...prev.relapseDates, agora],
       };
       salvarDados(next);
       return next;
@@ -71,6 +73,7 @@ export function useAppData() {
         streakDias: calcStreakDias(dados.streakStartDate),
         totalXP: calcTotalXP(dados),
         patente: calcPatente(calcTotalXP(dados), dados.isPro),
+        maiorStreak: calcMaiorStreak(dados),
       }
     : null;
 

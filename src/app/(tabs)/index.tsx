@@ -7,6 +7,7 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTim
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AmbientGlow } from '@/components/ambient-glow';
+import { CountdownBloco } from '@/components/countdown-bloco';
 import { GlassCard } from '@/components/glass-card';
 import { GlowRing } from '@/components/glow-ring';
 import { ParticleField } from '@/components/particle-field';
@@ -18,6 +19,7 @@ import { getPatenteBadge } from '@/constants/patente-badges';
 import { PATENTE_THEMES } from '@/constants/patente-themes';
 import { Accent, Colors, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
+import { useElapsedTime } from '@/hooks/useElapsedTime';
 import { falarFrase } from '@/utils/audio-frases';
 import { mostrarPaywall } from '@/utils/paywall';
 
@@ -33,6 +35,7 @@ const APP_ICON = require('@/assets/images/icon.png');
 
 export default function HomeScreen() {
   const { dados, derivado, registrarRecaida, carregando } = useAppData();
+  const elapsed = useElapsedTime(dados?.streakStartDate ?? null);
 
   const flamePulse = useSharedValue(1);
   const panicoGlow = useSharedValue(0);
@@ -63,7 +66,7 @@ export default function HomeScreen() {
   }
 
   const frase = getFraseDoDia();
-  const { streakDias, totalXP, patente } = derivado;
+  const { totalXP, patente } = derivado;
   const sublevelLabel = patente.nivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.nivel.sublevel - 1]}` : '';
   const patenteBadge = getPatenteBadge(patente.nivel.nome, patente.nivel.sublevel);
 
@@ -121,22 +124,26 @@ export default function HomeScreen() {
           </View>
 
           {/* Streak */}
-          <LinearGradient
-            colors={[Accent.fireStart, Accent.fireMid, Accent.fireEnd]}
-            locations={Accent.fireLocations}
-            start={{ x: 0.1, y: 0 }}
-            end={{ x: 0.9, y: 1 }}
-            style={[styles.card, styles.streakCard]}>
-            <ParticleField mode="rise" count={6} colors={EMBER_COLORS} style={styles.emberArea} />
-            <ThemedText type="eyebrow" style={styles.eyebrowOnColor}>Sequência atual</ThemedText>
-            <Animated.View style={[styles.flameBadge, flameStyle]}>
-              <Ionicons name="flame" size={36} color="#FFFFFF" />
-            </Animated.View>
-            <ThemedText type="heroNumber" style={styles.streakNumber}>{streakDias}</ThemedText>
-            <ThemedText style={styles.onColorText}>
-              {streakDias === 1 ? 'dia sem recair' : 'dias sem recair'}
-            </ThemedText>
-          </LinearGradient>
+          <Pressable onPress={() => router.push('/streak-detalhe' as Href)} style={styles.streakPressable}>
+            <LinearGradient
+              colors={[Accent.fireStart, Accent.fireMid, Accent.fireEnd]}
+              locations={Accent.fireLocations}
+              start={{ x: 0.1, y: 0 }}
+              end={{ x: 0.9, y: 1 }}
+              style={[styles.card, styles.streakCard]}>
+              <ParticleField mode="rise" count={6} colors={EMBER_COLORS} style={styles.emberArea} />
+              <ThemedText type="eyebrow" style={styles.eyebrowOnColor}>Sequência atual</ThemedText>
+              <Animated.View style={[styles.flameBadge, flameStyle]}>
+                <Ionicons name="flame" size={36} color="#FFFFFF" />
+              </Animated.View>
+              <View style={styles.countdownRow}>
+                <CountdownBloco valor={elapsed.dias} label="dias" light />
+                <CountdownBloco valor={elapsed.horas} label="horas" light />
+                <CountdownBloco valor={elapsed.minutos} label="min" light />
+                <CountdownBloco valor={elapsed.segundos} label="seg" light />
+              </View>
+            </LinearGradient>
+          </Pressable>
 
           {/* Patente */}
           <LinearGradient
@@ -278,6 +285,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
+  streakPressable: {
+    width: '100%',
+    maxWidth: 480,
+  },
   streakCard: {
     gap: Spacing.one,
     overflow: 'hidden',
@@ -301,11 +312,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: Spacing.one,
   },
-  streakNumber: {
-    color: '#FFFFFF',
-    textShadowColor: 'rgba(0,0,0,0.25)',
-    textShadowOffset: { width: 0, height: 4 },
-    textShadowRadius: 20,
+  countdownRow: {
+    flexDirection: 'row',
+    gap: Spacing.two,
+    marginTop: Spacing.one,
   },
   patenteCard: {
     gap: Spacing.one,
