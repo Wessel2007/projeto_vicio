@@ -1,5 +1,9 @@
 export const XP_POR_DIA = 10;
 
+// Fração do XP da streak perdida ao registrar uma recaída (o restante é
+// bancado em savedXP). Pesa na consciência sem zerar o progresso todo.
+export const RECAIDA_PENALIDADE_PERCENT = 0.25;
+
 export interface NivelPatente {
   nome: string;
   sublevel: 1 | 2 | 3 | null;

@@ -202,7 +202,7 @@ export default function PanicoScreen() {
   function confirmarRecaidaPanico() {
     Alert.alert(
       'Registrar recaída',
-      'Isso vai zerar seu streak atual, mas seu XP e patente são mantidos. Isso realmente aconteceu?',
+      'Isso vai zerar seu streak atual e você perde parte do XP dessa sequência. Seu progresso total não zera. Isso realmente aconteceu?',
       [
         { text: 'Cancelar', style: 'cancel' },
         {
@@ -297,8 +297,8 @@ export default function PanicoScreen() {
           <View style={[styles.content, styles.vitoriaContent]}>
             <ThemedText type="cardTitle" style={styles.vitoriaTitulo}>Tudo bem. Continue.</ThemedText>
             <ThemedText type="default" themeColor="textSecondary" style={styles.vitoriaTexto}>
-              Seu streak foi zerado, mas seu XP e sua patente estão preservados.
-              Cada dia é uma nova escolha — a jornada continua.
+              Seu streak foi zerado e parte do XP dessa sequência foi perdido.
+              Mas seu progresso não some — cada dia é uma nova escolha.
             </ThemedText>
             <GradientButton label="Voltar" onPress={() => router.back()} style={styles.btnMargin} />
           </View>

@@ -95,8 +95,8 @@ export default function OnboardingScreen() {
                 <ThemedText type="default" themeColor="textSecondary" style={styles.descricao}>
                   Este app acompanha sua jornada de autodisciplina, dia a dia.
                   {'\n\n'}
-                  Sua patente e XP nunca regridem — mesmo se houver uma recaída, seu
-                  progresso está preservado.
+                  Uma recaída zera seu streak e custa parte do XP daquela
+                  sequência — mas seu progresso total nunca some.
                 </ThemedText>
 
                 <GlassCard style={styles.card}>

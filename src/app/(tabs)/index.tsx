@@ -86,7 +86,7 @@ export default function HomeScreen() {
   function confirmarRecaida() {
     Alert.alert(
       'Registrar recaída',
-      'Isso vai zerar seu streak atual, mas seu XP e patente são mantidos. Isso realmente aconteceu?',
+      'Isso vai zerar seu streak atual e você perde parte do XP dessa sequência. Seu progresso total não zera. Isso realmente aconteceu?',
       [
         { text: 'Cancelar', style: 'cancel' },
         {
@@ -96,7 +96,7 @@ export default function HomeScreen() {
             registrarRecaida();
             Alert.alert(
               'Recomeçando',
-              'Sua jornada continua. Cada dia é uma nova escolha. Seu XP está preservado.',
+              'Sua jornada continua. Cada dia é uma nova escolha. Você manteve parte do seu XP.',
             );
           },
         },
