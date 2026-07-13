@@ -1,19 +1,25 @@
 /**
- * Paleta dark-only do app — "Jornada do Guerreiro", direção 1a (Fogo).
- * Extraída de design/redesign/Redesign.dc.html. O app não segue mais o tema
- * do sistema: é sempre escuro, como no mockup.
+ * Paleta dark-only do app — direção visual "Aço & Brasa" (Steel & Ember).
+ * Fundo carvão único em todas as telas; fogo/brasa APENAS como acento de
+ * progresso e ação; bronze para patente/PRO; carmesim RESERVADO ao SOS.
+ * Referência: design_handoff_forja/README.md + Redesign Forja.dc.html (2a/1a–1i).
  */
 
 import '@/global.css';
 
 export const Colors = {
-  background: '#0B0A0D',
-  backgroundElement: 'rgba(255,255,255,0.045)',
-  backgroundSelected: 'rgba(255,255,255,0.09)',
-  border: 'rgba(255,255,255,0.08)',
-  text: '#F2F2F5',
-  textSecondary: '#9A9AA4',
-  textTertiary: '#6A6A74',
+  // Fundo carvão quente de TODAS as telas. Fluxos de crise/celebração usam
+  // um passo mais escuro (ver Accent.bgCrise / Accent.bgCelebracao).
+  background: '#0D0B09',
+  // Única superfície de card do app ("chapa").
+  backgroundElement: '#171310',
+  backgroundSelected: 'rgba(255,255,255,0.06)',
+  border: 'rgba(255,255,255,0.07)',
+  // Texto primário: branco quente, nunca #FFF puro em texto corrido.
+  text: '#F4EFE9',
+  // Hierarquia de texto secundário (rgba do texto primário).
+  textSecondary: 'rgba(244,239,233,0.55)',
+  textTertiary: 'rgba(244,239,233,0.40)',
 } as const;
 
 export type ThemeColor = keyof typeof Colors;
@@ -22,10 +28,21 @@ export type ThemeColor = keyof typeof Colors;
 // no _layout raiz. Como não são fontes variáveis, a seleção de peso é feita
 // trocando `fontFamily`, não `fontWeight`.
 export const Fonts = {
+  // Archivo — manchetes cerimoniais, marca FORJA, eyebrows, títulos atléticos.
   display: {
+    medium: 'Archivo_500Medium',
+    semibold: 'Archivo_600SemiBold',
+    bold: 'Archivo_700Bold',
+    extrabold: 'Archivo_800ExtraBold',
+    black: 'Archivo_900Black',
+  },
+  // Space Grotesk — números grandes, labels de card (UPPERCASE), dados.
+  data: {
+    medium: 'SpaceGrotesk_500Medium',
     semibold: 'SpaceGrotesk_600SemiBold',
     bold: 'SpaceGrotesk_700Bold',
   },
+  // Manrope — corpo, botões de texto, listas.
   body: {
     regular: 'Manrope_400Regular',
     medium: 'Manrope_500Medium',
@@ -46,40 +63,85 @@ export const Spacing = {
   six: 64,
 } as const;
 
+// Raios de canto padronizados (README > Raios e espaçamento).
+export const Radius = {
+  card: 16,
+  cardHighlight: 18,
+  button: 16,
+  pill: 99,
+  badge: 7,
+} as const;
+
 export const BottomTabInset = 24;
 export const MaxContentWidth = 800;
 
-// Cores semânticas de gamificação (streak, patente, ações). Vivem em cima de
-// superfícies em gradiente onde o texto é sempre claro.
+// Cores semânticas de "Aço & Brasa". O fogo vive sobre o carvão; o texto
+// sobre gradiente de brasa é sempre claro.
 export const Accent = {
-  // Streak — gradiente de fogo de 3 stops (linear-gradient(160deg,#FF9D4D 0%,#FF5722 52%,#C1300F 100%))
-  fireStart: '#FF9D4D',
-  fireMid: '#FF5722',
-  fireEnd: '#C1300F',
-  fireLocations: [0, 0.52, 1] as [number, number, number],
+  // Brasa (primária) — progresso, tab ativa, acentos.
+  brasa: '#FF6B2B',
+  brasaTab: '#FF7A36',
+  brasaClara: '#FFC46B', // ponta de progresso, highlights
+  brasaEscura: '#C9330B', // fim de gradientes
+  brasaEscura2: '#D8380E',
 
-  // Patente — violeta nobre (linear-gradient(160deg,#241B4A 0%,#4B2E86 100%))
-  rankStart: '#241B4A',
-  rankEnd: '#4B2E86',
+  // Gradiente de têmpera do metal (barra/anel de progresso).
+  temperaStart: '#FFC46B',
+  temperaMid: '#FF6B2B',
+  temperaEnd: '#C9330B',
+  temperaLocations: [0, 0.55, 1] as [number, number, number],
 
-  gold: '#F2C572',
-  goldMuted: 'rgba(242, 197, 114, 0.7)',
+  // CTA primário: linear-gradient(135deg,#FFB05C,#FF6B2B 55%,#D8380E)
+  ctaStart: '#FFB05C',
+  ctaMid: '#FF6B2B',
+  ctaEnd: '#D8380E',
+  ctaLocations: [0, 0.55, 1] as [number, number, number],
 
-  // Botão de pânico
-  danger: '#F0392B',
-  dangerDark: '#B01810',
+  // Orbe de respiração (radial-gradient no protótipo, aproximado com linear).
+  orbStart: '#FF9D4D',
+  orbMid: '#FF5A1E',
+  orbEnd: '#A82708',
 
-  // Eyebrows de seção
-  violet: '#9A6BFF',
-  teal: '#2BB6A8',
+  // Bronze/dourado — patente, marca FORJA, tudo PRO.
+  bronze: '#E8B458',
+  bronzeMuted: 'rgba(232,180,88,0.7)',
+  bronzeBorda: 'rgba(232,180,88,0.28)',
+  bronzeFundo: 'rgba(232,180,88,0.06)',
 
-  // Laranja de destaque (links, chip selecionado, tab ativa)
-  orange: '#FF7A3D',
+  // Carmesim — RESERVADO ao SOS/pânico. Nunca usar em outro contexto.
+  carmesim: '#E5484D',
+  carmesimTexto: '#F2A9AC',
+  carmesimBorda: 'rgba(229,72,77,0.45)',
+  carmesimFundo: 'rgba(229,72,77,0.10)',
+
+  // Verde — "Resisti" / taxa de resistência.
+  verde: '#58C286',
+  verdeFundo: 'rgba(88,194,134,0.14)',
+
+  // Vermelho suave — "Recaída" / ações destrutivas.
+  vermelhoSuave: '#F07B72',
+  vermelhoSuaveFundo: 'rgba(240,123,114,0.13)',
+
+  // Tab inativa.
+  tabInativa: '#6F6558',
+
+  // Fundos um passo mais escuros para fluxos especiais.
+  bgCrise: '#0A0807',
+  bgCelebracao: '#0B0908',
+
+  // --- Aliases de compatibilidade com código legado ainda não migrado ---
+  gold: '#E8B458',
+  goldMuted: 'rgba(232,180,88,0.7)',
+  orange: '#FF7A36',
   orangeLight: '#FFB37D',
-
-  // Badges do diário (resisti / recaída)
-  success: '#4ADE80',
-  successBg: 'rgba(46,190,110,0.16)',
-  dangerText: '#F87171',
-  dangerBg: 'rgba(217,48,37,0.16)',
+  danger: '#E5484D',
+  dangerDark: '#A82708',
+  success: '#58C286',
+  successBg: 'rgba(88,194,134,0.14)',
+  dangerText: '#F07B72',
+  dangerBg: 'rgba(240,123,114,0.13)',
+  fireStart: '#FF9D4D',
+  fireMid: '#FF5A1E',
+  fireEnd: '#A82708',
+  fireLocations: [0, 0.55, 1] as [number, number, number],
 } as const;

@@ -1,27 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
-import {
-  FlatList,
-  Modal,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useMemo, useState } from 'react';
+import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AmbientGlow } from '@/components/ambient-glow';
-import { Chip } from '@/components/chip';
-import { GlassCard } from '@/components/glass-card';
 import { GradientButton } from '@/components/gradient-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { GATILHOS_COMUNS } from '@/constants/gatilhos';
-import { Accent, Colors, Fonts, Spacing } from '@/constants/theme';
+import { Accent, Colors, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
 import { TriggerEntry } from '@/types';
+import { chaveDia, horaCurta, rotuloDiaTimeline } from '@/utils/datas';
 import {
   calcTaxaResistencia,
   calcTendenciaSemanal,
@@ -30,30 +20,20 @@ import {
 } from '@/utils/insights';
 import { mostrarPaywall } from '@/utils/paywall';
 
-const DIARIO_GLOW = [
-  { color: Accent.fireMid, top: '4%' as const, left: '10%' as const, size: 480, opacity: 0.16 },
-  { color: '#7846DC', top: '35%' as const, left: '96%' as const, size: 520, opacity: 0.14 },
-];
-
-function formatarData(isoDate: string) {
-  const d = new Date(isoDate);
-  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-}
-
 function EntradaItem({ entry }: { entry: TriggerEntry }) {
   return (
-    <GlassCard style={styles.entradaCard}>
-      <View style={styles.entradaHeader}>
-        <ThemedText type="small" themeColor="textSecondary">{formatarData(entry.date)}</ThemedText>
-        <View style={[styles.badge, entry.resisted ? styles.badgeSuccess : styles.badgeDanger]}>
-          <Text style={[styles.badgeText, entry.resisted ? styles.badgeTextSuccess : styles.badgeTextDanger]}>
-            {entry.resisted ? 'RESISTI' : 'RECAÍDA'}
-          </Text>
-        </View>
+    <View style={styles.entrada}>
+      <Text style={styles.entradaHora}>{horaCurta(entry.date)}</Text>
+      <View style={styles.entradaCorpo}>
+        <Text style={styles.entradaGatilho}>{entry.trigger}</Text>
+        {entry.notes ? <Text style={styles.entradaNota}>{entry.notes}</Text> : null}
       </View>
-      <Text style={styles.entradaTrigger}>{entry.trigger}</Text>
-      {entry.notes ? <ThemedText type="small" themeColor="textSecondary">{entry.notes}</ThemedText> : null}
-    </GlassCard>
+      <View style={[styles.badge, entry.resisted ? styles.badgeResisti : styles.badgeRecaida]}>
+        <Text style={[styles.badgeTxt, entry.resisted ? styles.badgeTxtResisti : styles.badgeTxtRecaida]}>
+          {entry.resisted ? 'RESISTI' : 'RECAÍDA'}
+        </Text>
+      </View>
+    </View>
   );
 }
 
@@ -78,6 +58,23 @@ export default function DiarioScreen() {
   const [gatilhoSelecionado, setGatilhoSelecionado] = useState('');
   const [notas, setNotas] = useState('');
   const [resistedSelecionado, setResistedSelecionado] = useState<boolean | null>(null);
+
+  // Agrupa as entradas por dia, preservando a ordem (mais recente primeiro).
+  const grupos = useMemo(() => {
+    const out: { rotulo: string; entradas: TriggerEntry[] }[] = [];
+    const idxPorChave = new Map<string, number>();
+    (dados?.entries ?? []).forEach((e) => {
+      const chave = chaveDia(e.date);
+      let idx = idxPorChave.get(chave);
+      if (idx === undefined) {
+        idx = out.length;
+        idxPorChave.set(chave, idx);
+        out.push({ rotulo: rotuloDiaTimeline(e.date), entradas: [] });
+      }
+      out[idx].entradas.push(e);
+    });
+    return out;
+  }, [dados?.entries]);
 
   function abrirInsights() {
     if (!dados?.isPro) {
@@ -108,86 +105,119 @@ export default function DiarioScreen() {
     );
   }
 
+  const taxa = calcTaxaResistencia(dados.entries);
+  const horarios = contarPorHorario(dados.entries);
+  const horarioTop = [...horarios].sort((a, b) => b.total - a.total)[0];
+  const temPadrao = dados.entries.length >= 3 && horarioTop && horarioTop.total > 0;
+
   return (
     <ThemedView style={styles.container}>
-      <AmbientGlow blobs={DIARIO_GLOW} />
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        {/* Header */}
         <View style={styles.header}>
-          <View style={styles.headerTopo}>
+          <View style={styles.headerTextos}>
             <ThemedText type="title">Diário</ThemedText>
-            <Pressable onPress={abrirInsights} style={styles.insightsBtn}>
-              <Ionicons name="stats-chart-outline" size={16} color={Colors.textSecondary} />
-              <ThemedText type="small" themeColor="textSecondary">Insights</ThemedText>
-              {!dados.isPro && <Ionicons name="lock-closed" size={11} color={Colors.textTertiary} />}
-            </Pressable>
+            <Text style={styles.subtitulo}>
+              {dados.entries.length} {dados.entries.length === 1 ? 'batalha registrada' : 'batalhas registradas'}
+              {dados.entries.length > 0 ? ` · ${taxa.percentResistencia}% vencidas` : ''}
+            </Text>
           </View>
-          <ThemedText type="small" themeColor="textSecondary">
-            {dados.entries.length} {dados.entries.length === 1 ? 'entrada registrada' : 'entradas registradas'}
-          </ThemedText>
+          <Pressable onPress={abrirInsights} style={styles.insightsPill}>
+            <Ionicons name="stats-chart" size={13} color={Accent.bronze} />
+            <Text style={styles.insightsPillTxt}>Insights <Text style={styles.proTag}>·PRO</Text></Text>
+          </Pressable>
         </View>
 
         {dados.entries.length === 0 ? (
-          <ThemedView style={styles.vazio}>
+          <View style={styles.vazio}>
+            <View style={styles.vazioIcone}>
+              <Ionicons name="book-outline" size={26} color={Accent.bronze} />
+            </View>
+            <ThemedText type="subtitle" style={styles.vazioTitulo}>Nenhuma batalha ainda</ThemedText>
             <ThemedText type="small" themeColor="textSecondary" style={styles.vazioTexto}>
-              Nenhuma entrada ainda.{'\n'}Registre seus gatilhos para identificar padrões.
+              Registre seus gatilhos para começar a enxergar padrões — horário, situação, o que funciona.
             </ThemedText>
-          </ThemedView>
+          </View>
         ) : (
-          <FlatList
-            data={dados.entries}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <EntradaItem entry={item} />}
-            contentContainerStyle={styles.lista}
-          />
+          <ScrollView contentContainerStyle={styles.lista} showsVerticalScrollIndicator={false}>
+            {grupos.map((grupo, gi) => (
+              <View key={gi} style={styles.grupo}>
+                <Text style={styles.grupoRotulo}>{grupo.rotulo}</Text>
+                {grupo.entradas.map((e) => (
+                  <EntradaItem key={e.id} entry={e} />
+                ))}
+              </View>
+            ))}
+
+            {temPadrao && (
+              <Pressable onPress={abrirInsights} style={styles.teaser}>
+                <Ionicons name="stats-chart" size={20} color={Accent.bronze} />
+                <View style={styles.teaserTextos}>
+                  <Text style={styles.teaserTitulo}>Um padrão está surgindo</Text>
+                  <Text style={styles.teaserTexto}>
+                    Seus gatilhos concentram-se em &ldquo;{horarioTop.label}&rdquo;. Veja a análise completa no PRO.
+                  </Text>
+                </View>
+              </Pressable>
+            )}
+          </ScrollView>
         )}
 
-        <GradientButton label="+ Registrar gatilho" onPress={() => setModalAberto(true)} style={styles.addBtn} />
+        {/* CTA ancorado sobre fade do fundo */}
+        <LinearGradient
+          colors={['rgba(13,11,9,0)', Colors.background]}
+          locations={[0, 0.55]}
+          style={styles.ctaWrap}
+          pointerEvents="box-none">
+          <GradientButton
+            label="+ Registrar gatilho"
+            onPress={() => setModalAberto(true)}
+            style={styles.ctaBtn}
+          />
+        </LinearGradient>
       </SafeAreaView>
 
-      {/* Modal para nova entrada */}
+      {/* Modal: nova entrada */}
       <Modal visible={modalAberto} animationType="slide" presentationStyle="pageSheet">
         <ThemedView style={styles.modal}>
           <View style={styles.modalHeader}>
-            <ThemedText type="subtitle">Novo registro</ThemedText>
+            <ThemedText type="subtitle">Nova batalha</ThemedText>
             <Pressable onPress={fecharModal}>
               <ThemedText type="small" themeColor="textSecondary">Cancelar</ThemedText>
             </Pressable>
           </View>
 
           <ScrollView contentContainerStyle={styles.modalContent}>
-            <ThemedText type="small" themeColor="textSecondary">Qual gatilho?</ThemedText>
-
+            <Text style={styles.campoLabel}>QUAL GATILHO?</Text>
             <View style={styles.gatilhosGrid}>
-              {GATILHOS_COMUNS.map((g) => (
-                <Chip key={g} label={g} selected={gatilhoSelecionado === g} onPress={() => setGatilhoSelecionado(g)} />
-              ))}
+              {GATILHOS_COMUNS.map((g) => {
+                const sel = gatilhoSelecionado === g;
+                return (
+                  <Pressable
+                    key={g}
+                    onPress={() => setGatilhoSelecionado(g)}
+                    style={[styles.chip, sel && styles.chipSel]}>
+                    <Text style={[styles.chipTxt, sel && styles.chipTxtSel]}>{g}</Text>
+                  </Pressable>
+                );
+              })}
             </View>
 
-            <ThemedText type="small" themeColor="textSecondary" style={{ marginTop: Spacing.three }}>
-              O que aconteceu?
-            </ThemedText>
+            <Text style={[styles.campoLabel, styles.campoLabelSpaced]}>O QUE ACONTECEU?</Text>
             <View style={styles.resultadoRow}>
               <Pressable
                 onPress={() => setResistedSelecionado(true)}
-                style={[styles.resultadoBtn, resistedSelecionado === true && styles.resultadoBtnResistiAtivo]}>
-                <Text
-                  style={[styles.resultadoBtnText, resistedSelecionado === true && styles.badgeTextSuccess]}>
-                  Resisti
-                </Text>
+                style={[styles.resultadoBtn, resistedSelecionado === true && styles.resultadoResisti]}>
+                <Text style={[styles.resultadoTxt, resistedSelecionado === true && styles.badgeTxtResisti]}>Resisti</Text>
               </Pressable>
               <Pressable
                 onPress={() => setResistedSelecionado(false)}
-                style={[styles.resultadoBtn, resistedSelecionado === false && styles.resultadoBtnRecaiAtivo]}>
-                <Text
-                  style={[styles.resultadoBtnText, resistedSelecionado === false && styles.badgeTextDanger]}>
-                  Recaí
-                </Text>
+                style={[styles.resultadoBtn, resistedSelecionado === false && styles.resultadoRecaida]}>
+                <Text style={[styles.resultadoTxt, resistedSelecionado === false && styles.badgeTxtRecaida]}>Recaí</Text>
               </Pressable>
             </View>
 
-            <ThemedText type="small" themeColor="textSecondary" style={{ marginTop: Spacing.three }}>
-              Observações (opcional)
-            </ThemedText>
+            <Text style={[styles.campoLabel, styles.campoLabelSpaced]}>OBSERVAÇÕES (OPCIONAL)</Text>
             <TextInput
               value={notas}
               onChangeText={setNotas}
@@ -207,7 +237,7 @@ export default function DiarioScreen() {
         </ThemedView>
       </Modal>
 
-      {/* Modal de insights (PRO) */}
+      {/* Modal: insights (PRO) */}
       <Modal visible={insightsAberto} animationType="slide" presentationStyle="pageSheet">
         <ThemedView style={styles.modal}>
           <View style={styles.modalHeader}>
@@ -220,56 +250,48 @@ export default function DiarioScreen() {
           <ScrollView contentContainerStyle={styles.modalContent}>
             {dados.entries.length === 0 ? (
               <ThemedText type="small" themeColor="textSecondary">
-                Registre entradas no diário para ver seus padrões aqui.
+                Registre batalhas no diário para ver seus padrões aqui.
               </ThemedText>
             ) : (
-              <>
-                {(() => {
-                  const taxa = calcTaxaResistencia(dados.entries);
-                  const tendencia = calcTendenciaSemanal(dados.entries);
-                  const gatilhos = contarGatilhos(dados.entries);
-                  const horarios = contarPorHorario(dados.entries);
-                  return (
-                    <>
-                      <GlassCard style={styles.insightCard}>
-                        <ThemedText type="eyebrow" themeColor="textSecondary">Taxa de resistência</ThemedText>
-                        <ThemedText type="cardTitle" style={{ color: Accent.success }}>{taxa.percentResistencia}%</ThemedText>
-                        <ThemedText type="small" themeColor="textSecondary">
-                          {taxa.resistidas} resistidas • {taxa.recaidas} recaídas
-                        </ThemedText>
-                      </GlassCard>
+              (() => {
+                const tendencia = calcTendenciaSemanal(dados.entries);
+                const gatilhos = contarGatilhos(dados.entries);
+                return (
+                  <>
+                    <View style={styles.insightCard}>
+                      <Text style={styles.cardLabel}>TAXA DE RESISTÊNCIA</Text>
+                      <Text style={styles.insightBig}>{taxa.percentResistencia}%</Text>
+                      <ThemedText type="small" themeColor="textSecondary">
+                        {taxa.resistidas} resistidas · {taxa.recaidas} recaídas
+                      </ThemedText>
+                    </View>
 
-                      <GlassCard style={styles.insightCard}>
-                        <ThemedText type="eyebrow" themeColor="textSecondary">Tendência semanal</ThemedText>
-                        <ThemedText type="default">
-                          {tendencia.semanaAtual} registros nos últimos 7 dias
-                          {tendencia.semanaAnterior > 0 || tendencia.semanaAtual > 0
-                            ? ` (${tendencia.semanaAnterior} na semana anterior)`
-                            : ''}
-                        </ThemedText>
-                      </GlassCard>
+                    <View style={styles.insightCard}>
+                      <Text style={styles.cardLabel}>TENDÊNCIA SEMANAL</Text>
+                      <ThemedText type="default">
+                        {tendencia.semanaAtual} registros nos últimos 7 dias
+                        {tendencia.semanaAnterior > 0 || tendencia.semanaAtual > 0
+                          ? ` (${tendencia.semanaAnterior} na semana anterior)`
+                          : ''}
+                      </ThemedText>
+                    </View>
 
-                      <GlassCard style={styles.insightCard}>
-                        <ThemedText type="eyebrow" themeColor="textSecondary" style={{ marginBottom: Spacing.one }}>
-                          Gatilhos mais comuns
-                        </ThemedText>
-                        {gatilhos.map((g) => (
-                          <BarraInsight key={g.gatilho} label={g.gatilho} total={g.total} percent={g.percent} />
-                        ))}
-                      </GlassCard>
+                    <View style={styles.insightCard}>
+                      <Text style={[styles.cardLabel, styles.cardLabelMb]}>GATILHOS MAIS COMUNS</Text>
+                      {gatilhos.map((g) => (
+                        <BarraInsight key={g.gatilho} label={g.gatilho} total={g.total} percent={g.percent} />
+                      ))}
+                    </View>
 
-                      <GlassCard style={styles.insightCard}>
-                        <ThemedText type="eyebrow" themeColor="textSecondary" style={{ marginBottom: Spacing.one }}>
-                          Horário mais recorrente
-                        </ThemedText>
-                        {horarios.map((h) => (
-                          <BarraInsight key={h.label} label={h.label} total={h.total} percent={h.percent} />
-                        ))}
-                      </GlassCard>
-                    </>
-                  );
-                })()}
-              </>
+                    <View style={styles.insightCard}>
+                      <Text style={[styles.cardLabel, styles.cardLabelMb]}>HORÁRIO MAIS RECORRENTE</Text>
+                      {horarios.map((h) => (
+                        <BarraInsight key={h.label} label={h.label} total={h.total} percent={h.percent} />
+                      ))}
+                    </View>
+                  </>
+                );
+              })()
             )}
           </ScrollView>
         </ThemedView>
@@ -282,88 +304,97 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   safe: { flex: 1 },
+
   header: {
-    paddingHorizontal: Spacing.three,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.four,
     paddingTop: Spacing.three,
     paddingBottom: Spacing.two,
-    gap: Spacing.half,
   },
-  headerTopo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  insightsBtn: {
+  headerTextos: { gap: 4 },
+  subtitulo: { fontFamily: Fonts.body.medium, fontSize: 12.5, color: 'rgba(244,239,233,0.5)' },
+  insightsPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    paddingVertical: Spacing.one,
-    paddingHorizontal: Spacing.two,
-    borderRadius: Spacing.two,
+    gap: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: Radius.pill,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: 'rgba(232,180,88,0.35)',
+    backgroundColor: 'rgba(232,180,88,0.07)',
   },
-  insightCard: {
-    padding: Spacing.three,
-    gap: 2,
-  },
-  insightLinha: {
-    marginTop: Spacing.one,
-    gap: 4,
-  },
-  insightLinhaTopo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  insightTrack: {
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.backgroundSelected,
-    overflow: 'hidden',
-  },
-  insightFill: {
-    height: '100%',
-    borderRadius: 4,
-    backgroundColor: Accent.orange,
-  },
-  vazio: {
-    flex: 1,
+  insightsPillTxt: { fontFamily: Fonts.body.bold, fontSize: 11.5, color: Accent.bronze },
+  proTag: { color: Accent.bronze },
+
+  vazio: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: Spacing.four, gap: Spacing.two },
+  vazioIcone: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: Spacing.four,
+    backgroundColor: Accent.bronzeFundo,
+    borderWidth: 1,
+    borderColor: Accent.bronzeBorda,
+    marginBottom: Spacing.two,
   },
-  vazioTexto: { textAlign: 'center', lineHeight: 24 },
-  lista: { padding: Spacing.three, gap: Spacing.two, paddingBottom: 110 },
-  entradaCard: {
-    padding: Spacing.three,
-    gap: Spacing.one,
+  vazioTitulo: { textAlign: 'center' },
+  vazioTexto: { textAlign: 'center', lineHeight: 20, maxWidth: 300 },
+
+  lista: { paddingHorizontal: Spacing.four, paddingTop: 4, paddingBottom: 120, gap: Spacing.two },
+  grupo: { gap: Spacing.two, marginBottom: Spacing.one },
+  grupoRotulo: {
+    fontFamily: Fonts.display.bold,
+    fontSize: 10,
+    letterSpacing: 3,
+    color: 'rgba(244,239,233,0.35)',
+    marginTop: Spacing.two,
+    marginBottom: 2,
   },
-  entradaHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 },
-  badge: {
-    borderRadius: 8,
-    paddingHorizontal: 9,
-    paddingVertical: 3,
+  entrada: {
+    flexDirection: 'row',
+    gap: 14,
+    padding: 14,
+    paddingHorizontal: Radius.card,
+    backgroundColor: Colors.backgroundElement,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: 14,
+    alignItems: 'flex-start',
   },
-  badgeSuccess: { backgroundColor: Accent.successBg },
-  badgeDanger: { backgroundColor: Accent.dangerBg },
-  badgeText: {
-    fontFamily: Fonts.body.extrabold,
-    fontSize: 11,
-    letterSpacing: 0.4,
+  entradaHora: { fontFamily: Fonts.mono, fontSize: 11, color: 'rgba(244,239,233,0.4)', paddingTop: 2 },
+  entradaCorpo: { flex: 1, gap: 3 },
+  entradaGatilho: { fontFamily: Fonts.body.bold, fontSize: 14.5, color: Colors.text },
+  entradaNota: { fontFamily: Fonts.body.medium, fontSize: 12, lineHeight: 18, color: 'rgba(244,239,233,0.5)' },
+  badge: { paddingHorizontal: 9, paddingVertical: 3, borderRadius: Radius.badge },
+  badgeResisti: { backgroundColor: Accent.verdeFundo },
+  badgeRecaida: { backgroundColor: Accent.vermelhoSuaveFundo },
+  badgeTxt: { fontFamily: Fonts.body.extrabold, fontSize: 9.5, letterSpacing: 0.8 },
+  badgeTxtResisti: { color: Accent.verde },
+  badgeTxtRecaida: { color: Accent.vermelhoSuave },
+
+  teaser: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    padding: 16,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(232,180,88,0.35)',
+    borderStyle: 'dashed',
+    marginTop: Spacing.two,
   },
-  badgeTextSuccess: { color: Accent.success },
-  badgeTextDanger: { color: Accent.dangerText },
-  entradaTrigger: {
-    fontFamily: Fonts.display.semibold,
-    fontSize: 16,
-    color: Colors.text,
-  },
-  addBtn: {
-    position: 'absolute',
-    bottom: Spacing.four,
-    left: Spacing.three,
-    right: Spacing.three,
-  },
+  teaserTextos: { flex: 1, gap: 2 },
+  teaserTitulo: { fontFamily: Fonts.body.bold, fontSize: 12.5, color: Accent.bronze },
+  teaserTexto: { fontFamily: Fonts.body.medium, fontSize: 11.5, lineHeight: 17, color: 'rgba(244,239,233,0.5)' },
+
+  ctaWrap: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingTop: 30, paddingHorizontal: 20, paddingBottom: Spacing.two },
+  ctaBtn: {},
+
+  // Modais
   modal: { flex: 1 },
   modalHeader: {
     flexDirection: 'row',
@@ -373,37 +404,59 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.four,
   },
   modalContent: { padding: Spacing.three, gap: Spacing.two, paddingBottom: 40 },
+  campoLabel: { fontFamily: Fonts.data.semibold, fontSize: 10, letterSpacing: 2, color: 'rgba(232,180,88,0.7)' },
+  campoLabelSpaced: { marginTop: Spacing.three },
   gatilhosGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
+  chip: {
+    borderRadius: 14,
+    paddingHorizontal: Spacing.three,
+    paddingVertical: 11,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    backgroundColor: Colors.backgroundElement,
+  },
+  chipSel: { borderColor: 'rgba(255,138,61,0.75)', backgroundColor: 'rgba(255,107,43,0.14)' },
+  chipTxt: { fontFamily: Fonts.body.semibold, fontSize: 14, color: 'rgba(244,239,233,0.85)' },
+  chipTxtSel: { color: '#FFC49A', fontFamily: Fonts.body.bold },
   resultadoRow: { flexDirection: 'row', gap: Spacing.two },
   resultadoBtn: {
     flex: 1,
     borderWidth: 1,
     borderColor: Colors.border,
-    borderRadius: Spacing.two,
-    paddingVertical: Spacing.two,
+    borderRadius: 14,
+    paddingVertical: Spacing.three,
     alignItems: 'center',
   },
-  resultadoBtnResistiAtivo: { backgroundColor: Accent.successBg, borderColor: Accent.success },
-  resultadoBtnRecaiAtivo: { backgroundColor: Accent.dangerBg, borderColor: Accent.dangerText },
-  resultadoBtnText: {
-    fontFamily: Fonts.body.extrabold,
-    fontSize: 13,
-    letterSpacing: 0.3,
-    color: Colors.textSecondary,
-  },
+  resultadoResisti: { backgroundColor: Accent.verdeFundo, borderColor: Accent.verde },
+  resultadoRecaida: { backgroundColor: Accent.vermelhoSuaveFundo, borderColor: Accent.vermelhoSuave },
+  resultadoTxt: { fontFamily: Fonts.body.extrabold, fontSize: 14, color: Colors.textSecondary },
   textInput: {
     borderWidth: 1,
     borderColor: Colors.border,
     backgroundColor: Colors.backgroundElement,
-    borderRadius: Spacing.two,
+    borderRadius: 14,
     padding: Spacing.three,
     minHeight: 80,
     textAlignVertical: 'top',
-    fontSize: 16,
+    fontFamily: Fonts.body.medium,
+    fontSize: 15,
     color: Colors.text,
-    marginTop: Spacing.one,
   },
-  salvarBtn: {
-    marginTop: Spacing.three,
+  salvarBtn: { marginTop: Spacing.three },
+
+  insightCard: {
+    padding: Spacing.three,
+    gap: 4,
+    backgroundColor: Colors.backgroundElement,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: Radius.card,
   },
+  cardLabel: { fontFamily: Fonts.data.semibold, fontSize: 10, letterSpacing: 2, color: 'rgba(232,180,88,0.7)' },
+  cardLabelMb: { marginBottom: Spacing.one },
+  insightBig: { fontFamily: Fonts.data.bold, fontSize: 30, color: Accent.verde },
+  insightLinha: { marginTop: Spacing.one, gap: 4 },
+  insightLinhaTopo: { flexDirection: 'row', justifyContent: 'space-between' },
+  insightTrack: { height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.08)', overflow: 'hidden' },
+  insightFill: { height: '100%', borderRadius: 4, backgroundColor: Accent.brasa },
 });

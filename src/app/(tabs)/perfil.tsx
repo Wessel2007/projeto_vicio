@@ -3,46 +3,33 @@ import DateTimePicker, { type DateTimePickerEvent } from '@react-native-communit
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, type Href } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Image, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AmbientGlow } from '@/components/ambient-glow';
-import { GlassCard } from '@/components/glass-card';
 import { GradientSwitch } from '@/components/gradient-switch';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { getPatenteBadge } from '@/constants/patente-badges';
 import { PATENTE_THEMES } from '@/constants/patente-themes';
-import { Accent, Colors, Fonts, Spacing } from '@/constants/theme';
+import { Accent, Colors, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
 import { agendarLembreteDiario, ativarNotificacoes, desativarNotificacoes } from '@/notifications';
 import { PatenteTheme } from '@/types';
 import { mostrarPaywall } from '@/utils/paywall';
 
-const PERFIL_GLOW = [{ color: Accent.fireMid, top: '4%' as const, left: '90%' as const, size: 500, opacity: 0.16 }];
+const SUBLEVEL_LABEL = ['I', 'II', 'III'];
+const AURA_GRADIENTES: Record<PatenteTheme, [string, string, string]> = {
+  ouro: ['#F7D89A', '#E8B458', '#8A6420'],
+  prata: ['#E7EDF4', '#B9C4D0', '#5E6873'],
+  brasa: ['#FF9A6B', '#E5450F', '#7E1F02'],
+};
 
-function SecaoHeader({ titulo }: { titulo: string }) {
+function SecaoHeader({ titulo, pro }: { titulo: string; pro?: boolean }) {
   return (
-    <ThemedText type="eyebrow" themeColor="textSecondary" style={styles.secaoHeader}>
+    <Text style={styles.secaoHeader}>
       {titulo}
-    </ThemedText>
-  );
-}
-
-function ItemConfig({
-  label,
-  onPress,
-  destrutivo,
-}: {
-  label: string;
-  onPress?: () => void;
-  destrutivo?: boolean;
-}) {
-  return (
-    <Pressable onPress={onPress} style={styles.itemConfig}>
-      <ThemedText type="default" style={destrutivo ? styles.textoDestrutivo : undefined}>
-        {label}
-      </ThemedText>
-    </Pressable>
+      {pro ? <Text style={styles.proTag}> · PRO</Text> : null}
+    </Text>
   );
 }
 
@@ -58,10 +45,8 @@ export default function PerfilScreen() {
     );
   }
 
-  const sublevelLabel = derivado.patente.nivel.sublevel
-    ? ` ${['I', 'II', 'III'][derivado.patente.nivel.sublevel - 1]}`
-    : '';
-
+  const patente = derivado.patente.nivel;
+  const sublevelLabel = patente.sublevel ? ` ${SUBLEVEL_LABEL[patente.sublevel - 1]}` : '';
   const horaFormatada = `${String(dados.dailyQuoteHour).padStart(2, '0')}:${String(dados.dailyQuoteMinute).padStart(2, '0')}`;
 
   function abrirSeletorHora() {
@@ -80,7 +65,7 @@ export default function PerfilScreen() {
     router.push('/relatorio' as Href);
   }
 
-  function selecionarTemaPatente(tema: PatenteTheme) {
+  function selecionarAura(tema: PatenteTheme) {
     if (!dados?.isPro) {
       mostrarPaywall('A personalização visual da patente');
       return;
@@ -123,72 +108,86 @@ export default function PerfilScreen() {
       'Isso vai remover seu histórico, streak e XP permanentemente. Esta ação não pode ser desfeita.',
       [
         { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Apagar tudo',
-          style: 'destructive',
-          onPress: () => resetarApp(),
-        },
+        { text: 'Apagar tudo', style: 'destructive', onPress: () => resetarApp() },
       ],
     );
   }
 
   return (
     <ThemedView style={styles.container}>
-      <AmbientGlow blobs={PERFIL_GLOW} />
-      <SafeAreaView style={styles.safe}>
-        <View style={styles.header}>
-          <ThemedText type="title">Perfil</ThemedText>
-        </View>
-
+      <SafeAreaView style={styles.safe} edges={['top']}>
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          {/* Stats */}
-          <LinearGradient
-            colors={['rgba(255,122,61,0.14)', 'rgba(120,70,220,0.12)']}
-            start={{ x: 0.1, y: 0 }}
-            end={{ x: 0.9, y: 1 }}
-            style={styles.statsCard}>
-            <View style={styles.statItem}>
-              <ThemedText type="cardTitle" style={styles.statStreak}>{derivado.streakDias}</ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">dias de streak</ThemedText>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <ThemedText type="cardTitle">{derivado.totalXP}</ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">XP total</ThemedText>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <ThemedText type="subtitle" style={styles.patenteText}>
-                {derivado.patente.nivel.nome}{sublevelLabel}
-              </ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">patente</ThemedText>
-            </View>
-          </LinearGradient>
+          <ThemedText type="title">Perfil</ThemedText>
 
-          <SecaoHeader titulo="Configurações" />
-
-          <GlassCard style={styles.secaoCard}>
-            <View style={styles.switchRow}>
-              <ThemedText type="default">Notificações diárias</ThemedText>
-              <GradientSwitch
-                value={dados.notificationsEnabled}
-                onValueChange={alternarNotificacoes}
-              />
+          {/* Cartão de guerreiro */}
+          <Pressable style={styles.guerreiroCard} onPress={() => router.push('/streak-detalhe' as Href)}>
+            <Image source={getPatenteBadge(patente.nome, patente.sublevel)} style={styles.guerreiroBadge} resizeMode="contain" />
+            <View style={styles.guerreiroTextos}>
+              <Text style={styles.guerreiroNome}>{patente.nome}{sublevelLabel}</Text>
+              <Text style={styles.guerreiroStats}>{derivado.streakDias} dias de streak · {derivado.totalXP} XP</Text>
             </View>
+            <Ionicons name="chevron-forward" size={18} color={Accent.tabInativa} />
+          </Pressable>
 
+          {/* FORJA PRO */}
+          {dados.isPro ? (
+            <View style={styles.proAtivoCard}>
+              <Ionicons name="star" size={15} color={Accent.bronze} />
+              <View style={styles.proAtivoTextos}>
+                <Text style={styles.proAtivoTitulo}>FORJA PRO ativo</Text>
+                <Text style={styles.proBenef}>Você tem acesso a todas as patentes e ferramentas.</Text>
+              </View>
+            </View>
+          ) : (
+            <LinearGradient
+              colors={['rgba(232,180,88,0.10)', 'rgba(255,107,43,0.05)']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.proCard}>
+              <View style={styles.proTopo}>
+                <Ionicons name="star" size={15} color={Accent.bronze} />
+                <Text style={styles.proMarca}>FORJA PRO</Text>
+              </View>
+              <Text style={styles.proTitulo}>Forje até o Imortal</Text>
+              <Text style={styles.proBenef}>Patentes além do Guerreiro · insights do diário · ferramentas de crise expandidas</Text>
+              <View style={styles.proRodape}>
+                <Text style={styles.proPreco}>R$ 9,90/mês</Text>
+                <Pressable onPress={() => mostrarPaywall('O plano FORJA PRO')}>
+                  <LinearGradient
+                    colors={[Accent.ctaStart, Accent.ctaMid, Accent.ctaEnd]}
+                    locations={Accent.ctaLocations}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.assinarBtn}>
+                    <Text style={styles.assinarTxt}>Assinar</Text>
+                  </LinearGradient>
+                </Pressable>
+              </View>
+            </LinearGradient>
+          )}
+
+          {/* Configurações */}
+          <SecaoHeader titulo="CONFIGURAÇÕES" />
+          <View style={styles.card}>
+            <View style={styles.linha}>
+              <Text style={styles.linhaLabel}>Notificações diárias</Text>
+              <GradientSwitch value={dados.notificationsEnabled} onValueChange={alternarNotificacoes} />
+            </View>
             {dados.notificationsEnabled && (
               <>
                 <View style={styles.divisor} />
-                <Pressable onPress={abrirSeletorHora} style={styles.switchRow}>
-                  <View style={styles.horarioLabelRow}>
-                    <ThemedText type="default">Horário do lembrete</ThemedText>
-                    {!dados.isPro && <Ionicons name="lock-closed" size={13} color={Colors.textTertiary} />}
+                <Pressable onPress={abrirSeletorHora} style={styles.linha}>
+                  <Text style={styles.linhaLabel}>
+                    Horário do lembrete <Text style={styles.proTag}>·PRO</Text>
+                  </Text>
+                  <View style={styles.valorRow}>
+                    <Text style={styles.valorMono}>{horaFormatada}</Text>
+                    <Ionicons name="chevron-forward" size={13} color={Accent.tabInativa} />
                   </View>
-                  <ThemedText type="default" themeColor="textSecondary">{horaFormatada}</ThemedText>
                 </Pressable>
               </>
             )}
-          </GlassCard>
+          </View>
 
           {mostrarSeletorHora && (
             <DateTimePicker
@@ -200,42 +199,41 @@ export default function PerfilScreen() {
             />
           )}
 
-          <View style={styles.secaoHeaderRow}>
-            <SecaoHeader titulo="Personalização da patente" />
-            {!dados.isPro && <Ionicons name="lock-closed" size={13} color={Colors.textTertiary} />}
-          </View>
-          <GlassCard style={styles.secaoCard}>
-            <View style={styles.temasRow}>
-              {(Object.keys(PATENTE_THEMES) as PatenteTheme[]).map((tema) => (
-                <Pressable
-                  key={tema}
-                  onPress={() => selecionarTemaPatente(tema)}
-                  style={[
-                    styles.temaSwatch,
-                    { borderColor: dados.patenteTheme === tema ? PATENTE_THEMES[tema].cor : Colors.border },
-                  ]}>
-                  <View style={[styles.temaSwatchCor, { backgroundColor: PATENTE_THEMES[tema].cor }]} />
-                  <Text style={styles.temaSwatchLabel}>{PATENTE_THEMES[tema].nome}</Text>
-                </Pressable>
-              ))}
+          {/* Aura da patente */}
+          <SecaoHeader titulo="AURA DA PATENTE" pro />
+          <View style={styles.card}>
+            <View style={styles.aurasRow}>
+              {(Object.keys(PATENTE_THEMES) as PatenteTheme[]).map((tema) => {
+                const sel = dados.patenteTheme === tema;
+                return (
+                  <Pressable
+                    key={tema}
+                    onPress={() => selecionarAura(tema)}
+                    style={[styles.aura, sel && styles.auraSel]}>
+                    <LinearGradient
+                      colors={AURA_GRADIENTES[tema]}
+                      start={{ x: 0.35, y: 0.3 }}
+                      end={{ x: 1, y: 1 }}
+                      style={styles.auraSwatch}
+                    />
+                    <Text style={[styles.auraLabel, sel && styles.auraLabelSel]}>{PATENTE_THEMES[tema].nome}</Text>
+                  </Pressable>
+                );
+              })}
             </View>
-          </GlassCard>
-
-          <View style={styles.secaoHeaderRow}>
-            <SecaoHeader titulo="Contato de confiança" />
-            {!dados.isPro && <Ionicons name="lock-closed" size={13} color={Colors.textTertiary} />}
           </View>
-          <GlassCard style={[styles.secaoCard, styles.contatoCard]}>
-            <ThemedText type="small" themeColor="textSecondary">
-              Usado no &ldquo;contato rápido&rdquo; do botão de pânico expandido (PRO).
-            </ThemedText>
+
+          {/* Contato de confiança */}
+          <SecaoHeader titulo="CONTATO DE CONFIANÇA" pro />
+          <View style={[styles.card, styles.cardPad]}>
+            <Text style={styles.ajuda}>Usado no contato rápido do botão de pânico.</Text>
             <TextInput
               value={dados.accountabilityName}
               onChangeText={(v) => atualizar({ accountabilityName: v })}
-              placeholder="Nome"
+              placeholder="Nome (ex.: João — irmão)"
               placeholderTextColor={Colors.textTertiary}
               editable={dados.isPro}
-              style={styles.contatoInput}
+              style={styles.input}
             />
             <TextInput
               value={dados.accountabilityPhone}
@@ -244,43 +242,49 @@ export default function PerfilScreen() {
               placeholderTextColor={Colors.textTertiary}
               keyboardType="phone-pad"
               editable={dados.isPro}
-              style={styles.contatoInput}
+              style={styles.input}
             />
-          </GlassCard>
+          </View>
 
-          <SecaoHeader titulo="PRO" />
-          <GlassCard style={styles.secaoCard}>
-            <Pressable onPress={abrirRelatorio} style={styles.switchRow}>
-              <View style={styles.horarioLabelRow}>
-                <ThemedText type="default">Relatório de progresso</ThemedText>
-                {!dados.isPro && <Ionicons name="lock-closed" size={13} color={Colors.textTertiary} />}
-              </View>
-              <Ionicons name="chevron-forward" size={18} color={Colors.textTertiary} />
+          {/* Relatório PRO */}
+          <SecaoHeader titulo="RELATÓRIO" pro />
+          <View style={styles.card}>
+            <Pressable onPress={abrirRelatorio} style={styles.linha}>
+              <Text style={styles.linhaLabel}>Relatório de progresso</Text>
+              <Ionicons name="chevron-forward" size={16} color={Accent.tabInativa} />
             </Pressable>
-          </GlassCard>
+          </View>
 
-          <SecaoHeader titulo="Dados" />
+          {/* Dados */}
+          <SecaoHeader titulo="DADOS" />
+          <View style={styles.card}>
+            <Pressable style={styles.linha} onPress={() => Alert.alert('Exportar', 'Em breve: exportação dos seus dados em JSON.')}>
+              <Text style={styles.linhaLabel}>Exportar meus dados</Text>
+              <Ionicons name="download-outline" size={16} color={Accent.tabInativa} />
+            </Pressable>
+            <View style={styles.divisor} />
+            <Pressable style={styles.linha} onPress={confirmarReset}>
+              <Text style={[styles.linhaLabel, styles.destrutivo]}>Apagar todos os dados</Text>
+            </Pressable>
+          </View>
 
-          <GlassCard style={styles.secaoCard}>
-            <ItemConfig label="Apagar todos os dados" destrutivo onPress={confirmarReset} />
-          </GlassCard>
-
-          <SecaoHeader titulo="Modo de teste" />
-          <GlassCard style={styles.secaoCard}>
-            <View style={styles.switchRow}>
-              <View style={styles.notifTextos}>
-                <ThemedText type="default">Simular assinatura PRO</ThemedText>
-                <ThemedText type="small" themeColor="textSecondary">
+          {/* Modo de teste */}
+          <SecaoHeader titulo="MODO DE TESTE" />
+          <View style={[styles.card, styles.cardPad]}>
+            <View style={styles.linhaCompacta}>
+              <View style={styles.testeTextos}>
+                <Text style={styles.linhaLabel}>Simular assinatura PRO</Text>
+                <Text style={styles.ajuda}>
                   Sem cobrança real — a loja de pagamento ainda não está integrada. Use para testar as features PRO.
-                </ThemedText>
+                </Text>
               </View>
               <GradientSwitch value={dados.isPro} onValueChange={(v) => atualizar({ isPro: v })} />
             </View>
-          </GlassCard>
+          </View>
 
-          <ThemedText type="small" themeColor="textTertiary" style={styles.rodape}>
-            Este app é um apoio de hábito, não substitui acompanhamento terapêutico profissional.
-          </ThemedText>
+          <Text style={styles.rodape}>
+            O Forja é um apoio de hábito — não substitui acompanhamento terapêutico profissional.
+          </Text>
         </ScrollView>
       </SafeAreaView>
     </ThemedView>
@@ -291,97 +295,116 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   safe: { flex: 1 },
-  header: {
-    paddingHorizontal: Spacing.three,
-    paddingTop: Spacing.three,
-    paddingBottom: Spacing.two,
-  },
-  content: { padding: Spacing.three, gap: Spacing.three, paddingBottom: 40 },
-  statsCard: {
-    borderRadius: 22,
+  content: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.five, gap: Spacing.two },
+  proTag: { color: Accent.bronze, fontFamily: Fonts.display.bold, fontSize: 10 },
+
+  guerreiroCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
+    padding: 18,
+    marginTop: Spacing.two,
+    backgroundColor: Colors.backgroundElement,
     borderWidth: 1,
     borderColor: Colors.border,
-    padding: Spacing.three,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    borderRadius: Radius.cardHighlight,
   },
-  statItem: { alignItems: 'center', gap: 2, flex: 1 },
-  statStreak: { color: '#FF9D4D' },
-  statDivider: { width: 1, height: 40, backgroundColor: 'rgba(255,255,255,0.1)' },
-  patenteText: { color: '#C9A6FF', fontSize: 19, lineHeight: 24 },
-  secaoHeader: { marginLeft: Spacing.one },
-  secaoHeaderRow: {
+  guerreiroBadge: { width: 60, height: 60 },
+  guerreiroTextos: { flex: 1 },
+  guerreiroNome: { fontFamily: Fonts.display.extrabold, fontSize: 17, color: Colors.text },
+  guerreiroStats: { fontFamily: Fonts.body.medium, fontSize: 12, color: 'rgba(244,239,233,0.5)', marginTop: 2 },
+
+  proCard: {
+    padding: 18,
+    borderRadius: Radius.cardHighlight,
+    borderWidth: 1,
+    borderColor: 'rgba(232,180,88,0.35)',
+    gap: 8,
+    marginTop: Spacing.one,
+  },
+  proTopo: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  proMarca: { fontFamily: Fonts.display.extrabold, fontSize: 12, letterSpacing: 2.5, color: Accent.bronze },
+  proTitulo: { fontFamily: Fonts.body.bold, fontSize: 15.5, color: Colors.text },
+  proBenef: { fontFamily: Fonts.body.medium, fontSize: 12, lineHeight: 19, color: 'rgba(244,239,233,0.55)' },
+  proRodape: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 6 },
+  proPreco: { fontFamily: Fonts.body.semibold, fontSize: 12, color: 'rgba(244,239,233,0.45)' },
+  assinarBtn: { paddingHorizontal: 18, paddingVertical: 9, borderRadius: 11 },
+  assinarTxt: { fontFamily: Fonts.display.extrabold, fontSize: 12, letterSpacing: 0.5, color: '#FFFFFF' },
+  proAtivoCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.one,
+    gap: 10,
+    padding: 16,
+    borderRadius: Radius.cardHighlight,
+    borderWidth: 1,
+    borderColor: 'rgba(232,180,88,0.35)',
+    backgroundColor: 'rgba(232,180,88,0.06)',
+    marginTop: Spacing.one,
   },
-  secaoCard: {
+  proAtivoTextos: { flex: 1 },
+  proAtivoTitulo: { fontFamily: Fonts.display.extrabold, fontSize: 13, letterSpacing: 1.5, color: Accent.bronze },
+
+  secaoHeader: {
+    fontFamily: Fonts.display.bold,
+    fontSize: 10,
+    letterSpacing: 3,
+    color: 'rgba(244,239,233,0.4)',
+    marginTop: Spacing.three,
+    marginLeft: 4,
+    marginBottom: -2,
+  },
+  card: {
+    backgroundColor: Colors.backgroundElement,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: Radius.card,
     overflow: 'hidden',
   },
-  temasRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: Spacing.three,
-  },
-  temaSwatch: {
+  cardPad: { padding: 16, gap: Spacing.two },
+  linha: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 17, paddingVertical: 15 },
+  linhaCompacta: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: Spacing.three },
+  linhaLabel: { fontFamily: Fonts.body.semibold, fontSize: 14, color: Colors.text },
+  valorRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  valorMono: { fontFamily: Fonts.mono, fontSize: 13.5, color: 'rgba(244,239,233,0.55)' },
+  divisor: { height: 1, backgroundColor: 'rgba(255,255,255,0.06)', marginHorizontal: 17 },
+  destrutivo: { color: Accent.vermelhoSuave },
+
+  aurasRow: { flexDirection: 'row', gap: 12, padding: 16 },
+  aura: {
+    flex: 1,
     alignItems: 'center',
-    gap: Spacing.one,
-    padding: Spacing.two,
-    borderRadius: Spacing.two,
-    borderWidth: 2,
+    gap: 8,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.09)',
   },
-  temaSwatchCor: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-  },
-  temaSwatchLabel: {
-    fontFamily: Fonts.body.semibold,
-    fontSize: 12,
-    color: Colors.textSecondary,
-  },
-  contatoCard: {
-    padding: Spacing.three,
-    gap: Spacing.two,
-  },
-  contatoInput: {
+  auraSel: { borderColor: Accent.bronze, backgroundColor: 'rgba(232,180,88,0.07)' },
+  auraSwatch: { width: 26, height: 26, borderRadius: 13 },
+  auraLabel: { fontFamily: Fonts.body.semibold, fontSize: 11, color: 'rgba(244,239,233,0.6)' },
+  auraLabelSel: { color: Accent.bronze, fontFamily: Fonts.body.bold },
+
+  ajuda: { fontFamily: Fonts.body.medium, fontSize: 11.5, lineHeight: 17, color: 'rgba(244,239,233,0.4)' },
+  input: {
     borderWidth: 1,
     borderColor: Colors.border,
-    backgroundColor: Colors.backgroundElement,
-    borderRadius: Spacing.two,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    borderRadius: 12,
     paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.two,
+    paddingVertical: 11,
+    fontFamily: Fonts.body.medium,
     fontSize: 15,
     color: Colors.text,
   },
-  switchRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: Spacing.three,
-  },
-  horarioLabelRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.one,
-  },
-  notifTextos: { flex: 1, gap: 2, marginRight: Spacing.two },
-  itemConfig: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: Spacing.three,
-  },
-  divisor: {
-    height: 1,
-    backgroundColor: Colors.border,
-    marginHorizontal: Spacing.three,
-  },
-  textoDestrutivo: { color: Accent.dangerText },
+  testeTextos: { flex: 1, gap: 2 },
+
   rodape: {
+    fontFamily: Fonts.body.medium,
+    fontSize: 11,
+    lineHeight: 16,
+    color: 'rgba(244,239,233,0.3)',
     textAlign: 'center',
-    lineHeight: 20,
-    marginTop: Spacing.two,
+    marginTop: Spacing.three,
+    paddingHorizontal: Spacing.three,
   },
 });

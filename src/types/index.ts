@@ -6,7 +6,7 @@ export interface TriggerEntry {
   resisted: boolean;
 }
 
-export type PatenteTheme = 'ouro' | 'prata' | 'carmesim';
+export type PatenteTheme = 'ouro' | 'prata' | 'brasa';
 
 export interface AppData {
   onboardingDone: boolean;
@@ -48,7 +48,7 @@ export const DEFAULT_DATA: AppData = {
   dailyQuoteHour: 8,
   dailyQuoteMinute: 0,
   isPro: false,
-  patenteTheme: 'ouro',
+  patenteTheme: 'ouro' as PatenteTheme,
   accountabilityName: '',
   accountabilityPhone: '',
 };

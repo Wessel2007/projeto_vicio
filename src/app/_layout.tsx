@@ -1,6 +1,7 @@
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { Manrope_400Regular, Manrope_500Medium, Manrope_600SemiBold, Manrope_700Bold, Manrope_800ExtraBold } from '@expo-google-fonts/manrope';
-import { SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
+import { SpaceGrotesk_500Medium, SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
+import { Archivo_500Medium, Archivo_600SemiBold, Archivo_700Bold, Archivo_800ExtraBold, Archivo_900Black } from '@expo-google-fonts/archivo';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -33,8 +34,14 @@ export default function RootLayout() {
     Manrope_600SemiBold,
     Manrope_700Bold,
     Manrope_800ExtraBold,
+    SpaceGrotesk_500Medium,
     SpaceGrotesk_600SemiBold,
     SpaceGrotesk_700Bold,
+    Archivo_500Medium,
+    Archivo_600SemiBold,
+    Archivo_700Bold,
+    Archivo_800ExtraBold,
+    Archivo_900Black,
   });
 
   const [showIntro, setShowIntro] = useState(true);
@@ -63,12 +70,16 @@ export default function RootLayout() {
           <Stack.Screen
             name="panico"
             options={{
-              presentation: 'modal',
-              headerShown: true,
-              headerTitle: '',
-              headerShadowVisible: false,
-              headerTintColor: Colors.text,
-              headerStyle: { backgroundColor: Colors.background },
+              presentation: 'fullScreenModal',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="celebracao"
+            options={{
+              presentation: 'fullScreenModal',
+              headerShown: false,
+              animation: 'fade',
             }}
           />
           <Stack.Screen

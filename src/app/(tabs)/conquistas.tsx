@@ -1,88 +1,54 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect } from 'react';
-import { Dimensions, Image, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
-  FadeInDown,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
-  withSequence,
   withTiming,
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AmbientGlow } from '@/components/ambient-glow';
-import { GlowRing } from '@/components/glow-ring';
-import { ParticleField } from '@/components/particle-field';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { CONQUISTAS_SECRETAS } from '@/constants/conquistas-secretas';
 import { FREE_MAX_RANK_INDEX, NIVEIS, NivelPatente } from '@/constants/gamification';
 import { getPatenteBadge } from '@/constants/patente-badges';
 import { PATENTE_THEMES } from '@/constants/patente-themes';
-import { Accent, Colors, Spacing } from '@/constants/theme';
+import { Accent, Colors, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
 
 const SUBLEVEL_LABEL = ['I', 'II', 'III'];
-const SCREEN_WIDTH = Dimensions.get('window').width;
-const CONFETTI_COLORS = ['#F2C572', '#FFFFFF', '#9D6BF0', '#CFFAFE'];
-const CONQUISTAS_GLOW = [
-  { color: Accent.teal, top: '4%' as const, left: '50%' as const, size: 520, opacity: 0.22 },
-  { color: '#9D6BF0', top: '60%' as const, left: '90%' as const, size: 560, opacity: 0.18 },
-];
 
-// Color identity per patente, progressing from cool/muted (início da jornada)
-// para tons cada vez mais quentes e nobres (fim da jornada).
-const TIER_THEME: Record<string, { colors: [string, string]; glow: string }> = {
-  Recruta: { colors: ['#6E7684', '#3E4450'], glow: '#9AA3B2' },
-  Aprendiz: { colors: ['#4C93FB', '#2260C9'], glow: '#4C93FB' },
-  Guerreiro: { colors: ['#2BB6A8', '#157A72'], glow: '#2BB6A8' },
-  Guardião: { colors: ['#43BE5C', '#237B38'], glow: '#43BE5C' },
-  Espartano: { colors: [Accent.fireStart, Accent.fireEnd], glow: Accent.fireMid },
-  Monge: { colors: ['#9D6BF0', '#5E38A8'], glow: '#9D6BF0' },
-  Mestre: { colors: ['#E0447A', '#9C1F52'], glow: '#E0447A' },
-  Lenda: { colors: [Accent.gold, '#B8862E'], glow: Accent.gold },
-  Imortal: { colors: [Accent.gold, Accent.rankEnd], glow: '#FFFFFF' },
-};
-
-// Group NIVEIS by patente name for display
-const GRUPOS = NIVEIS.reduce<{ nome: string; niveis: NivelPatente[] }[]>((acc, n) => {
+// Agrupa NIVEIS por patente para a trilha vertical.
+const GRUPOS = NIVEIS.reduce<{ nome: string; niveis: NivelPatente[]; minIdx: number }[]>((acc, n, i) => {
   const ultimo = acc[acc.length - 1];
   if (ultimo && ultimo.nome === n.nome) {
     ultimo.niveis.push(n);
   } else {
-    acc.push({ nome: n.nome, niveis: [n] });
+    acc.push({ nome: n.nome, niveis: [n], minIdx: i });
   }
   return acc;
 }, []);
 
-export default function ConquistasScreen() {
+function faixaDias(niveis: NivelPatente[]): string {
+  const primeiro = niveis[0];
+  const ultimo = niveis[niveis.length - 1];
+  if (primeiro.sublevel === null) return `${primeiro.minDias}+ dias`;
+  return `${primeiro.minDias}–${ultimo.minDias} dias`;
+}
+
+export default function PatentesScreen() {
   const { dados, derivado, carregando } = useAppData();
 
-  const badgePulse = useSharedValue(1);
-  const shimmerX = useSharedValue(-1);
-
+  const ember = useSharedValue(0.5);
   useEffect(() => {
-    badgePulse.value = withRepeat(
-      withTiming(1.1, { duration: 1100, easing: Easing.inOut(Easing.ease) }),
-      -1,
-      true,
-    );
-    shimmerX.value = withRepeat(
-      withSequence(
-        withTiming(-1, { duration: 0 }),
-        withTiming(1, { duration: 2200, easing: Easing.out(Easing.quad) }),
-      ),
-      -1,
-      false,
-    );
-  }, [badgePulse, shimmerX]);
-
-  const badgeGlowStyle = useAnimatedStyle(() => ({ transform: [{ scale: badgePulse.value }] }));
-  const shimmerStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: shimmerX.value * SCREEN_WIDTH }, { rotate: '20deg' }],
+    ember.value = withRepeat(withTiming(1, { duration: 1000, easing: Easing.inOut(Easing.ease) }), -1, true);
+  }, [ember]);
+  const emberStyle = useAnimatedStyle(() => ({
+    opacity: 0.5 + ember.value * 0.5,
+    transform: [{ scale: 0.96 + ember.value * 0.08 }],
   }));
 
   if (carregando || !dados || !derivado) {
@@ -95,213 +61,157 @@ export default function ConquistasScreen() {
 
   const { patente, totalXP, streakDias } = derivado;
   const isPro = dados.isPro;
+  const dias = patente.diasEfetivos;
   const nomeAtual = patente.nivel.nome;
   const sublevelAtual = patente.nivel.sublevel;
-  const heroTheme = TIER_THEME[nomeAtual];
   const sublevelLabelAtual = sublevelAtual ? ` ${SUBLEVEL_LABEL[sublevelAtual - 1]}` : '';
+  const auraCor = (PATENTE_THEMES[dados.patenteTheme] ?? PATENTE_THEMES.ouro).cor;
+
+  const proxLabel = patente.proxNivel
+    ? `${patente.proxNivel.nome}${patente.proxNivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.proxNivel.sublevel - 1]}` : ''}`
+    : null;
+  const faltamDias = patente.proxNivel ? Math.max(0, patente.proxNivel.minDias - dias) : 0;
 
   return (
     <ThemedView style={styles.container}>
-      <AmbientGlow blobs={CONQUISTAS_GLOW} />
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={styles.safe} edges={['top']}>
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          <View style={styles.header}>
-            <ThemedText type="eyebrow" style={{ color: Accent.teal }}>Jornada do Guerreiro</ThemedText>
-            <ThemedText type="title">Conquistas</ThemedText>
-          </View>
+          <Text style={styles.eyebrow}>JORNADA DO GUERREIRO</Text>
+          <ThemedText type="title" style={styles.titulo}>Patentes</ThemedText>
 
           {/* Hero: patente atual */}
-          <LinearGradient
-            colors={heroTheme.colors}
-            start={{ x: 0.1, y: 0 }}
-            end={{ x: 0.9, y: 1 }}
-            style={[styles.heroCard, { shadowColor: heroTheme.glow }]}>
-            <View style={styles.heroShimmerClip} pointerEvents="none">
-              <ParticleField mode="fall" count={10} colors={CONFETTI_COLORS} />
-              <Animated.View style={[styles.heroShimmer, shimmerStyle]} />
+          <View style={styles.hero}>
+            <View style={[styles.heroGlow, { backgroundColor: auraCor }]} />
+            <View style={styles.heroBadgeWrap}>
+              <View style={[styles.heroRing, { borderColor: auraCor + '5A' }]} />
+              <Image source={getPatenteBadge(nomeAtual, sublevelAtual)} style={styles.heroBadge} resizeMode="contain" />
             </View>
-
-            <ThemedText type="eyebrow" style={styles.heroEyebrow}>Sua patente atual</ThemedText>
-
-            <Animated.View style={[styles.heroBadgeWrap, badgeGlowStyle]}>
-              <GlowRing size={136} color={PATENTE_THEMES[dados.patenteTheme].cor} />
-              <View style={[styles.heroBadgeGlow, { backgroundColor: heroTheme.glow }]} />
-              <Image
-                source={getPatenteBadge(nomeAtual, sublevelAtual)}
-                style={styles.heroBadgeImage}
-                resizeMode="contain"
-              />
-            </Animated.View>
-
-            <ThemedText type="cardTitle" style={styles.heroNome}>{nomeAtual}{sublevelLabelAtual}</ThemedText>
-            <ThemedText style={styles.heroStats}>{totalXP} XP total • {streakDias} dias de streak</ThemedText>
-
-            <View style={styles.heroProgressTrack}>
+            <ThemedText type="subtitle" style={styles.heroNome}>{nomeAtual}{sublevelLabelAtual}</ThemedText>
+            <Text style={styles.heroStats}>{totalXP} XP · {streakDias} dias de streak</Text>
+            <View style={styles.heroTrack}>
               <LinearGradient
-                colors={['rgba(255,255,255,0.55)', '#FFFFFF']}
+                colors={[Accent.brasa, Accent.brasaClara]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
-                style={[styles.heroProgressFill, { width: `${patente.progressoPercent}%` }]}
+                style={[styles.heroFill, { width: `${patente.progressoPercent}%` }]}
               />
             </View>
-            {patente.proxNivel ? (
-              <ThemedText type="small" style={styles.heroProgressLabel}>
-                {patente.proxNivel.minDias - patente.diasEfetivos} dias para {patente.proxNivel.nome}
-                {patente.proxNivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.proxNivel.sublevel - 1]}` : ''}
-              </ThemedText>
-            ) : patente.bloqueadoPorPlano ? (
-              <ThemedText type="small" style={styles.heroProgressLabel}>
-                Guerreiro III é o teto do plano Free — assine o PRO para continuar até Imortal
-              </ThemedText>
-            ) : (
-              <ThemedText type="small" style={styles.heroProgressLabel}>Nível máximo atingido 🏆</ThemedText>
-            )}
-          </LinearGradient>
-
-          {!isPro && (
-            <View style={styles.proBanner}>
-              <Ionicons name="star" size={16} color={Accent.gold} />
-              <ThemedText type="small" themeColor="textSecondary" style={styles.proBannerText}>
-                Guardião em diante é exclusivo do plano PRO
-              </ThemedText>
-            </View>
-          )}
-
-          {GRUPOS.map((grupo, idx) => {
-            const grupoMinIdx = NIVEIS.findIndex((n) => n.nome === grupo.nome);
-            const grupoBloqueadoPorPlano = !isPro && grupoMinIdx > FREE_MAX_RANK_INDEX;
-            const isGrupoAtual = grupo.nome === nomeAtual;
-            const isGrupoPassado =
-              !grupoBloqueadoPorPlano && NIVEIS.find((n) => n.nome === grupo.nome)!.minDias <= patente.diasEfetivos;
-            const tier = TIER_THEME[grupo.nome];
-
-            const conteudo = (
-              <>
-                <View style={styles.grupoHeaderRow}>
-                  <ThemedText
-                    type="eyebrow"
-                    style={isGrupoAtual ? styles.grupoNomeOnColor : undefined}
-                    themeColor={isGrupoAtual ? undefined : isGrupoPassado ? 'text' : 'textTertiary'}>
-                    {grupo.nome}
-                  </ThemedText>
-                  {isGrupoPassado && !isGrupoAtual && (
-                    <Ionicons name="checkmark-circle" size={16} color={tier.colors[0]} />
-                  )}
-                </View>
-
-                <View style={styles.badgeRow}>
-                  {grupo.niveis.map((nivel, i) => {
-                    const nivelIdx = NIVEIS.indexOf(nivel);
-                    const bloqueadoPorPlanoNivel = !isPro && nivelIdx > FREE_MAX_RANK_INDEX;
-                    const atingido = patente.diasEfetivos >= nivel.minDias && !bloqueadoPorPlanoNivel;
-                    const ehAtual = isGrupoAtual && sublevelAtual === nivel.sublevel;
-                    const badge = getPatenteBadge(grupo.nome, nivel.sublevel);
-                    return (
-                      <View key={i} style={styles.badgeChipCol}>
-                        <Animated.View
-                          style={[
-                            styles.badgeChip,
-                            !atingido && styles.badgeChipLocked,
-                            ehAtual && [styles.badgeChipAtual, { borderColor: tier.glow, shadowColor: tier.glow }],
-                            ehAtual && badgeGlowStyle,
-                          ]}>
-                          <Image source={badge} style={styles.badgeChipImage} resizeMode="contain" />
-                          {!atingido && (
-                            <View style={[styles.lockOverlay, bloqueadoPorPlanoNivel && styles.lockOverlayPro]}>
-                              <Ionicons
-                                name={bloqueadoPorPlanoNivel ? 'star' : 'lock-closed'}
-                                size={12}
-                                color={bloqueadoPorPlanoNivel ? Accent.gold : 'rgba(255,255,255,0.9)'}
-                              />
-                            </View>
-                          )}
-                        </Animated.View>
-                        {nivel.sublevel !== null && (
-                          <ThemedText
-                            type="small"
-                            style={isGrupoAtual ? styles.subLabelOnColor : undefined}
-                            themeColor={isGrupoAtual ? undefined : atingido ? 'text' : 'textTertiary'}>
-                            {SUBLEVEL_LABEL[i]}
-                          </ThemedText>
-                        )}
-                      </View>
-                    );
-                  })}
-                </View>
-
-                <ThemedText
-                  type="small"
-                  style={isGrupoAtual ? styles.grupoDiasOnColor : undefined}
-                  themeColor={isGrupoAtual ? undefined : 'textSecondary'}>
-                  {grupo.niveis[0].sublevel !== null
-                    ? `${grupo.niveis[0].minDias}+ dias consecutivos`
-                    : `${grupo.niveis[0].minDias}+ dias — sem limite`}
-                </ThemedText>
-              </>
-            );
-
-            return (
-              <Animated.View key={grupo.nome} entering={FadeInDown.delay(idx * 70).duration(420)}>
-                {isGrupoAtual ? (
-                  <LinearGradient
-                    colors={tier.colors}
-                    start={{ x: 0.1, y: 0 }}
-                    end={{ x: 0.9, y: 1 }}
-                    style={[styles.grupoCard, styles.grupoAtualCard, { shadowColor: tier.glow }]}>
-                    {conteudo}
-                  </LinearGradient>
-                ) : (
-                  <ThemedView
-                    type="backgroundElement"
-                    style={[styles.grupoCard, styles.grupoCardBorder, !isGrupoPassado && styles.grupoBloqueado]}>
-                    <View
-                      style={[
-                        styles.grupoAccentBar,
-                        { backgroundColor: isGrupoPassado ? tier.colors[0] : Colors.backgroundSelected },
-                      ]}
-                    />
-                    {conteudo}
-                  </ThemedView>
-                )}
-              </Animated.View>
-            );
-          })}
-
-          <View style={styles.secretasHeader}>
-            <ThemedText type="eyebrow" themeColor="textSecondary">Conquistas Secretas</ThemedText>
-            {!isPro && <Ionicons name="lock-closed" size={13} color={Colors.textTertiary} />}
+            <Text style={styles.heroProx}>
+              {proxLabel
+                ? `${faltamDias} dias para ${proxLabel}`
+                : patente.bloqueadoPorPlano
+                  ? 'Teto do Free — assine o PRO para continuar'
+                  : 'Nível máximo atingido'}
+            </Text>
           </View>
 
-          {isPro ? (
-            <View style={styles.secretasGrid}>
-              {CONQUISTAS_SECRETAS.map((c) => {
-                const desbloqueada = c.condicao({ dados, streakDias, totalXP });
-                return (
-                  <View key={c.id} style={styles.secretaCard}>
-                    <View style={[styles.secretaIconWrap, desbloqueada && styles.secretaIconWrapAtivo]}>
-                      <Ionicons
-                        name={(desbloqueada ? c.icone : 'lock-closed') as never}
-                        size={22}
-                        color={desbloqueada ? Accent.gold : Colors.textTertiary}
-                      />
-                    </View>
-                    <ThemedText type="smallBold" themeColor={desbloqueada ? 'text' : 'textTertiary'} style={styles.secretaNome}>
-                      {c.nome}
-                    </ThemedText>
-                    <ThemedText type="small" themeColor="textTertiary" style={styles.secretaDescricao}>
-                      {desbloqueada ? c.descricao : '???'}
-                    </ThemedText>
+          {/* Trilha vertical */}
+          <View style={styles.trilha}>
+            {GRUPOS.map((grupo, gi) => {
+              const primeiro = grupo.niveis[0];
+              const ultimo = grupo.niveis[grupo.niveis.length - 1];
+              const bloqueado = !isPro && grupo.minIdx > FREE_MAX_RANK_INDEX;
+              const alcancado = !bloqueado && primeiro.minDias <= dias;
+              const totalmente = !bloqueado && ultimo.minDias <= dias && grupo.nome !== nomeAtual;
+              const isAtual = grupo.nome === nomeAtual;
+              const aboveAcesa = alcancado || isAtual;
+              const belowAcesa = totalmente;
+              const primeiraLinha = gi === 0;
+
+              const linha = (
+                <>
+                  {/* Conector vertical + nó */}
+                  <View style={styles.conector}>
+                    <View
+                      style={[
+                        styles.segmento,
+                        primeiraLinha
+                          ? styles.segmentoFade
+                          : aboveAcesa
+                            ? styles.segmentoAceso
+                            : styles.segmentoFrio,
+                      ]}
+                    />
+                    {isAtual ? (
+                      <Animated.View style={[styles.noAtual, emberStyle]} />
+                    ) : (
+                      <View style={[styles.no, alcancado ? styles.noAceso : styles.noFrio]} />
+                    )}
+                    <View style={[styles.segmento, belowAcesa ? styles.segmentoAceso : styles.segmentoFrio]} />
                   </View>
-                );
-              })}
-            </View>
-          ) : (
-            <ThemedView type="backgroundElement" style={styles.secretasBloqueadas}>
-              <ThemedText type="small" themeColor="textSecondary" style={styles.secretasBloqueadasTexto}>
-                Assine o PRO para desbloquear {CONQUISTAS_SECRETAS.length} conquistas secretas.
-              </ThemedText>
-            </ThemedView>
-          )}
+
+                  {/* Badge */}
+                  <Image
+                    source={getPatenteBadge(grupo.nome, isAtual ? sublevelAtual : primeiro.sublevel)}
+                    style={[styles.tierBadge, !alcancado && styles.tierBadgeLocked]}
+                    resizeMode="contain"
+                  />
+
+                  {/* Textos */}
+                  <View style={styles.tierTextos}>
+                    <View style={styles.tierNomeRow}>
+                      <Text style={[styles.tierNome, isAtual && styles.tierNomeAtual, !alcancado && styles.tierNomeLocked]}>
+                        {grupo.nome}
+                      </Text>
+                      {isAtual && <Text style={styles.voceAqui}> · VOCÊ ESTÁ AQUI</Text>}
+                    </View>
+                    <Text style={[styles.tierFaixa, isAtual && styles.tierFaixaAtual]}>
+                      {faixaDias(grupo.niveis)}
+                      {totalmente ? ' · concluída' : isAtual ? ' · em forja' : ''}
+                    </Text>
+                  </View>
+
+                  {/* Pips de sublevel (só em tiers alcançados com sublevels) */}
+                  {alcancado && primeiro.sublevel !== null && (
+                    <View style={styles.pips}>
+                      {grupo.niveis.map((nivel) => {
+                        const feito = dias >= nivel.minDias;
+                        const atualPip = isAtual && sublevelAtual === nivel.sublevel;
+                        return (
+                          <View
+                            key={nivel.sublevel}
+                            style={[
+                              styles.pip,
+                              atualPip ? styles.pipAtual : feito ? styles.pipFeito : styles.pipFuturo,
+                            ]}
+                          />
+                        );
+                      })}
+                    </View>
+                  )}
+                </>
+              );
+
+              return (
+                <View key={grupo.nome}>
+                  {isAtual ? (
+                    <View style={styles.rowAtual}>{linha}</View>
+                  ) : (
+                    <View style={[styles.row, bloqueado ? styles.rowBloqueado : totalmente ? null : styles.rowFuturo]}>
+                      {linha}
+                    </View>
+                  )}
+
+                  {/* Marco PRO logo após o teto do Free */}
+                  {grupo.minIdx === FREE_MAX_RANK_INDEX && (
+                    <LinearGradient
+                      colors={['rgba(232,180,88,0.08)', 'rgba(232,180,88,0.02)']}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={styles.gatePro}>
+                      <Ionicons name="star" size={18} color={Accent.bronze} />
+                      <View style={styles.gateTextos}>
+                        <Text style={styles.gateTitulo}>Forja avançada · PRO</Text>
+                        <Text style={styles.gateTexto}>
+                          Do Guardião ao Imortal — 6 patentes e 351 dias de jornada.
+                        </Text>
+                      </View>
+                    </LinearGradient>
+                  )}
+                </View>
+              );
+            })}
+          </View>
         </ScrollView>
       </SafeAreaView>
     </ThemedView>
@@ -312,223 +222,118 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   safe: { flex: 1 },
-  header: {
-    paddingHorizontal: Spacing.three,
-    paddingTop: Spacing.three,
-    paddingBottom: Spacing.two,
-    gap: Spacing.half,
-  },
-  content: { padding: Spacing.three, gap: Spacing.two, paddingBottom: 40 },
+  content: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three, paddingBottom: Spacing.six },
 
-  heroCard: {
-    borderRadius: Spacing.four,
-    padding: Spacing.four,
-    alignItems: 'center',
-    marginBottom: Spacing.two,
-    shadowOpacity: 0.4,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 6,
-  },
-  heroShimmerClip: { ...StyleSheet.absoluteFillObject, overflow: 'hidden', borderRadius: Spacing.four },
-  heroShimmer: {
-    position: 'absolute',
-    top: -100,
-    left: -SCREEN_WIDTH,
-    width: SCREEN_WIDTH * 0.5,
-    height: '250%',
-    backgroundColor: 'rgba(255,255,255,0.16)',
-  },
-  heroEyebrow: {
-    color: 'rgba(255,255,255,0.85)',
-  },
-  heroBadgeWrap: {
-    width: 136,
-    height: 136,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: Spacing.two,
-    marginBottom: Spacing.one,
-  },
-  heroBadgeGlow: {
-    position: 'absolute',
-    width: 108,
-    height: 108,
-    borderRadius: 54,
-    opacity: 0.28,
-  },
-  heroBadgeImage: {
-    width: 128,
-    height: 128,
-  },
-  heroNome: {
-    color: '#FFFFFF',
-    textAlign: 'center',
-  },
-  heroStats: {
-    color: 'rgba(255,255,255,0.75)',
-    fontSize: 13,
-    marginBottom: Spacing.two,
-  },
-  heroProgressTrack: {
-    width: '100%',
-    height: 8,
-    backgroundColor: 'rgba(255,255,255,0.18)',
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  heroProgressFill: {
-    height: '100%',
-    borderRadius: 4,
-  },
-  heroProgressLabel: {
-    color: 'rgba(255,255,255,0.8)',
-    marginTop: Spacing.two,
-  },
+  eyebrow: { fontFamily: Fonts.display.bold, fontSize: 10, letterSpacing: 3, color: 'rgba(232,180,88,0.7)' },
+  titulo: { marginTop: 6 },
 
-  proBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.one,
-    paddingVertical: Spacing.two,
-    paddingHorizontal: Spacing.three,
-    borderRadius: Spacing.two,
-    backgroundColor: 'rgba(242,197,114,0.12)',
-    marginBottom: Spacing.two,
-  },
-  proBannerText: {
-    flex: 1,
-  },
-  grupoCard: {
-    borderRadius: Spacing.two,
-    padding: Spacing.three,
-    gap: Spacing.two,
-    marginBottom: Spacing.two,
-    overflow: 'hidden',
-  },
-  grupoCardBorder: {
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  grupoAtualCard: {
-    shadowOpacity: 0.4,
-    shadowRadius: 14,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 5,
-  },
-  grupoBloqueado: {
-    opacity: 0.55,
-  },
-  grupoAccentBar: {
+  hero: { alignItems: 'center', paddingVertical: 22 },
+  heroGlow: {
     position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-    width: 4,
+    top: 16,
+    width: 300,
+    height: 240,
+    borderRadius: 150,
+    opacity: 0.1,
   },
-  grupoHeaderRow: {
+  heroBadgeWrap: { width: 150, height: 150, alignItems: 'center', justifyContent: 'center' },
+  heroRing: { position: 'absolute', top: -4, left: -4, right: -4, bottom: -4, borderRadius: 79, borderWidth: 1 },
+  heroBadge: {
+    width: 140,
+    height: 140,
+    shadowColor: Accent.brasa,
+    shadowOpacity: 0.3,
+    shadowRadius: 30,
+    shadowOffset: { width: 0, height: 12 },
+  },
+  heroNome: { marginTop: 14 },
+  heroStats: { fontFamily: Fonts.body.medium, fontSize: 12.5, color: 'rgba(244,239,233,0.5)', marginTop: 4 },
+  heroTrack: {
+    width: 240,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    overflow: 'hidden',
+    marginTop: 14,
+  },
+  heroFill: { height: '100%', borderRadius: 3 },
+  heroProx: { fontFamily: Fonts.body.semibold, fontSize: 11.5, color: 'rgba(232,180,88,0.75)', marginTop: 8 },
+
+  trilha: { marginTop: Spacing.two },
+  row: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, paddingVertical: 13 },
+  rowFuturo: { opacity: 0.5 },
+  rowBloqueado: { opacity: 0.4 },
+  rowAtual: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  grupoNomeOnColor: {
-    color: '#FFFFFF',
-  },
-  grupoDiasOnColor: {
-    color: 'rgba(255,255,255,0.8)',
-  },
-  badgeRow: {
-    flexDirection: 'row',
     gap: Spacing.three,
+    paddingVertical: 15,
+    paddingHorizontal: Radius.card,
+    marginHorizontal: -Radius.card,
+    marginVertical: 2,
+    backgroundColor: 'rgba(255,107,43,0.07)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,138,61,0.4)',
+    borderRadius: Radius.card,
   },
-  badgeChipCol: {
-    alignItems: 'center',
-    gap: Spacing.one,
+
+  conector: { alignItems: 'center', alignSelf: 'stretch' },
+  segmento: { width: 2, flex: 1 },
+  segmentoAceso: { backgroundColor: Accent.brasa },
+  segmentoFrio: { backgroundColor: 'rgba(255,255,255,0.1)' },
+  segmentoFade: { backgroundColor: 'transparent' },
+  no: { width: 10, height: 10, borderRadius: 5, marginVertical: 3 },
+  noAceso: { backgroundColor: Accent.brasa },
+  noFrio: { borderWidth: 1, borderColor: 'rgba(255,255,255,0.25)' },
+  noAtual: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginVertical: 3,
+    backgroundColor: Accent.brasaClara,
+    shadowColor: Accent.brasa,
+    shadowOpacity: 0.9,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 0 },
+    elevation: 4,
   },
-  badgeChip: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.05)',
-  },
-  badgeChipLocked: {
-    opacity: 0.55,
-  },
-  badgeChipAtual: {
-    borderWidth: 2,
+
+  tierBadge: { width: 48, height: 48 },
+  tierBadgeLocked: { opacity: 0.85 },
+
+  tierTextos: { flex: 1 },
+  tierNomeRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' },
+  tierNome: { fontFamily: Fonts.body.bold, fontSize: 14.5, color: Colors.text },
+  tierNomeAtual: { color: '#FFC49A', fontFamily: Fonts.body.extrabold, fontSize: 15 },
+  tierNomeLocked: { color: 'rgba(244,239,233,0.75)' },
+  voceAqui: { fontFamily: Fonts.display.bold, fontSize: 10, letterSpacing: 1, color: '#FF8A3D' },
+  tierFaixa: { fontFamily: Fonts.body.medium, fontSize: 11, color: 'rgba(244,239,233,0.45)', marginTop: 2 },
+  tierFaixaAtual: { color: 'rgba(244,239,233,0.55)' },
+
+  pips: { flexDirection: 'row', gap: 5 },
+  pip: { width: 8, height: 8, borderRadius: 4 },
+  pipFeito: { backgroundColor: Accent.bronze },
+  pipAtual: {
+    backgroundColor: Accent.brasaClara,
+    shadowColor: Accent.brasa,
     shadowOpacity: 0.8,
     shadowRadius: 8,
-    elevation: 6,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    shadowOffset: { width: 0, height: 0 },
   },
-  badgeChipImage: {
-    width: 44,
-    height: 44,
-  },
-  lockOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.42)',
-    borderRadius: 28,
-  },
-  lockOverlayPro: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
-  },
-  subLabelOnColor: {
-    color: 'rgba(255,255,255,0.85)',
-  },
-  secretasHeader: {
+  pipFuturo: { borderWidth: 1, borderColor: 'rgba(255,255,255,0.25)' },
+
+  gatePro: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.one,
-    marginTop: Spacing.two,
-    marginLeft: Spacing.one,
-  },
-  secretasGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.two,
-  },
-  secretaCard: {
-    width: '31%',
-    alignItems: 'center',
-    gap: 4,
-    paddingVertical: Spacing.two,
-    paddingHorizontal: Spacing.one,
-    borderRadius: Spacing.two,
+    gap: 14,
+    padding: 14,
+    paddingHorizontal: Radius.card,
+    marginVertical: 10,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: Colors.border,
-    backgroundColor: Colors.backgroundElement,
+    borderColor: 'rgba(232,180,88,0.3)',
   },
-  secretaIconWrap: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.05)',
-  },
-  secretaIconWrapAtivo: {
-    backgroundColor: 'rgba(242,197,114,0.14)',
-  },
-  secretaNome: {
-    textAlign: 'center',
-  },
-  secretaDescricao: {
-    textAlign: 'center',
-    fontSize: 11,
-    lineHeight: 15,
-  },
-  secretasBloqueadas: {
-    borderRadius: Spacing.two,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    padding: Spacing.three,
-  },
-  secretasBloqueadasTexto: {
-    textAlign: 'center',
-  },
+  gateTextos: { flex: 1 },
+  gateTitulo: { fontFamily: Fonts.body.bold, fontSize: 12.5, color: Accent.bronze },
+  gateTexto: { fontFamily: Fonts.body.medium, fontSize: 11, lineHeight: 16, color: 'rgba(244,239,233,0.5)', marginTop: 2 },
 });

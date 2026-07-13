@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics="">
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#12100D;font-family:Manrope,system-ui,sans-serif}
+a{color:#E8B458;text-decoration:none}
+a:hover{color:#FFC46B}
+.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(255,255,255,.06);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 8px}
+.dv-tid{font:700 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#E8B458;color:#201505;border-radius:4px;text-decoration:none}
+.dv-tname{font:700 15px/1.2 Archivo,system-ui,sans-serif;color:#F4EFE9;letter-spacing:.3px}
+.dv-group{font:700 11px Archivo,sans-serif;letter-spacing:3px;color:rgba(244,239,233,.4);text-transform:uppercase;margin:38px 0 18px;display:flex;align-items:center;gap:14px}
+.dv-group::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.07)}
+.dv-opts{display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:12px;scroll-margin-top:16px}
+.dv-oid{font:700 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(255,255,255,.12);color:#F4EFE9;border-radius:5px;text-decoration:none}
+.dv-oid:hover{color:#F4EFE9;background:rgba(255,255,255,.2)}
+.dv-olabel{display:flex;align-items:baseline;gap:9px;font:600 13px/1.3 Manrope,sans-serif;color:rgba(244,239,233,.85)}
+.dv-olabel small{font:500 11px Manrope,sans-serif;color:rgba(244,239,233,.45)}
+.dv-opt:target .dv-oid{background:#FF6B2B;color:#fff}
+.dv-next{margin:26px 0 0;font:12px/1.6 Manrope,sans-serif;color:rgba(244,239,233,.45)}
+.dv-notes{max-width:400px;font:500 12px/1.65 Manrope,sans-serif;color:rgba(244,239,233,.55)}
+.dv-notes b{display:block;font:700 10px Archivo,sans-serif;letter-spacing:2px;color:rgba(232,180,88,.8);text-transform:uppercase;margin-bottom:6px}
+.dv-notes ul{margin:0;padding-left:16px}
+.dv-notes li{margin-bottom:4px}
+@keyframes sosBreathe{0%,100%{box-shadow:0 0 0 0 rgba(229,72,77,0)}50%{box-shadow:0 0 26px 0 rgba(229,72,77,.20)}}
+@keyframes emberPulse{0%,100%{opacity:.5;transform:scale(.96)}50%{opacity:1;transform:scale(1.04)}}
+@keyframes glowPulse{0%,100%{opacity:.35}50%{opacity:.8}}
+@keyframes breathe{0%,100%{transform:scale(.8)}50%{transform:scale(1.08)}}
+@keyframes ripple{0%{transform:scale(1);opacity:.45}100%{transform:scale(1.65);opacity:0}}
+@keyframes rise{0%{transform:translateY(16px) scale(1);opacity:0}25%{opacity:1}100%{transform:translateY(-34px) scale(.6);opacity:0}}
+@keyframes flicker{0%,100%{opacity:1}45%{opacity:.72}60%{opacity:.9}75%{opacity:.65}}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Home final — Painel da Forja (<a class="dv-oid" href="#1b">1b</a>) + Anel de Brasa (<a class="dv-oid" href="#1a">1a</a>)</span></div>
+<div class="dv-opts">
+<div class="dv-opt" id="2a">
+  <div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Painel da Forja com Anel <small>· Space Grotesk · anel como hero, dados abaixo</small></div>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0D0B09;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="2a Home final">
+      <div style="position:absolute;top:-140px;right:-140px;width:420px;height:420px;background:radial-gradient(closest-side,rgba(255,107,43,.10),transparent);pointer-events:none"></div>
+      <div style="flex:1;overflow:auto;padding:66px 22px 8px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font:600 11px 'Space Grotesk',sans-serif;letter-spacing:2.5px;color:rgba(244,239,233,.45)">SUA FORJA · SEG, 13 JUL</div>
+          <div style="display:flex;align-items:center;gap:6px;padding:4px 11px 4px 5px;border:1px solid rgba(232,180,88,.28);border-radius:99px;background:rgba(232,180,88,.06)">
+            <img src="patentes/guerreiro-2.png" alt="" style="width:20px;height:20px;object-fit:contain">
+            <span style="font:700 10.5px 'Space Grotesk',sans-serif;letter-spacing:1px;color:#E8B458">{{ patenteLabelCaps }}</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+          <div style="position:relative;width:236px;height:236px;display:flex;align-items:center;justify-content:center">
+            <div style="position:absolute;inset:22px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,107,43,.16),transparent 72%);animation:glowPulse 3.2s ease-in-out infinite"></div>
+            <svg width="236" height="236" viewBox="0 0 260 260" style="position:absolute;inset:0;margin:auto">
+              <defs>
+                <linearGradient id="fjRing2" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#FFC46B"></stop>
+                  <stop offset=".55" stop-color="#FF6B2B"></stop>
+                  <stop offset="1" stop-color="#C9330B"></stop>
+                </linearGradient>
+              </defs>
+              <circle cx="130" cy="130" r="115" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="10"></circle>
+              <circle cx="130" cy="130" r="115" fill="none" stroke="url(#fjRing2)" stroke-width="10" stroke-linecap="round" stroke-dasharray="722.57" stroke-dashoffset="{{ ringOffset }}" transform="rotate(-90 130 130)"></circle>
+              <circle cx="{{ tipX }}" cy="{{ tipY }}" r="12" fill="rgba(255,196,107,0.25)"></circle>
+              <circle cx="{{ tipX }}" cy="{{ tipY }}" r="5.5" fill="#FFC46B"></circle>
+            </svg>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+              <div style="font:700 64px/1 'Space Grotesk',sans-serif;letter-spacing:-2px">{{ dias }}</div>
+              <div style="font:600 10px 'Space Grotesk',sans-serif;letter-spacing:3px;color:rgba(244,239,233,.5)">DIAS NA FORJA</div>
+              <div style="font:600 11.5px ui-monospace,Menlo,monospace;color:rgba(232,180,88,.75);margin-top:5px">+ 14h 22m sem recair</div>
+            </div>
+          </div>
+          <div style="font:600 12.5px Manrope,sans-serif;color:rgba(244,239,233,.6)"><span style="color:#FFC46B;font-weight:700">{{ faltam }} dias</span> para {{ proxLabel }} · {{ xp }} XP</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:13px 16px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:16px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#FF6B2B"></span><span style="font:600 10px Manrope,sans-serif;color:rgba(244,239,233,.4)">T</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#FF6B2B"></span><span style="font:600 10px Manrope,sans-serif;color:rgba(244,239,233,.4)">Q</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#FF6B2B"></span><span style="font:600 10px Manrope,sans-serif;color:rgba(244,239,233,.4)">Q</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#FF6B2B"></span><span style="font:600 10px Manrope,sans-serif;color:rgba(244,239,233,.4)">S</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#FF6B2B"></span><span style="font:600 10px Manrope,sans-serif;color:rgba(244,239,233,.4)">S</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#FF6B2B"></span><span style="font:600 10px Manrope,sans-serif;color:rgba(244,239,233,.4)">D</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:radial-gradient(circle,#FFC46B,#FF6B2B);box-shadow:0 0 10px rgba(255,107,43,.8);animation:emberPulse 2s ease-in-out infinite"></span><span style="font:700 10px Manrope,sans-serif;color:#FFC46B">S</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="padding:14px 16px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:16px;display:flex;flex-direction:column;gap:8px">
+            <div style="font:600 10px 'Space Grotesk',sans-serif;letter-spacing:2px;color:rgba(232,180,88,.7)">BATALHAS</div>
+            <div style="font:700 30px/1 'Space Grotesk',sans-serif">8<span style="font-size:14px;color:rgba(244,239,233,.4)"> /9</span></div>
+            <div style="font:700 11px Manrope,sans-serif;color:#58C286">89% de resistência</div>
+          </div>
+          <div style="padding:14px 16px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:16px;display:flex;flex-direction:column;gap:6px;justify-content:center">
+            <div style="font:600 10px 'Space Grotesk',sans-serif;letter-spacing:2px;color:rgba(244,239,233,.4)">FRASE DO DIA</div>
+            <div style="font:italic 500 11.5px/1.5 Manrope,sans-serif;color:rgba(244,239,233,.75)">"{{ fraseTexto }}"</div>
+            <div style="font:700 10px 'Space Grotesk',sans-serif;letter-spacing:1.5px;color:rgba(232,180,88,.8);text-transform:uppercase">{{ fraseAutor }}</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:0 20px 10px">
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:15px;border:1px solid rgba(229,72,77,.45);background:rgba(229,72,77,.10);animation:sosBreathe 3s ease-in-out infinite">
+          <span style="width:8px;height:8px;border-radius:50%;background:#E5484D;animation:emberPulse 2s ease-in-out infinite"></span>
+          <span style="font:700 13px Manrope,sans-serif;letter-spacing:2px;color:#F2A9AC">PRECISO DE AJUDA</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-around;padding:10px 16px 30px;border-top:1px solid rgba(255,255,255,.06)">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF7A36" stroke-width="1.9" stroke-linejoin="round"><path d="M4 11.5 12 4.5l8 7V20a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"></path></svg>
+          <span style="font:700 9.5px Manrope,sans-serif;color:#FF7A36">Home</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="4" width="14" height="16" rx="2"></rect><path d="M9.5 4v16"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;color:#6F6558">Diário</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.4-3 7.6-7 9.5-4-1.9-7-5.1-7-9.5V6z"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;color:#6F6558">Patente</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="3.4"></circle><path d="M5.5 20c1-3.6 3.5-5.4 6.5-5.4s5.5 1.8 6.5 5.4"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;color:#6F6558">Perfil</span>
+        </div>
+      </div>
+    </div>
+  </x-import>
+  <div class="dv-notes"><b>O que foi combinado</b><ul>
+    <li>Anel de Brasa da <a class="dv-oid" href="#1a">1a</a> vira o hero (236px, dias no centro, horas em mono) — substitui a manchete "Dia 12" da <a class="dv-oid" href="#1b">1b</a>.</li>
+    <li>Mantidos da <a class="dv-oid" href="#1b">1b</a>: header com data, régua da semana, tipografia Space Grotesk e os cards de chapa única.</li>
+    <li>Patente sai do card (o anel já mostra o progresso dela) e vira o chip de bronze no topo — libera espaço pra Batalhas + Frase dividirem uma linha.</li>
+    <li>Tudo cabe sem rolagem; SOS e tab bar idênticos ao sistema.</li>
+  </ul></div>
+</div>
+</div>
+</section>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">FORJA — Redesign completo · direção "Aço &amp; Brasa"</span></div>
+
+<!-- ===================== ANÁLISE DO ESTADO ATUAL ===================== -->
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start;padding:26px 28px;background:#191512;border:1px solid rgba(255,255,255,.07);border-radius:16px;margin:10px 0 8px">
+  <div style="flex:1 1 460px;min-width:380px">
+    <div style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:#E8B458;text-transform:uppercase;margin-bottom:10px">Diagnóstico do app atual</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;font:500 12.5px/1.6 Manrope,sans-serif;color:rgba(244,239,233,.72)">
+      <div>
+        <div style="font:700 12px Manrope,sans-serif;color:#F4EFE9;margin-bottom:5px">Home</div>
+        1 · Três blocos de cor saturada (laranja, roxo, vermelho) competem entre si — nada tem hierarquia, tudo grita.<br>
+        2 · O roxo da patente não pertence à temática de forja.<br>
+        3 · Timer com 4 casas iguais para um streak de 0 dias — a unidade "dias" deveria dominar.<br>
+        4 · O botão de pânico colide com o card da patente e o halo vermelho duplo lê como estado de erro.<br>
+        5 · Tudo centrado, sem ritmo de leitura — pôster, não dashboard.
+      </div>
+      <div>
+        <div style="font:700 12px Manrope,sans-serif;color:#F4EFE9;margin-bottom:5px">Diário</div>
+        6 · Estado vazio é um vazio literal: texto perdido num campo preto, CTA flutuando sem âncora.
+        <div style="font:700 12px Manrope,sans-serif;color:#F4EFE9;margin:12px 0 5px">Conquistas</div>
+        7 · Confete celebrando 0 XP; card cinza lava o badge; barra branca invisível; eyebrow teal fora da paleta.<br>
+        8 · Tiers bloqueados quase desaparecem.
+      </div>
+      <div>
+        <div style="font:700 12px Manrope,sans-serif;color:#F4EFE9;margin-bottom:5px">Perfil</div>
+        9 · Seletor de hora permanentemente expandido ocupa metade da tela.<br>
+        10 · Swatch rosa "Carmesim" briga com o laranja; seções sem hierarquia.
+      </div>
+      <div>
+        <div style="font:700 12px Manrope,sans-serif;color:#F4EFE9;margin-bottom:5px">Global</div>
+        11 · Três cores de eyebrow (violeta, teal, dourado) sem semântica.<br>
+        12 · Raios de borda e sombras inconsistentes; ícones genéricos de biblioteca.
+      </div>
+    </div>
+  </div>
+  <div style="flex:0 0 auto;display:flex;gap:10px">
+    <img src="uploads/IMG_4533.PNG" alt="Home atual" style="height:240px;border-radius:12px;border:1px solid rgba(255,255,255,.1)">
+    <img src="uploads/IMG_4535.PNG" alt="Conquistas atual" style="height:240px;border-radius:12px;border:1px solid rgba(255,255,255,.1)">
+    <img src="uploads/IMG_4536.PNG" alt="Perfil atual" style="height:240px;border-radius:12px;border:1px solid rgba(255,255,255,.1)">
+  </div>
+  <div style="flex:1 1 100%;border-top:1px solid rgba(255,255,255,.07);padding-top:16px;display:flex;flex-wrap:wrap;gap:28px;align-items:center">
+    <div style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:#E8B458;text-transform:uppercase">O novo sistema</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span style="width:26px;height:26px;border-radius:7px;background:#0D0B09;border:1px solid rgba(255,255,255,.15)"></span>
+      <span style="width:26px;height:26px;border-radius:7px;background:#171310;border:1px solid rgba(255,255,255,.1)"></span>
+      <span style="width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#FFC46B,#FF6B2B 55%,#C9330B)"></span>
+      <span style="width:26px;height:26px;border-radius:7px;background:#E8B458"></span>
+      <span style="width:26px;height:26px;border-radius:7px;background:#E5484D"></span>
+      <span style="font:500 11.5px Manrope,sans-serif;color:rgba(244,239,233,.55);margin-left:6px">carvão único de fundo · brasa só como acento · bronze p/ patente · carmesim reservado ao SOS</span>
+    </div>
+    <div style="font:500 11.5px/1.6 Manrope,sans-serif;color:rgba(244,239,233,.55);max-width:560px">Uma superfície, uma temperatura: fundo carvão quente em todas as telas, cards são a mesma chapa com 1px de borda. O fogo aparece onde há progresso ou ação — nunca como decoração. Os badges 3D existentes viram o único elemento "rico" da tela, com espaço pra respirar.</div>
+  </div>
+</div>
+
+<div class="dv-group">Home — 3 direções (UX e tipografia diferentes)</div>
+<div class="dv-opts">
+
+<!-- ============================== 1a ============================== -->
+<div class="dv-opt" id="1a">
+  <div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Anel de Brasa <small>· gauge circular estilo Whoop · Archivo</small></div>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0D0B09;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1a Home Anel de Brasa">
+      <div style="position:absolute;left:50%;bottom:-180px;width:560px;height:420px;margin-left:-280px;background:radial-gradient(closest-side,rgba(255,107,43,.14),transparent);pointer-events:none"></div>
+      <div style="flex:1;overflow:auto;padding:64px 24px 8px;display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:6px">
+          <div style="font:800 13px Archivo,sans-serif;letter-spacing:5px;color:#E8B458">FORJA</div>
+          <div style="display:flex;align-items:center;gap:7px;padding:5px 12px 5px 6px;border:1px solid rgba(232,180,88,.28);border-radius:99px;background:rgba(232,180,88,.06)">
+            <img src="patentes/guerreiro-2.png" alt="" style="width:22px;height:22px;object-fit:contain">
+            <span style="font:700 11px Archivo,sans-serif;letter-spacing:1.2px;color:#E8B458">{{ patenteLabel }}</span>
+          </div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:360px">
+          <div style="position:relative;width:280px;height:280px;display:flex;align-items:center;justify-content:center">
+            <div style="position:absolute;inset:26px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,107,43,.16),transparent 72%);animation:glowPulse 3.2s ease-in-out infinite"></div>
+            <svg width="280" height="280" viewBox="0 0 260 260" style="position:absolute;inset:0;margin:auto">
+              <defs>
+                <linearGradient id="fjRing" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#FFC46B"></stop>
+                  <stop offset=".55" stop-color="#FF6B2B"></stop>
+                  <stop offset="1" stop-color="#C9330B"></stop>
+                </linearGradient>
+              </defs>
+              <circle cx="130" cy="130" r="115" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="10"></circle>
+              <circle cx="130" cy="130" r="115" fill="none" stroke="url(#fjRing)" stroke-width="10" stroke-linecap="round" stroke-dasharray="722.57" stroke-dashoffset="{{ ringOffset }}" transform="rotate(-90 130 130)"></circle>
+              <circle cx="{{ tipX }}" cy="{{ tipY }}" r="12" fill="rgba(255,196,107,0.25)"></circle>
+              <circle cx="{{ tipX }}" cy="{{ tipY }}" r="5.5" fill="#FFC46B"></circle>
+            </svg>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+              <div style="font:900 82px/1 Archivo,sans-serif;letter-spacing:-1px">{{ dias }}</div>
+              <div style="font:700 10.5px Archivo,sans-serif;letter-spacing:3.5px;color:rgba(244,239,233,.5)">DIAS NA FORJA</div>
+              <div style="font:600 12px ui-monospace,Menlo,monospace;color:rgba(232,180,88,.75);margin-top:6px">+ 14h 22m sem recair</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:2px">
+            <div style="font:600 12.5px Manrope,sans-serif;color:rgba(244,239,233,.6)"><span style="color:#FFC46B;font-weight:700">{{ faltam }} dias</span> para {{ proxLabel }} · {{ xp }} XP</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:16px 18px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:16px;margin-bottom:14px">
+          <div style="font:700 26px Archivo,sans-serif;color:rgba(232,180,88,.55);line-height:.9;margin-top:2px">"</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="font:italic 500 13.5px/1.55 Manrope,sans-serif;color:rgba(244,239,233,.85)">{{ fraseTexto }}</div>
+            <div style="font:700 10.5px Archivo,sans-serif;letter-spacing:2px;color:rgba(244,239,233,.4);text-transform:uppercase">{{ fraseAutor }}</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:0 20px 10px">
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:15px;border:1px solid rgba(229,72,77,.45);background:rgba(229,72,77,.10);animation:sosBreathe 3s ease-in-out infinite">
+          <span style="width:8px;height:8px;border-radius:50%;background:#E5484D;animation:emberPulse 2s ease-in-out infinite"></span>
+          <span style="font:700 13px Manrope,sans-serif;letter-spacing:2px;color:#F2A9AC">PRECISO DE AJUDA</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-around;padding:10px 16px 30px;border-top:1px solid rgba(255,255,255,.06)">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF7A36" stroke-width="1.9" stroke-linejoin="round"><path d="M4 11.5 12 4.5l8 7V20a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"></path></svg>
+          <span style="font:700 9.5px Manrope,sans-serif;letter-spacing:.5px;color:#FF7A36">Home</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="4" width="14" height="16" rx="2"></rect><path d="M9.5 4v16"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;letter-spacing:.5px;color:#6F6558">Diário</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.4-3 7.6-7 9.5-4-1.9-7-5.1-7-9.5V6z"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;letter-spacing:.5px;color:#6F6558">Patente</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="3.4"></circle><path d="M5.5 20c1-3.6 3.5-5.4 6.5-5.4s5.5 1.8 6.5 5.4"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;letter-spacing:.5px;color:#6F6558">Perfil</span>
+        </div>
+      </div>
+    </div>
+  </x-import>
+  <div class="dv-notes"><b>Decisões</b><ul>
+    <li>O streak vira <i>um</i> instrumento: anel de progresso até a próxima patente com o dia gigante no centro — dias dominam, horas viram uma linha secundária (resolve o timer de 4 casas iguais).</li>
+    <li>Patente sai do card roxo e vira um chip de bronze no topo — sempre visível, nunca competindo.</li>
+    <li>SOS reprojetado: pill carmesim contido com respiração sutil de glow — visível sem ler como erro; carmesim é reservado só pra ele.</li>
+    <li>Títulos em Archivo 900 — presença atlética estilo Nike Training Club.</li>
+  </ul></div>
+</div>
+
+<!-- ============================== 1b ============================== -->
+<div class="dv-opt" id="1b">
+  <div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Painel da Forja <small>· dashboard de dados estilo Oura · Space Grotesk</small></div>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0D0B09;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1b Home Painel da Forja">
+      <div style="position:absolute;top:-140px;right:-140px;width:420px;height:420px;background:radial-gradient(closest-side,rgba(255,107,43,.10),transparent);pointer-events:none"></div>
+      <div style="flex:1;overflow:auto;padding:66px 22px 8px;display:flex;flex-direction:column;gap:18px">
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="font:600 11px 'Space Grotesk',sans-serif;letter-spacing:2.5px;color:rgba(244,239,233,.45)">SUA FORJA · SEG, 13 JUL</div>
+            <div style="font:700 12px 'Space Grotesk',sans-serif;letter-spacing:2px;color:#E8B458">FORJA</div>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:10px;margin-top:10px">
+            <span style="font:700 58px/1 'Space Grotesk',sans-serif;letter-spacing:-2px">Dia {{ dias }}</span>
+            <svg width="26" height="26" viewBox="0 0 24 24" style="animation:flicker 2.6s ease-in-out infinite"><path d="M12 3c.6 3.4 4.6 4.8 4.6 8.9A4.6 4.6 0 0 1 12 16.5 4.6 4.6 0 0 1 7.4 11.9c0-1.7.7-3 1.8-4.3.4 1.1 1.1 1.8 2 2.2C10.7 7.3 11.3 5.2 12 3z" fill="#FF6B2B"></path></svg>
+          </div>
+          <div style="font:500 13.5px Manrope,sans-serif;color:rgba(244,239,233,.55);margin-top:4px">de disciplina contínua · 14h 22m desde a meia-noite</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:14px 16px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:16px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#FF6B2B"></span><span style="font:600 10px Manrope,sans-serif;color:rgba(244,239,233,.4)">T</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#FF6B2B"></span><span style="font:600 10px Manrope,sans-serif;color:rgba(244,239,233,.4)">Q</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#FF6B2B"></span><span style="font:600 10px Manrope,sans-serif;color:rgba(244,239,233,.4)">Q</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#FF6B2B"></span><span style="font:600 10px Manrope,sans-serif;color:rgba(244,239,233,.4)">S</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#FF6B2B"></span><span style="font:600 10px Manrope,sans-serif;color:rgba(244,239,233,.4)">S</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:#FF6B2B"></span><span style="font:600 10px Manrope,sans-serif;color:rgba(244,239,233,.4)">D</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:radial-gradient(circle,#FFC46B,#FF6B2B);box-shadow:0 0 10px rgba(255,107,43,.8);animation:emberPulse 2s ease-in-out infinite"></span><span style="font:700 10px Manrope,sans-serif;color:#FFC46B">S</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="padding:16px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:16px;display:flex;flex-direction:column;gap:10px">
+            <div style="font:600 10px 'Space Grotesk',sans-serif;letter-spacing:2px;color:rgba(232,180,88,.7)">PATENTE</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <img src="patentes/guerreiro-2.png" alt="" style="width:44px;height:44px;object-fit:contain">
+              <div>
+                <div style="font:700 15px 'Space Grotesk',sans-serif">{{ patenteLabel }}</div>
+                <div style="font:500 11px Manrope,sans-serif;color:rgba(244,239,233,.45)">{{ xp }} XP</div>
+              </div>
+            </div>
+            <div style="height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden">
+              <div style="height:100%;width:{{ barW }};border-radius:3px;background:linear-gradient(90deg,#FF6B2B,#FFC46B)"></div>
+            </div>
+            <div style="font:500 10.5px Manrope,sans-serif;color:rgba(244,239,233,.45)">{{ proxLabel }} em {{ faltam }} dias</div>
+          </div>
+          <div style="padding:16px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:16px;display:flex;flex-direction:column;gap:10px">
+            <div style="font:600 10px 'Space Grotesk',sans-serif;letter-spacing:2px;color:rgba(232,180,88,.7)">BATALHAS</div>
+            <div style="font:700 34px/1 'Space Grotesk',sans-serif">8<span style="font-size:15px;color:rgba(244,239,233,.4)"> /9</span></div>
+            <div style="font:500 11px/1.5 Manrope,sans-serif;color:rgba(244,239,233,.45)">gatilhos vencidos este mês</div>
+            <div style="font:700 11px Manrope,sans-serif;color:#58C286">89% de resistência</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:15px 17px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:16px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="font:600 10px 'Space Grotesk',sans-serif;letter-spacing:2px;color:rgba(244,239,233,.4)">FRASE DO DIA</div>
+            <div style="font:italic 500 13px/1.5 Manrope,sans-serif;color:rgba(244,239,233,.8)">"{{ fraseTexto }}" — <span style="font-style:normal;font-weight:700;color:rgba(232,180,88,.8)">{{ fraseAutor }}</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:0 20px 10px">
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:15px;border:1px solid rgba(229,72,77,.45);background:rgba(229,72,77,.10);animation:sosBreathe 3s ease-in-out infinite">
+          <span style="width:8px;height:8px;border-radius:50%;background:#E5484D;animation:emberPulse 2s ease-in-out infinite"></span>
+          <span style="font:700 13px Manrope,sans-serif;letter-spacing:2px;color:#F2A9AC">PRECISO DE AJUDA</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-around;padding:10px 16px 30px;border-top:1px solid rgba(255,255,255,.06)">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF7A36" stroke-width="1.9" stroke-linejoin="round"><path d="M4 11.5 12 4.5l8 7V20a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"></path></svg>
+          <span style="font:700 9.5px Manrope,sans-serif;color:#FF7A36">Home</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="4" width="14" height="16" rx="2"></rect><path d="M9.5 4v16"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;color:#6F6558">Diário</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.4-3 7.6-7 9.5-4-1.9-7-5.1-7-9.5V6z"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;color:#6F6558">Patente</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="3.4"></circle><path d="M5.5 20c1-3.6 3.5-5.4 6.5-5.4s5.5 1.8 6.5 5.4"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;color:#6F6558">Perfil</span>
+        </div>
+      </div>
+    </div>
+  </x-import>
+  <div class="dv-notes"><b>Decisões</b><ul>
+    <li>Leitura em F, alinhada à esquerda: "Dia 12" como manchete tipográfica, dados em cards uniformes de mesma chapa (Oura) — zero cards coloridos.</li>
+    <li>Régua da semana: 7 brasas acesas mostram consistência recente num relance — a de hoje pulsa.</li>
+    <li>Card "Batalhas" traz o diário pra Home: taxa de resistência vira motivação diária.</li>
+    <li>Mantém Space Grotesk (custo zero de migração) mas recalibrada: menos centralização, mais escala.</li>
+  </ul></div>
+</div>
+
+<!-- ============================== 1c ============================== -->
+<div class="dv-opt" id="1c">
+  <div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Aço Vivo <small>· radical tipográfico, SOS central · Barlow Condensed</small></div>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0B0908;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1c Home Aço Vivo">
+      <div style="position:absolute;left:50%;top:38%;width:600px;height:500px;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(255,107,43,.13),transparent 70%);pointer-events:none;animation:glowPulse 4s ease-in-out infinite"></div>
+      <div style="flex:1;overflow:auto;padding:64px 28px 8px;display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:4px">
+          <div style="font:600 14px 'Barlow Condensed',sans-serif;letter-spacing:6px;color:#E8B458">FORJA</div>
+          <div style="font:600 13px 'Barlow Condensed',sans-serif;letter-spacing:2px;color:rgba(244,239,233,.4)">SEG · 13 JUL</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:380px">
+          <div style="font:700 210px/0.82 'Barlow Condensed',sans-serif;background:linear-gradient(180deg,#FFD9A0 0%,#FF6B2B 58%,#B92E0A 100%);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-2px">{{ dias }}</div>
+          <div style="font:600 17px 'Barlow Condensed',sans-serif;letter-spacing:11px;color:rgba(244,239,233,.65);margin:10px 0 0 11px">DIAS FORJANDO</div>
+          <div style="width:180px;height:1px;background:linear-gradient(90deg,transparent,rgba(232,180,88,.5),transparent);margin:26px 0"></div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <img src="patentes/guerreiro-2.png" alt="" style="width:34px;height:34px;object-fit:contain">
+            <div style="font:600 20px 'Barlow Condensed',sans-serif;letter-spacing:3px;color:#E8B458">{{ patenteLabelCaps }}</div>
+          </div>
+          <div style="font:500 12.5px Manrope,sans-serif;color:rgba(244,239,233,.45);margin-top:8px">{{ proxLabel }} em {{ faltam }} dias · {{ xp }} XP</div>
+        </div>
+        <div style="text-align:center;padding:0 12px 18px">
+          <div style="font:italic 500 12.5px/1.6 Manrope,sans-serif;color:rgba(244,239,233,.5)">"{{ fraseTexto }}"</div>
+          <div style="font:600 12px 'Barlow Condensed',sans-serif;letter-spacing:3px;color:rgba(232,180,88,.6);margin-top:5px;text-transform:uppercase">{{ fraseAutor }}</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;padding:8px 34px 28px;border-top:1px solid rgba(255,255,255,.06);position:relative">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:52px">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#FF7A36" stroke-width="1.9" stroke-linejoin="round"><path d="M4 11.5 12 4.5l8 7V20a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"></path></svg>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:52px">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="4" width="14" height="16" rx="2"></rect><path d="M9.5 4v16"></path></svg>
+        </div>
+        <div style="width:64px;height:64px;margin-top:-30px;border-radius:50%;background:linear-gradient(160deg,#E5484D,#9E1B1F);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;box-shadow:0 6px 24px rgba(229,72,77,.4),inset 0 1px 0 rgba(255,255,255,.25);animation:sosBreathe 3s ease-in-out infinite">
+          <span style="font:700 15px 'Barlow Condensed',sans-serif;letter-spacing:2px;color:#fff">SOS</span>
+          <span style="font:600 7px Manrope,sans-serif;letter-spacing:.5px;color:rgba(255,255,255,.75)">AJUDA</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:52px">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.4-3 7.6-7 9.5-4-1.9-7-5.1-7-9.5V6z"></path></svg>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:52px">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="3.4"></circle><path d="M5.5 20c1-3.6 3.5-5.4 6.5-5.4s5.5 1.8 6.5 5.4"></path></svg>
+        </div>
+      </div>
+    </div>
+  </x-import>
+  <div class="dv-notes"><b>Decisões</b><ul>
+    <li>Aposta radical: o número É a interface. Metal incandescente em gradiente de têmpera (amarelo→laranja→vermelho escuro), tudo mais recua.</li>
+    <li>SOS vira o botão central elevado da tab bar (padrão de câmera/ação) — sempre ao alcance do polegar, resolve de vez a colisão com conteúdo.</li>
+    <li>Barlow Condensed 700 dá o peso vertical de tipografia de forjaria/industrial.</li>
+    <li>Tab bar sem rótulos: só 4 destinos + SOS, ícones bastam.</li>
+  </ul></div>
+</div>
+</div>
+
+<div class="dv-group">Fluxos — onboarding e crise (sistema visual da <a class="dv-oid" href="#1a">1a</a>)</div>
+<div class="dv-opts">
+
+<!-- ============================== 1d ============================== -->
+<div class="dv-opt" id="1d">
+  <div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>Onboarding <small>· boas-vindas → pergunta → forja concluída</small></div>
+  <div style="display:flex;gap:24px;flex-wrap:wrap">
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0D0B09;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1d Onboarding boas-vindas">
+      <div style="position:absolute;left:50%;top:30%;width:480px;height:480px;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(255,107,43,.12),transparent 70%);pointer-events:none"></div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px 34px 20px;text-align:center;gap:0">
+        <div style="position:relative;width:110px;height:110px;display:flex;align-items:center;justify-content:center;margin-bottom:30px">
+          <div style="position:absolute;inset:0;border-radius:50%;border:1px solid rgba(232,180,88,.35)"></div>
+          <div style="position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(232,180,88,.12)"></div>
+          <div style="position:absolute;inset:14px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,107,43,.3),transparent);animation:glowPulse 3s ease-in-out infinite"></div>
+          <svg width="46" height="46" viewBox="0 0 24 24" style="animation:flicker 2.8s ease-in-out infinite"><path d="M12 3c.6 3.4 4.6 4.8 4.6 8.9A4.6 4.6 0 0 1 12 16.5 4.6 4.6 0 0 1 7.4 11.9c0-1.7.7-3 1.8-4.3.4 1.1 1.1 1.8 2 2.2C10.7 7.3 11.3 5.2 12 3z" fill="url(#fjFlame1)"></path><defs><linearGradient id="fjFlame1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFC46B"></stop><stop offset="1" stop-color="#E5450F"></stop></linearGradient></defs></svg>
+        </div>
+        <div style="font:800 12px Archivo,sans-serif;letter-spacing:6px;color:#E8B458;margin-bottom:14px">FORJA</div>
+        <div style="font:800 30px/1.15 Archivo,sans-serif;letter-spacing:-.5px;max-width:300px">Você está prestes a forjar uma nova versão de si</div>
+        <div style="font:500 14px/1.65 Manrope,sans-serif;color:rgba(244,239,233,.55);max-width:290px;margin-top:16px">Algumas perguntas rápidas para moldar sua jornada. Suas respostas ficam só neste aparelho — nunca são enviadas ou compartilhadas.</div>
+      </div>
+      <div style="padding:0 24px 46px;display:flex;flex-direction:column;gap:12px;align-items:center">
+        <div style="width:100%;height:56px;border-radius:16px;background:linear-gradient(135deg,#FFB05C,#FF6B2B 55%,#D8380E);display:flex;align-items:center;justify-content:center;font:800 15px Archivo,sans-serif;letter-spacing:.8px;color:#fff;box-shadow:0 8px 28px rgba(255,107,43,.28)">Começar minha jornada</div>
+        <div style="font:600 11px Manrope,sans-serif;letter-spacing:.5px;color:rgba(244,239,233,.38)">Leva 2 minutos · 100% privado</div>
+      </div>
+    </div>
+  </x-import>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0D0B09;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1d Onboarding pergunta">
+      <div style="padding:70px 24px 0">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);position:relative">
+            <div style="position:absolute;left:0;top:0;bottom:0;width:62%;border-radius:3px;background:linear-gradient(90deg,#C9330B,#FF6B2B 70%,#FFC46B)"></div>
+            <div style="position:absolute;left:62%;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;background:#FFC46B;box-shadow:0 0 12px rgba(255,196,107,.9)"></div>
+          </div>
+          <div style="font:700 11px Archivo,sans-serif;letter-spacing:1.5px;color:rgba(244,239,233,.4)">5/8</div>
+        </div>
+        <div style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:rgba(232,180,88,.7);margin:30px 0 10px">A FORJA ESQUENTA</div>
+        <div style="font:800 26px/1.2 Archivo,sans-serif;letter-spacing:-.3px">Qual seu maior motivo pra mudar agora?</div>
+      </div>
+      <div style="flex:1;overflow:auto;padding:22px 24px;display:flex;flex-direction:column;gap:10px">
+        <div style="padding:16px 18px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:#171310;font:600 14.5px Manrope,sans-serif;color:rgba(244,239,233,.85)">Saúde</div>
+        <div style="padding:16px 18px;border-radius:14px;border:1px solid rgba(255,138,61,.75);background:linear-gradient(135deg,rgba(255,107,43,.16),rgba(201,51,11,.10));font:700 14.5px Manrope,sans-serif;color:#FFC49A;box-shadow:0 0 20px rgba(255,107,43,.14);display:flex;align-items:center;justify-content:space-between">Relacionamento
+          <svg width="17" height="17" viewBox="0 0 24 24" style="animation:flicker 2.4s ease-in-out infinite"><path d="M12 3c.6 3.4 4.6 4.8 4.6 8.9A4.6 4.6 0 0 1 12 16.5 4.6 4.6 0 0 1 7.4 11.9c0-1.7.7-3 1.8-4.3.4 1.1 1.1 1.8 2 2.2C10.7 7.3 11.3 5.2 12 3z" fill="#FF8A3D"></path></svg>
+        </div>
+        <div style="padding:16px 18px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:#171310;font:600 14.5px Manrope,sans-serif;color:rgba(244,239,233,.85)">Produtividade</div>
+        <div style="padding:16px 18px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:#171310;font:600 14.5px Manrope,sans-serif;color:rgba(244,239,233,.85)">Autoestima</div>
+        <div style="padding:16px 18px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:#171310;font:600 14.5px Manrope,sans-serif;color:rgba(244,239,233,.85)">Espiritualidade</div>
+        <div style="padding:16px 18px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:#171310;font:600 14.5px Manrope,sans-serif;color:rgba(244,239,233,.85)">Outro</div>
+      </div>
+      <div style="display:flex;gap:12px;padding:0 24px 46px">
+        <div style="flex:1;height:54px;border-radius:15px;display:flex;align-items:center;justify-content:center;font:700 14px Manrope,sans-serif;color:rgba(244,239,233,.5)">Voltar</div>
+        <div style="flex:2;height:54px;border-radius:15px;background:linear-gradient(135deg,#FFB05C,#FF6B2B 55%,#D8380E);display:flex;align-items:center;justify-content:center;font:800 14.5px Archivo,sans-serif;letter-spacing:.5px;color:#fff;box-shadow:0 8px 24px rgba(255,107,43,.25)">Continuar</div>
+      </div>
+    </div>
+  </x-import>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0D0B09;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1d Onboarding forja concluída">
+      <div style="position:absolute;left:50%;top:42%;width:520px;height:520px;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(255,140,50,.17),transparent 70%);pointer-events:none;animation:glowPulse 3.4s ease-in-out infinite"></div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px 34px 60px;text-align:center">
+        <div style="position:relative;width:190px;height:190px;display:flex;align-items:center;justify-content:center;margin-bottom:28px">
+          <div style="position:absolute;inset:6px;border-radius:50%;border:1px solid rgba(232,180,88,.4)"></div>
+          <div style="position:absolute;inset:-10px;border-radius:50%;border:1px solid rgba(232,180,88,.14)"></div>
+          <span style="position:absolute;left:38%;bottom:16%;width:5px;height:5px;border-radius:50%;background:#FFC46B;animation:rise 2.4s ease-out infinite"></span>
+          <span style="position:absolute;left:58%;bottom:12%;width:4px;height:4px;border-radius:50%;background:#FF8A3D;animation:rise 3s .8s ease-out infinite"></span>
+          <span style="position:absolute;left:48%;bottom:10%;width:3px;height:3px;border-radius:50%;background:#FFE0B0;animation:rise 2.7s 1.5s ease-out infinite"></span>
+          <img src="patentes/recruta-1.png" alt="Patente Recruta I" style="width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 10px 30px rgba(255,107,43,.35))">
+        </div>
+        <div style="font:700 10px Archivo,sans-serif;letter-spacing:4px;color:rgba(232,180,88,.8);margin-bottom:12px">SUA PRIMEIRA PATENTE</div>
+        <div style="font:800 34px/1.1 Archivo,sans-serif;letter-spacing:-.5px">Forja concluída</div>
+        <div style="font:500 14px/1.65 Manrope,sans-serif;color:rgba(244,239,233,.55);max-width:270px;margin-top:14px">Sua jornada foi moldada. Você começa como <b style="color:#E8B458">Recruta I</b> — a partir de agora, cada dia conta.</div>
+        <div style="display:flex;gap:7px;margin-top:34px">
+          <span style="width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2)"></span>
+          <span style="width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2)"></span>
+          <span style="width:18px;height:6px;border-radius:3px;background:#FF6B2B"></span>
+        </div>
+      </div>
+    </div>
+  </x-import>
+  </div>
+  <div class="dv-notes"><b>Decisões</b><ul>
+    <li>Barra de progresso vira "temperatura da forja": enche com gradiente de têmpera e tem uma brasa na ponta — avançar = aquecer.</li>
+    <li>Opção selecionada "acende" (borda-brasa + glow quente + chama pequena) em vez do laranja chapado.</li>
+    <li>A tela final entrega a primeira patente real (badge 3D do Recruta I com fagulhas subindo) — recompensa imediata, conecta ao sistema de progressão.</li>
+  </ul></div>
+</div>
+
+<!-- ============================== 1e ============================== -->
+<div class="dv-opt" id="1e">
+  <div class="dv-olabel"><a class="dv-oid" href="#1e">1e</a>Botão de Pânico <small>· respiração → ação → vitória</small></div>
+  <div style="display:flex;gap:24px;flex-wrap:wrap">
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0A0807;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1e Pânico respiração">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:70px 24px 0">
+        <div style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:rgba(244,239,233,.4)">CICLO 1 DE 3</div>
+        <div style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font:500 14px Manrope,sans-serif;color:rgba(244,239,233,.5)">✕</div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:38px;padding:0 34px">
+        <div style="position:relative;width:280px;height:280px;display:flex;align-items:center;justify-content:center">
+          <div style="position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,122,54,.25);animation:ripple 4s ease-out infinite"></div>
+          <div style="position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,122,54,.18);animation:ripple 4s 1.3s ease-out infinite"></div>
+          <div style="position:absolute;inset:22px;border-radius:50%;background:radial-gradient(circle at 38% 30%,#FF9D4D,#FF5A1E 55%,#A82708);box-shadow:0 0 80px rgba(255,90,30,.35),inset 0 -18px 40px rgba(120,20,0,.5);animation:breathe 12s ease-in-out infinite"></div>
+          <div style="position:relative;font:600 22px 'Space Grotesk',sans-serif;letter-spacing:3px;color:#fff;text-shadow:0 2px 12px rgba(120,20,0,.6)">Inspire</div>
+        </div>
+        <div style="font:500 13.5px/1.7 Manrope,sans-serif;color:rgba(244,239,233,.55);text-align:center">Respire com a brasa.<br>Inspire quando expande, expire quando contrai.</div>
+      </div>
+      <div style="padding:0 24px 50px;text-align:center">
+        <span style="font:600 13px Manrope,sans-serif;color:rgba(244,239,233,.4);border-bottom:1px solid rgba(244,239,233,.2);padding-bottom:2px">Pular respiração</span>
+      </div>
+    </div>
+  </x-import>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0A0807;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1e Pânico ação">
+      <div style="flex:1;overflow:auto;padding:74px 26px 20px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:rgba(244,239,233,.4)">GATILHO IDENTIFICADO</span>
+          <span style="padding:4px 12px;border-radius:99px;border:1px solid rgba(255,138,61,.5);background:rgba(255,107,43,.12);font:700 11.5px Manrope,sans-serif;color:#FFB37D">Ansiedade</span>
+        </div>
+        <div style="font:800 28px/1.15 Archivo,sans-serif;letter-spacing:-.4px">Faça isso agora</div>
+        <div style="padding:26px 24px;background:#161210;border:1px solid rgba(232,180,88,.22);border-radius:18px;position:relative;overflow:hidden">
+          <div style="position:absolute;left:0;top:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(232,180,88,.5),transparent)"></div>
+          <div style="font:600 19px/1.5 Manrope,sans-serif;color:#F4EFE9">Escreva 3 coisas pelas quais você é grato neste momento.</div>
+          <div style="font:500 12.5px/1.6 Manrope,sans-serif;color:rgba(244,239,233,.45);margin-top:12px">Faça a ação primeiro. Quando terminar, volte aqui — a onda passa.</div>
+        </div>
+        <div style="display:flex;justify-content:space-around;padding:6px 0 2px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:#161210;display:flex;align-items:center;justify-content:center">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#A79C8F" stroke-width="1.8" stroke-linecap="round"><path d="M12 21c-5-2.5-7-6-7-10 4 0 7 2 7 2s3-2 7-2c0 4-2 7.5-7 10z"></path><path d="M12 13v8"></path></svg>
+            </div>
+            <span style="font:600 10.5px Manrope,sans-serif;color:rgba(244,239,233,.5)">Meditação <span style="color:#E8B458">·PRO</span></span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:#161210;display:flex;align-items:center;justify-content:center">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#A79C8F" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="17" r="2.6"></circle><circle cx="17.5" cy="15" r="2.6"></circle><path d="M9.6 17V6.5L20 4.5V15"></path></svg>
+            </div>
+            <span style="font:600 10.5px Manrope,sans-serif;color:rgba(244,239,233,.5)">Playlist <span style="color:#E8B458">·PRO</span></span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:#161210;display:flex;align-items:center;justify-content:center">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#A79C8F" stroke-width="1.8" stroke-linecap="round"><path d="M5 4h4l2 5-2.5 1.5a13 13 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"></path></svg>
+            </div>
+            <span style="font:600 10.5px Manrope,sans-serif;color:rgba(244,239,233,.5)">Contato <span style="color:#E8B458">·PRO</span></span>
+          </div>
+        </div>
+      </div>
+      <div style="padding:0 24px 44px;display:flex;flex-direction:column;gap:14px">
+        <div style="height:56px;border-radius:16px;background:linear-gradient(135deg,#FFB05C,#FF6B2B 55%,#D8380E);display:flex;align-items:center;justify-content:center;font:800 15px Archivo,sans-serif;letter-spacing:.5px;color:#fff;box-shadow:0 8px 28px rgba(255,107,43,.28)">Resisti — registrar vitória</div>
+        <div style="display:flex;justify-content:center;gap:32px">
+          <span style="font:600 12.5px Manrope,sans-serif;color:rgba(244,239,233,.38)">Recaí dessa vez</span>
+          <span style="font:600 12.5px Manrope,sans-serif;color:rgba(244,239,233,.38)">Sair sem registrar</span>
+        </div>
+      </div>
+    </div>
+  </x-import>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0A0807;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1e Pânico vitória">
+      <div style="position:absolute;left:50%;top:38%;width:520px;height:520px;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(255,140,50,.15),transparent 70%);pointer-events:none"></div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px 34px 40px;text-align:center">
+        <div style="position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center;margin-bottom:30px">
+          <div style="position:absolute;inset:0;border-radius:50%;border:1px solid rgba(232,180,88,.4)"></div>
+          <div style="position:absolute;inset:12px;border-radius:50%;background:radial-gradient(circle at 40% 32%,#FF9D4D,#E5450F 60%,#A82708);box-shadow:0 0 60px rgba(255,107,43,.4),inset 0 -14px 30px rgba(110,18,0,.55)"></div>
+          <span style="position:absolute;left:24%;bottom:8%;width:5px;height:5px;border-radius:50%;background:#FFC46B;animation:rise 2.2s ease-out infinite"></span>
+          <span style="position:absolute;left:70%;bottom:6%;width:4px;height:4px;border-radius:50%;background:#FFE0B0;animation:rise 2.8s .9s ease-out infinite"></span>
+          <div style="position:relative;font:900 44px Archivo,sans-serif;color:#fff;text-shadow:0 3px 14px rgba(110,18,0,.6)">+1</div>
+        </div>
+        <div style="font:700 10px Archivo,sans-serif;letter-spacing:4px;color:rgba(232,180,88,.8);margin-bottom:12px">MAIS UMA MARTELADA</div>
+        <div style="font:800 32px/1.1 Archivo,sans-serif;letter-spacing:-.5px">Vitória forjada</div>
+        <div style="font:500 14px/1.65 Manrope,sans-serif;color:rgba(244,239,233,.55);max-width:280px;margin-top:14px">Cada vez que você resiste, você constrói quem você quer ser. Isso ficou salvo no seu diário.</div>
+      </div>
+      <div style="padding:0 24px 46px">
+        <div style="height:56px;border-radius:16px;border:1px solid rgba(232,180,88,.4);display:flex;align-items:center;justify-content:center;font:800 14.5px Archivo,sans-serif;letter-spacing:.5px;color:#E8B458">Voltar à forja</div>
+      </div>
+    </div>
+  </x-import>
+  </div>
+  <div class="dv-notes"><b>Decisões</b><ul>
+    <li>Modo crise = tela mais escura do app, sem tab bar, sem nada competindo — só a brasa que respira (substitui o orbe laranja chapado; sombra interna dá volume de carvão vivo).</li>
+    <li>"Recaí" e "Sair" existem mas em cinza silencioso — presentes sem puxar o olho de quem está vulnerável.</li>
+    <li>Vitória usa a metáfora da martelada ("+1 · mais uma martelada") em vez de confete — celebração com identidade, sem infantilizar.</li>
+    <li>Ferramentas PRO marcadas com "·PRO" em bronze discreto, não cadeado cinza.</li>
+  </ul></div>
+</div>
+</div>
+
+<div class="dv-group">Telas de suporte</div>
+<div class="dv-opts">
+
+<!-- ============================== 1f ============================== -->
+<div class="dv-opt" id="1f">
+  <div class="dv-olabel"><a class="dv-oid" href="#1f">1f</a>Diário de Gatilhos <small>· timeline + insight teaser</small></div>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0D0B09;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1f Diário">
+      <div style="padding:66px 24px 14px;display:flex;align-items:flex-end;justify-content:space-between">
+        <div>
+          <div style="font:800 28px/1.1 Archivo,sans-serif;letter-spacing:-.4px">Diário</div>
+          <div style="font:500 12.5px Manrope,sans-serif;color:rgba(244,239,233,.5);margin-top:4px">9 batalhas registradas · 89% vencidas</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:1px solid rgba(232,180,88,.35);background:rgba(232,180,88,.07)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E8B458" stroke-width="2.2" stroke-linecap="round"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3"></path></svg>
+          <span style="font:700 11.5px Manrope,sans-serif;color:#E8B458">Insights ·PRO</span>
+        </div>
+      </div>
+      <div style="flex:1;overflow:auto;padding:4px 24px 90px;display:flex;flex-direction:column;gap:10px">
+        <div style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:rgba(244,239,233,.35);margin:8px 0 2px">HOJE</div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:14px;align-items:flex-start">
+          <div style="font:600 11px ui-monospace,Menlo,monospace;color:rgba(244,239,233,.4);padding-top:2px">22:41</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font:700 14.5px Manrope,sans-serif">Notificações / celular</div>
+            <div style="font:500 12px/1.5 Manrope,sans-serif;color:rgba(244,239,233,.5)">Fechei o app e fui treinar.</div>
+          </div>
+          <span style="padding:3px 9px;border-radius:7px;background:rgba(88,194,134,.14);font:800 9.5px Manrope,sans-serif;letter-spacing:.8px;color:#58C286">RESISTI</span>
+        </div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:14px;align-items:flex-start">
+          <div style="font:600 11px ui-monospace,Menlo,monospace;color:rgba(244,239,233,.4);padding-top:2px">14:05</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font:700 14.5px Manrope,sans-serif">Tédio</div>
+          </div>
+          <span style="padding:3px 9px;border-radius:7px;background:rgba(88,194,134,.14);font:800 9.5px Manrope,sans-serif;letter-spacing:.8px;color:#58C286">RESISTI</span>
+        </div>
+        <div style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:rgba(244,239,233,.35);margin:10px 0 2px">ONTEM</div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:14px;align-items:flex-start">
+          <div style="font:600 11px ui-monospace,Menlo,monospace;color:rgba(244,239,233,.4);padding-top:2px">23:12</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font:700 14.5px Manrope,sans-serif">Ansiedade</div>
+            <div style="font:500 12px/1.5 Manrope,sans-serif;color:rgba(244,239,233,.5)">Dia difícil no trabalho.</div>
+          </div>
+          <span style="padding:3px 9px;border-radius:7px;background:rgba(240,123,114,.13);font:800 9.5px Manrope,sans-serif;letter-spacing:.8px;color:#F07B72">RECAÍDA</span>
+        </div>
+        <div style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:rgba(244,239,233,.35);margin:10px 0 2px">SEX, 10 JUL</div>
+        <div style="display:flex;gap:14px;padding:14px 16px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:14px;align-items:flex-start">
+          <div style="font:600 11px ui-monospace,Menlo,monospace;color:rgba(244,239,233,.4);padding-top:2px">21:30</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+            <div style="font:700 14.5px Manrope,sans-serif">Redes sociais</div>
+          </div>
+          <span style="padding:3px 9px;border-radius:7px;background:rgba(88,194,134,.14);font:800 9.5px Manrope,sans-serif;letter-spacing:.8px;color:#58C286">RESISTI</span>
+        </div>
+        <div style="padding:16px 18px;border:1px dashed rgba(232,180,88,.35);border-radius:14px;display:flex;align-items:center;gap:14px;margin-top:8px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8B458" stroke-width="1.8" stroke-linecap="round"><path d="M4 19V10M10 19V5M16 19v-7M21 19H3"></path></svg>
+          <div style="flex:1">
+            <div style="font:700 12.5px Manrope,sans-serif;color:#E8B458">Um padrão está surgindo</div>
+            <div style="font:500 11.5px/1.5 Manrope,sans-serif;color:rgba(244,239,233,.5)">Seus gatilhos concentram-se entre 22h e 0h. Veja a análise completa no PRO.</div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;left:0;right:0;bottom:0;padding:30px 20px 34px;background:linear-gradient(180deg,rgba(13,11,9,0),#0D0B09 55%)">
+        <div style="height:54px;border-radius:16px;background:linear-gradient(135deg,#FFB05C,#FF6B2B 55%,#D8380E);display:flex;align-items:center;justify-content:center;gap:8px;font:800 14.5px Archivo,sans-serif;letter-spacing:.5px;color:#fff;box-shadow:0 8px 28px rgba(255,107,43,.28)">+ Registrar gatilho</div>
+      </div>
+    </div>
+  </x-import>
+  <div class="dv-notes"><b>Decisões</b><ul>
+    <li>Vocabulário de "batalhas": o subtítulo já entrega valor ("9 batalhas · 89% vencidas") em vez do burocrático "entradas registradas".</li>
+    <li>Timeline com hora em coluna monoespaçada e agrupamento por dia — escaneável como um log de treino.</li>
+    <li>Teaser de insight com borda tracejada bronze converte para o PRO mostrando um gosto do valor real, não um cadeado.</li>
+    <li>CTA ancorado num gradiente de fade — não flutua mais no vazio.</li>
+  </ul></div>
+</div>
+
+<!-- ============================== 1g ============================== -->
+<div class="dv-opt" id="1g">
+  <div class="dv-olabel"><a class="dv-oid" href="#1g">1g</a>Patentes <small>· trilha vertical da forja (a tela rola)</small></div>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0D0B09;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1g Patentes">
+      <div style="flex:1;overflow:auto;padding:66px 24px 60px">
+        <div style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:rgba(232,180,88,.7)">JORNADA DO GUERREIRO</div>
+        <div style="font:800 28px/1.1 Archivo,sans-serif;letter-spacing:-.4px;margin-top:6px">Patentes</div>
+        <div style="display:flex;flex-direction:column;align-items:center;padding:26px 0 22px;position:relative">
+          <div style="position:absolute;left:50%;top:30px;width:340px;height:280px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(255,107,43,.13),transparent 70%);pointer-events:none"></div>
+          <div style="position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center">
+            <div style="position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(232,180,88,.35)"></div>
+            <img src="{{ badgeSrc }}" alt="Patente atual" style="width:140px;height:140px;object-fit:contain;filter:drop-shadow(0 12px 30px rgba(255,107,43,.3))">
+          </div>
+          <div style="font:800 24px Archivo,sans-serif;margin-top:14px">{{ patenteLabel }}</div>
+          <div style="font:500 12.5px Manrope,sans-serif;color:rgba(244,239,233,.5);margin-top:4px">{{ xp }} XP · {{ dias }} dias de streak</div>
+          <div style="width:240px;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:14px">
+            <div style="height:100%;width:{{ barW }};border-radius:3px;background:linear-gradient(90deg,#FF6B2B,#FFC46B)"></div>
+          </div>
+          <div style="font:600 11.5px Manrope,sans-serif;color:rgba(232,180,88,.75);margin-top:8px">{{ faltam }} dias para {{ proxLabel }}</div>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <div style="display:flex;gap:16px;align-items:center;padding:13px 0">
+            <div style="display:flex;flex-direction:column;align-items:center;align-self:stretch">
+              <div style="width:2px;flex:1;background:linear-gradient(180deg,transparent,#FF6B2B)"></div>
+              <div style="width:10px;height:10px;border-radius:50%;background:#FF6B2B;margin:3px 0"></div>
+              <div style="width:2px;flex:1;background:#FF6B2B"></div>
+            </div>
+            <img src="patentes/recruta-3.png" alt="" style="width:46px;height:46px;object-fit:contain">
+            <div style="flex:1">
+              <div style="font:700 14.5px Manrope,sans-serif">Recruta</div>
+              <div style="font:500 11px Manrope,sans-serif;color:rgba(244,239,233,.45)">1–3 dias · concluída</div>
+            </div>
+            <div style="display:flex;gap:5px">
+              <span style="width:8px;height:8px;border-radius:50%;background:#E8B458"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:#E8B458"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:#E8B458"></span>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:center;padding:13px 0">
+            <div style="display:flex;flex-direction:column;align-items:center;align-self:stretch">
+              <div style="width:2px;flex:1;background:#FF6B2B"></div>
+              <div style="width:10px;height:10px;border-radius:50%;background:#FF6B2B;margin:3px 0"></div>
+              <div style="width:2px;flex:1;background:#FF6B2B"></div>
+            </div>
+            <img src="patentes/aprendiz-3.png" alt="" style="width:46px;height:46px;object-fit:contain">
+            <div style="flex:1">
+              <div style="font:700 14.5px Manrope,sans-serif">Aprendiz</div>
+              <div style="font:500 11px Manrope,sans-serif;color:rgba(244,239,233,.45)">4–7 dias · concluída</div>
+            </div>
+            <div style="display:flex;gap:5px">
+              <span style="width:8px;height:8px;border-radius:50%;background:#E8B458"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:#E8B458"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:#E8B458"></span>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:center;padding:15px 16px;margin:2px -16px;background:rgba(255,107,43,.07);border:1px solid rgba(255,138,61,.4);border-radius:16px;box-shadow:0 0 24px rgba(255,107,43,.10)">
+            <div style="display:flex;flex-direction:column;align-items:center;align-self:stretch">
+              <div style="width:2px;flex:1;background:#FF6B2B"></div>
+              <div style="width:12px;height:12px;border-radius:50%;background:radial-gradient(circle,#FFC46B,#FF6B2B);box-shadow:0 0 12px rgba(255,138,61,.9);margin:3px 0;animation:emberPulse 2s ease-in-out infinite"></div>
+              <div style="width:2px;flex:1;background:rgba(255,255,255,.1)"></div>
+            </div>
+            <img src="patentes/guerreiro-2.png" alt="" style="width:52px;height:52px;object-fit:contain">
+            <div style="flex:1">
+              <div style="font:800 15px Manrope,sans-serif;color:#FFC49A">Guerreiro <span style="font:700 10px Archivo,sans-serif;letter-spacing:1px;color:#FF8A3D">· VOCÊ ESTÁ AQUI</span></div>
+              <div style="font:500 11px Manrope,sans-serif;color:rgba(244,239,233,.55)">8–14 dias · em forja</div>
+            </div>
+            <div style="display:flex;gap:5px">
+              <span style="width:8px;height:8px;border-radius:50%;background:#E8B458"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:radial-gradient(circle,#FFC46B,#FF6B2B);box-shadow:0 0 8px rgba(255,138,61,.8)"></span>
+              <span style="width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,.25);box-sizing:border-box"></span>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:center;padding:14px 16px;margin:10px 0;border:1px solid rgba(232,180,88,.3);border-radius:14px;background:linear-gradient(135deg,rgba(232,180,88,.08),rgba(232,180,88,.02))">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#E8B458"><path d="M12 2l2.4 6.2L21 9l-5 4.2 1.6 6.8L12 16.6 6.4 20l1.6-6.8L3 9l6.6-.8z"></path></svg>
+            <div style="flex:1">
+              <div style="font:700 12.5px Manrope,sans-serif;color:#E8B458">Forja avançada · PRO</div>
+              <div style="font:500 11px/1.5 Manrope,sans-serif;color:rgba(244,239,233,.5)">Do Guardião ao Imortal — 6 patentes e 351 dias de jornada.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:center;padding:13px 0;opacity:.45">
+            <div style="display:flex;flex-direction:column;align-items:center;align-self:stretch">
+              <div style="width:2px;flex:1;background:rgba(255,255,255,.1)"></div>
+              <div style="width:10px;height:10px;border-radius:50%;border:1px solid rgba(255,255,255,.25);box-sizing:border-box;margin:3px 0"></div>
+              <div style="width:2px;flex:1;background:rgba(255,255,255,.1)"></div>
+            </div>
+            <img src="patentes/guardiao-3.png" alt="" style="width:46px;height:46px;object-fit:contain;filter:grayscale(.7)">
+            <div style="flex:1">
+              <div style="font:700 14.5px Manrope,sans-serif;color:rgba(244,239,233,.75)">Guardião</div>
+              <div style="font:500 11px Manrope,sans-serif;color:rgba(244,239,233,.4)">15–30 dias</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:center;padding:13px 0;opacity:.4">
+            <div style="display:flex;flex-direction:column;align-items:center;align-self:stretch">
+              <div style="width:2px;flex:1;background:rgba(255,255,255,.1)"></div>
+              <div style="width:10px;height:10px;border-radius:50%;border:1px solid rgba(255,255,255,.25);box-sizing:border-box;margin:3px 0"></div>
+              <div style="width:2px;flex:1;background:rgba(255,255,255,.1)"></div>
+            </div>
+            <img src="patentes/espartano-3.png" alt="" style="width:46px;height:46px;object-fit:contain;filter:grayscale(.7)">
+            <div style="flex:1">
+              <div style="font:700 14.5px Manrope,sans-serif;color:rgba(244,239,233,.75)">Espartano</div>
+              <div style="font:500 11px Manrope,sans-serif;color:rgba(244,239,233,.4)">31–60 dias</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:center;padding:13px 0;opacity:.35">
+            <div style="display:flex;flex-direction:column;align-items:center;align-self:stretch">
+              <div style="width:2px;flex:1;background:rgba(255,255,255,.1)"></div>
+              <div style="width:10px;height:10px;border-radius:50%;border:1px solid rgba(255,255,255,.25);box-sizing:border-box;margin:3px 0"></div>
+              <div style="width:2px;flex:1;background:rgba(255,255,255,.08)"></div>
+            </div>
+            <img src="patentes/monge-3.png" alt="" style="width:46px;height:46px;object-fit:contain;filter:grayscale(.7)">
+            <div style="flex:1">
+              <div style="font:700 14.5px Manrope,sans-serif;color:rgba(244,239,233,.75)">Monge</div>
+              <div style="font:500 11px Manrope,sans-serif;color:rgba(244,239,233,.4)">61–90 dias</div>
+            </div>
+          </div>
+          <div style="text-align:center;font:600 11px Manrope,sans-serif;color:rgba(244,239,233,.3);padding:8px 0 4px">Mestre · Lenda · Imortal ↓</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-around;padding:10px 16px 30px;border-top:1px solid rgba(255,255,255,.06)">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><path d="M4 11.5 12 4.5l8 7V20a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;color:#6F6558">Home</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="4" width="14" height="16" rx="2"></rect><path d="M9.5 4v16"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;color:#6F6558">Diário</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF7A36" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.4-3 7.6-7 9.5-4-1.9-7-5.1-7-9.5V6z"></path></svg>
+          <span style="font:700 9.5px Manrope,sans-serif;color:#FF7A36">Patente</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="3.4"></circle><path d="M5.5 20c1-3.6 3.5-5.4 6.5-5.4s5.5 1.8 6.5 5.4"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;color:#6F6558">Perfil</span>
+        </div>
+      </div>
+    </div>
+  </x-import>
+  <div class="dv-notes"><b>Decisões</b><ul>
+    <li>De grade de cards coloridos para <i>trilha vertical</i>: a linha acesa (brasa) mostra até onde você forjou; adiante, a linha está fria. Zero confete.</li>
+    <li>Tier atual ganha o único destaque quente da lista + "VOCÊ ESTÁ AQUI"; sublevels viram 3 pips (ouro = feito, brasa = atual).</li>
+    <li>O gate PRO é um marco <i>na trilha</i> ("Forja avançada — do Guardião ao Imortal"), vendendo continuação da jornada, não punindo o free.</li>
+    <li>Badges 3D em fundo carvão puro finalmente aparecem — sem card cinza lavando o metal.</li>
+  </ul></div>
+</div>
+
+<!-- ============================== 1h ============================== -->
+<div class="dv-opt" id="1h">
+  <div class="dv-olabel"><a class="dv-oid" href="#1h">1h</a>Perfil <small>· configurações + PRO</small></div>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0D0B09;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1h Perfil">
+      <div style="flex:1;overflow:auto;padding:66px 24px 40px;display:flex;flex-direction:column;gap:18px">
+        <div style="font:800 28px/1.1 Archivo,sans-serif;letter-spacing:-.4px">Perfil</div>
+        <div style="display:flex;align-items:center;gap:16px;padding:18px;background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:18px">
+          <img src="{{ badgeSrc }}" alt="" style="width:60px;height:60px;object-fit:contain">
+          <div style="flex:1">
+            <div style="font:800 17px Archivo,sans-serif">{{ patenteLabel }}</div>
+            <div style="font:500 12px Manrope,sans-serif;color:rgba(244,239,233,.5);margin-top:2px">{{ dias }} dias de streak · {{ xp }} XP</div>
+          </div>
+          <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1l6 6-6 6" stroke="#6F6558" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+        <div style="padding:18px;border-radius:18px;border:1px solid rgba(232,180,88,.35);background:linear-gradient(135deg,rgba(232,180,88,.10),rgba(255,107,43,.05));display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8B458"><path d="M12 2l2.4 6.2L21 9l-5 4.2 1.6 6.8L12 16.6 6.4 20l1.6-6.8L3 9l6.6-.8z"></path></svg>
+            <span style="font:800 12px Archivo,sans-serif;letter-spacing:2.5px;color:#E8B458">FORJA PRO</span>
+          </div>
+          <div style="font:700 15.5px Manrope,sans-serif">Forje até o Imortal</div>
+          <div style="font:500 12px/1.6 Manrope,sans-serif;color:rgba(244,239,233,.55)">Patentes além do Guerreiro · insights do diário · ferramentas de crise expandidas</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+            <span style="font:600 12px Manrope,sans-serif;color:rgba(244,239,233,.45)">R$ 9,90/mês</span>
+            <span style="padding:9px 18px;border-radius:11px;background:linear-gradient(135deg,#FFB05C,#FF6B2B 60%,#D8380E);font:800 12px Archivo,sans-serif;letter-spacing:.5px;color:#fff">Assinar</span>
+          </div>
+        </div>
+        <div>
+          <div style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:rgba(244,239,233,.4);margin:0 0 8px 4px">CONFIGURAÇÕES</div>
+          <div style="background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:15px 17px">
+              <span style="font:600 14px Manrope,sans-serif">Notificações diárias</span>
+              <span style="width:46px;height:27px;border-radius:14px;background:linear-gradient(135deg,#FFB05C,#FF6B2B);position:relative;display:inline-block"><span style="position:absolute;right:3px;top:3px;width:21px;height:21px;border-radius:50%;background:#fff"></span></span>
+            </div>
+            <div style="height:1px;background:rgba(255,255,255,.06);margin:0 17px"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:15px 17px">
+              <span style="font:600 14px Manrope,sans-serif">Horário do lembrete <span style="font:700 10px Archivo,sans-serif;color:#E8B458">·PRO</span></span>
+              <span style="display:flex;align-items:center;gap:8px"><span style="font:600 13.5px ui-monospace,Menlo,monospace;color:rgba(244,239,233,.55)">09:00</span><svg width="7" height="12" viewBox="0 0 8 14"><path d="M1 1l6 6-6 6" stroke="#6F6558" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:rgba(244,239,233,.4);margin:0 0 8px 4px">AURA DA PATENTE <span style="color:#E8B458">· PRO</span></div>
+          <div style="background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px;display:flex;gap:12px">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 0;border-radius:12px;border:1.5px solid #E8B458;background:rgba(232,180,88,.07)">
+              <span style="width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#F7D89A,#E8B458 60%,#8A6420);box-shadow:0 0 12px rgba(232,180,88,.5)"></span>
+              <span style="font:700 11px Manrope,sans-serif;color:#E8B458">Ouro</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 0;border-radius:12px;border:1.5px solid rgba(255,255,255,.09)">
+              <span style="width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#E7EDF4,#B9C4D0 60%,#5E6873)"></span>
+              <span style="font:600 11px Manrope,sans-serif;color:rgba(244,239,233,.6)">Prata</span>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 0;border-radius:12px;border:1.5px solid rgba(255,255,255,.09)">
+              <span style="width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FF9A6B,#E5450F 60%,#7E1F02)"></span>
+              <span style="font:600 11px Manrope,sans-serif;color:rgba(244,239,233,.6)">Brasa</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:rgba(244,239,233,.4);margin:0 0 8px 4px">CONTATO DE CONFIANÇA <span style="color:#E8B458">· PRO</span></div>
+          <div style="background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:15px 17px">
+              <span style="font:600 14px Manrope,sans-serif">João (irmão)</span>
+              <span style="font:500 13px Manrope,sans-serif;color:rgba(244,239,233,.45)">(11) 9 8877-…</span>
+            </div>
+            <div style="height:1px;background:rgba(255,255,255,.06);margin:0 17px"></div>
+            <div style="padding:13px 17px;font:500 11.5px/1.5 Manrope,sans-serif;color:rgba(244,239,233,.4)">Usado no contato rápido do botão de pânico.</div>
+          </div>
+        </div>
+        <div>
+          <div style="font:700 10px Archivo,sans-serif;letter-spacing:3px;color:rgba(244,239,233,.4);margin:0 0 8px 4px">DADOS</div>
+          <div style="background:#171310;border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden">
+            <div style="padding:15px 17px;font:600 14px Manrope,sans-serif">Exportar meus dados</div>
+            <div style="height:1px;background:rgba(255,255,255,.06);margin:0 17px"></div>
+            <div style="padding:15px 17px;font:600 14px Manrope,sans-serif;color:#F07B72">Apagar todos os dados</div>
+          </div>
+        </div>
+        <div style="text-align:center;font:500 11px/1.6 Manrope,sans-serif;color:rgba(244,239,233,.3);padding:4px 20px 10px">O Forja é um apoio de hábito — não substitui acompanhamento terapêutico profissional.</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-around;padding:10px 16px 30px;border-top:1px solid rgba(255,255,255,.06)">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><path d="M4 11.5 12 4.5l8 7V20a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;color:#6F6558">Home</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><rect x="5" y="4" width="14" height="16" rx="2"></rect><path d="M9.5 4v16"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;color:#6F6558">Diário</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6F6558" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.4-3 7.6-7 9.5-4-1.9-7-5.1-7-9.5V6z"></path></svg>
+          <span style="font:600 9.5px Manrope,sans-serif;color:#6F6558">Patente</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF7A36" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="3.4"></circle><path d="M5.5 20c1-3.6 3.5-5.4 6.5-5.4s6.5 1.8 6.5 5.4"></path></svg>
+          <span style="font:700 9.5px Manrope,sans-serif;color:#FF7A36">Perfil</span>
+        </div>
+      </div>
+    </div>
+  </x-import>
+  <div class="dv-notes"><b>Decisões</b><ul>
+    <li>Identidade no topo: seu badge + streak + XP como um "cartão de guerreiro" — o perfil deixa de ser só uma lista de switches.</li>
+    <li>Seletor de hora colapsado numa linha (resolve o spinner permanentemente aberto).</li>
+    <li>Card PRO único, no topo, com proposta clara e preço — os "·PRO" nas seções são bronze discreto, sem cadeados cinza espalhados.</li>
+    <li>"Carmesim" substituído por "Brasa": carmesim agora é semanticamente reservado ao SOS.</li>
+  </ul></div>
+</div>
+
+<!-- ============================== 1i ============================== -->
+<div class="dv-opt" id="1i">
+  <div class="dv-olabel"><a class="dv-oid" href="#1i">1i</a>Celebração de marco <small>· subida de patente</small></div>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+    <div style="height:100%;display:flex;flex-direction:column;background:#0B0908;color:#F4EFE9;font-family:Manrope,sans-serif;position:relative;overflow:hidden" data-screen-label="1i Celebração">
+      <div style="position:absolute;left:50%;top:40%;width:640px;height:640px;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(255,150,60,.20),transparent 68%);pointer-events:none;animation:glowPulse 3.2s ease-in-out infinite"></div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:70px 34px 30px;text-align:center;position:relative">
+        <div style="font:700 11px Archivo,sans-serif;letter-spacing:5px;color:rgba(232,180,88,.85)">PATENTE FORJADA</div>
+        <div style="position:relative;width:230px;height:230px;display:flex;align-items:center;justify-content:center;margin:26px 0 18px">
+          <div style="position:absolute;inset:0;border-radius:50%;border:1px solid rgba(232,180,88,.45)"></div>
+          <div style="position:absolute;inset:-16px;border-radius:50%;border:1px solid rgba(232,180,88,.16)"></div>
+          <div style="position:absolute;inset:-34px;border-radius:50%;border:1px solid rgba(232,180,88,.07)"></div>
+          <span style="position:absolute;left:22%;bottom:10%;width:6px;height:6px;border-radius:50%;background:#FFC46B;animation:rise 2.3s ease-out infinite"></span>
+          <span style="position:absolute;left:72%;bottom:14%;width:5px;height:5px;border-radius:50%;background:#FF8A3D;animation:rise 2.9s .7s ease-out infinite"></span>
+          <span style="position:absolute;left:50%;bottom:6%;width:4px;height:4px;border-radius:50%;background:#FFE0B0;animation:rise 2.6s 1.4s ease-out infinite"></span>
+          <img src="patentes/guerreiro-3.png" alt="Guerreiro III" style="width:185px;height:185px;object-fit:contain;filter:drop-shadow(0 16px 44px rgba(255,120,40,.45));animation:emberPulse 4s ease-in-out infinite">
+        </div>
+        <div style="font:900 40px/1.05 Archivo,sans-serif;letter-spacing:-.5px">Guerreiro III</div>
+        <div style="font:600 13.5px Manrope,sans-serif;color:#E8B458;margin-top:10px">14 dias de disciplina contínua</div>
+        <div style="font:500 13px/1.65 Manrope,sans-serif;color:rgba(244,239,233,.5);max-width:280px;margin-top:12px">O metal só vira lâmina depois de duas semanas no fogo. Próxima têmpera: <b style="color:rgba(244,239,233,.75)">Guardião I</b>, em 1 dia.</div>
+      </div>
+      <div style="padding:0 24px 46px;display:flex;flex-direction:column;gap:12px">
+        <div style="height:56px;border-radius:16px;background:linear-gradient(135deg,#FFB05C,#FF6B2B 55%,#D8380E);display:flex;align-items:center;justify-content:center;font:800 15px Archivo,sans-serif;letter-spacing:.5px;color:#fff;box-shadow:0 8px 28px rgba(255,107,43,.28)">Continuar forjando</div>
+        <div style="text-align:center;font:600 12.5px Manrope,sans-serif;color:rgba(244,239,233,.4)">Compartilhar conquista</div>
+      </div>
+    </div>
+  </x-import>
+  <div class="dv-notes"><b>Decisões</b><ul>
+    <li>Momento de maior emoção do app: badge 3D em escala máxima, anéis concêntricos de bronze (ondas da martelada) e fagulhas subindo — nada de confete genérico.</li>
+    <li>Copy conecta o marco à metáfora ("o metal só vira lâmina…") e já aponta a próxima têmpera — celebração que puxa o próximo objetivo.</li>
+  </ul></div>
+</div>
+</div>
+
+<p class="dv-next">Próximos passos: "aplique o layout da <a class="dv-oid" href="#1b">1b</a> com a tipografia da <a class="dv-oid" href="#1c">1c</a>" · "quero ver a Home <a class="dv-oid" href="#1a">1a</a> com o SOS central da <a class="dv-oid" href="#1c">1c</a>" · "gere o pacote de referência pro Claude Code"</p>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1420},
+  &quot;dias&quot;: {&quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 12, &quot;min&quot;: 1, &quot;max&quot;: 400, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Dados de exemplo&quot;},
+  &quot;fraseTexto&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;O prazer que você busca agora é o peso que você carregará amanhã.&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Dados de exemplo&quot;},
+  &quot;fraseAutor&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Sêneca&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Dados de exemplo&quot;}
+}">
+class Component extends DCLogic {
+  renderVals() {
+    const NIVEIS = [
+      { nome: 'Recruta', sub: 1, min: 1 }, { nome: 'Recruta', sub: 2, min: 2 }, { nome: 'Recruta', sub: 3, min: 3 },
+      { nome: 'Aprendiz', sub: 1, min: 4 }, { nome: 'Aprendiz', sub: 2, min: 6 }, { nome: 'Aprendiz', sub: 3, min: 7 },
+      { nome: 'Guerreiro', sub: 1, min: 8 }, { nome: 'Guerreiro', sub: 2, min: 11 }, { nome: 'Guerreiro', sub: 3, min: 14 },
+      { nome: 'Guardião', sub: 1, min: 15 }, { nome: 'Guardião', sub: 2, min: 21 }, { nome: 'Guardião', sub: 3, min: 30 },
+      { nome: 'Espartano', sub: 1, min: 31 }, { nome: 'Espartano', sub: 2, min: 45 }, { nome: 'Espartano', sub: 3, min: 60 },
+      { nome: 'Monge', sub: 1, min: 61 }, { nome: 'Monge', sub: 2, min: 75 }, { nome: 'Monge', sub: 3, min: 90 },
+      { nome: 'Mestre', sub: 1, min: 91 }, { nome: 'Mestre', sub: 2, min: 135 }, { nome: 'Mestre', sub: 3, min: 180 },
+      { nome: 'Lenda', sub: 1, min: 181 }, { nome: 'Lenda', sub: 2, min: 270 }, { nome: 'Lenda', sub: 3, min: 365 },
+      { nome: 'Imortal', sub: null, min: 366 },
+    ];
+    const SLUG = { 'Recruta': 'recruta', 'Aprendiz': 'aprendiz', 'Guerreiro': 'guerreiro', 'Guardião': 'guardiao', 'Espartano': 'espartano', 'Monge': 'monge', 'Mestre': 'mestre', 'Lenda': 'lenda', 'Imortal': 'imortal' };
+    const roman = ['I', 'II', 'III'];
+
+    const dias = Math.max(1, Math.round(this.props.dias ?? 12));
+    let idx = 0;
+    for (let i = 0; i < NIVEIS.length; i++) if (dias >= NIVEIS[i].min) idx = i;
+    const cur = NIVEIS[idx];
+    const prox = NIVEIS[idx + 1] || null;
+
+    const patenteLabel = cur.nome + (cur.sub ? ' ' + roman[cur.sub - 1] : '');
+    const proxLabel = prox ? prox.nome + (prox.sub ? ' ' + roman[prox.sub - 1] : '') : 'nível máximo';
+    const faltam = prox ? Math.max(0, prox.min - dias) : 0;
+    const alvo = prox ? prox.min : cur.min + 1;
+    const pct = prox ? Math.min(1, Math.max(0.03, (dias - cur.min) / (alvo - cur.min))) : 1;
+
+    const C = 722.57;
+    const ang = -Math.PI / 2 + pct * 2 * Math.PI;
+
+    return {
+      dias,
+      patenteLabel,
+      patenteLabelCaps: patenteLabel.toUpperCase(),
+      proxLabel,
+      faltam,
+      xp: 220 + dias * 10,
+      barW: Math.round(pct * 100) + '%',
+      ringOffset: (C * (1 - pct)).toFixed(1),
+      tipX: (130 + 115 * Math.cos(ang)).toFixed(1),
+      tipY: (130 + 115 * Math.sin(ang)).toFixed(1),
+      badgeSrc: 'patentes/' + SLUG[cur.nome] + '-' + (cur.sub || 3) + '.png',
+      fraseTexto: this.props.fraseTexto ?? 'O prazer que você busca agora é o peso que você carregará amanhã.',
+      fraseAutor: this.props.fraseAutor ?? 'Sêneca',
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,61 +1,31 @@
-import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router, type Href } from 'expo-router';
-import { useEffect } from 'react';
-import { Alert, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AmbientGlow } from '@/components/ambient-glow';
-import { CountdownBloco } from '@/components/countdown-bloco';
-import { GlassCard } from '@/components/glass-card';
-import { GlowRing } from '@/components/glow-ring';
-import { ParticleField } from '@/components/particle-field';
-import { ShineSweep } from '@/components/shine-sweep';
+import { ProgressRing } from '@/components/progress-ring';
+import { SosButton } from '@/components/sos-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { WeekRuler } from '@/components/week-ruler';
 import { getFraseDoDia } from '@/constants/frases';
 import { getPatenteBadge } from '@/constants/patente-badges';
-import { PATENTE_THEMES } from '@/constants/patente-themes';
-import { Accent, Colors, Spacing } from '@/constants/theme';
+import { Accent, Colors, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
 import { useElapsedTime } from '@/hooks/useElapsedTime';
-import { falarFrase } from '@/utils/audio-frases';
-import { mostrarPaywall } from '@/utils/paywall';
+import { useRankUpCelebration } from '@/hooks/useRankUpCelebration';
+import { calcTaxaResistencia } from '@/utils/insights';
+import { calcularSemana, formatarCabecalhoData } from '@/utils/datas';
 
 const SUBLEVEL_LABEL = ['I', 'II', 'III'];
-const EMBER_COLORS = ['#FFE7B0', '#FFD27A', '#FFF0C8', '#FFB347', '#FFCF8A'];
 const HOME_GLOW = [
-  { color: '#FF5A22', top: '8%' as const, left: '20%' as const, size: 560, opacity: 0.28 },
-  { color: '#7846DC', top: '45%' as const, left: '92%' as const, size: 600, opacity: 0.24 },
+  { color: '#FF6B2B', top: '-6%' as const, left: '92%' as const, size: 420, opacity: 0.1 },
 ];
 
-const BADGE_SIZE = 124;
-const APP_ICON = require('@/assets/images/icon.png');
-
 export default function HomeScreen() {
-  const { dados, derivado, registrarRecaida, carregando } = useAppData();
+  const { dados, derivado, carregando } = useAppData();
   const elapsed = useElapsedTime(dados?.streakStartDate ?? null);
-
-  const flamePulse = useSharedValue(1);
-  const panicoGlow = useSharedValue(0);
-  useEffect(() => {
-    flamePulse.value = withRepeat(
-      withTiming(1.14, { duration: 950, easing: Easing.inOut(Easing.ease) }),
-      -1,
-      true,
-    );
-    panicoGlow.value = withRepeat(
-      withTiming(1, { duration: 1300, easing: Easing.inOut(Easing.ease) }),
-      -1,
-      true,
-    );
-  }, [flamePulse, panicoGlow]);
-  const flameStyle = useAnimatedStyle(() => ({ transform: [{ scale: flamePulse.value }] }));
-  const panicoGlowStyle = useAnimatedStyle(() => ({
-    opacity: 0.3 + panicoGlow.value * 0.4,
-    transform: [{ scale: 0.96 + panicoGlow.value * 0.08 }],
-  }));
+  useRankUpCelebration(derivado?.patente, derivado?.streakDias ?? 0);
 
   if (carregando || !dados || !derivado) {
     return (
@@ -69,163 +39,83 @@ export default function HomeScreen() {
   const { totalXP, patente } = derivado;
   const sublevelLabel = patente.nivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.nivel.sublevel - 1]}` : '';
   const patenteBadge = getPatenteBadge(patente.nivel.nome, patente.nivel.sublevel);
+  const patenteLabelCaps = `${patente.nivel.nome}${sublevelLabel}`.toUpperCase();
 
-  function ouvirFraseDoDia() {
-    if (!dados?.isPro) {
-      mostrarPaywall('Narração em áudio das frases');
-      return;
-    }
-    falarFrase(frase.texto, frase.autor);
-  }
+  const proxLabel = patente.proxNivel
+    ? `${patente.proxNivel.nome}${patente.proxNivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.proxNivel.sublevel - 1]}` : ''}`
+    : null;
+  const faltamDias = patente.proxNivel ? Math.max(0, patente.proxNivel.minDias - patente.diasEfetivos) : 0;
 
-  function abrirBiblioteca() {
-    if (!dados?.isPro) {
-      mostrarPaywall('A biblioteca de frases');
-      return;
-    }
-    router.push('/frases' as Href);
-  }
+  const semana = calcularSemana(dados.streakStartDate, dados.relapseDates);
+  const hojeIdx = [2, 3, 4, 5, 6, 0, 1].indexOf(new Date().getDay());
 
-  function confirmarRecaida() {
-    Alert.alert(
-      'Registrar recaída',
-      'Isso vai zerar seu streak atual e você perde parte do XP dessa sequência. Seu progresso total não zera. Isso realmente aconteceu?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Sim, aconteceu',
-          style: 'destructive',
-          onPress: () => {
-            registrarRecaida();
-            Alert.alert(
-              'Recomeçando',
-              'Sua jornada continua. Cada dia é uma nova escolha. Você manteve parte do seu XP.',
-            );
-          },
-        },
-      ],
-    );
-  }
+  const taxa = calcTaxaResistencia(dados.entries);
 
   return (
     <ThemedView style={styles.container}>
       <AmbientGlow blobs={HOME_GLOW} />
-      <SafeAreaView style={styles.safe}>
-        <View style={styles.brandRow}>
-          <Image source={APP_ICON} style={styles.brandIcon} resizeMode="contain" />
-          <ThemedText type="smallBold" style={styles.brandText}>FORJA</ThemedText>
-        </View>
-
-        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <View style={styles.content}>
+          {/* Header */}
           <View style={styles.header}>
-            <ThemedText type="eyebrow" style={{ color: Accent.violet }}>Jornada do Guerreiro</ThemedText>
-            <ThemedText type="subtitle" style={styles.headerTitle}>Sua disciplina, hoje</ThemedText>
+            <Text style={styles.headerData}>SUA FORJA · {formatarCabecalhoData()}</Text>
+            <View style={styles.patenteChip}>
+              <Image source={patenteBadge} style={styles.patenteChipBadge} resizeMode="contain" />
+              <Text style={styles.patenteChipTexto}>{patenteLabelCaps}</Text>
+            </View>
           </View>
 
-          {/* Streak */}
-          <Pressable onPress={() => router.push('/streak-detalhe' as Href)} style={styles.streakPressable}>
-            <LinearGradient
-              colors={[Accent.fireStart, Accent.fireMid, Accent.fireEnd]}
-              locations={Accent.fireLocations}
-              start={{ x: 0.1, y: 0 }}
-              end={{ x: 0.9, y: 1 }}
-              style={[styles.card, styles.streakCard]}>
-              <ParticleField mode="rise" count={6} colors={EMBER_COLORS} style={styles.emberArea} />
-              <ThemedText type="eyebrow" style={styles.eyebrowOnColor}>Sequência atual</ThemedText>
-              <Animated.View style={[styles.flameBadge, flameStyle]}>
-                <Ionicons name="flame" size={36} color="#FFFFFF" />
-              </Animated.View>
-              <View style={styles.countdownRow}>
-                <CountdownBloco valor={elapsed.dias} label="dias" light />
-                <CountdownBloco valor={elapsed.horas} label="horas" light />
-                <CountdownBloco valor={elapsed.minutos} label="min" light />
-                <CountdownBloco valor={elapsed.segundos} label="seg" light />
+          {/* Hero: anel de brasa */}
+          <View style={styles.heroWrap}>
+            <ProgressRing size={236} progress={patente.progressoPercent / 100}>
+              <View style={styles.heroCenter}>
+                <ThemedText type="heroNumber">{elapsed.dias}</ThemedText>
+                <Text style={styles.heroLabel}>DIAS NA FORJA</Text>
+                <Text style={styles.heroHoras}>
+                  + {elapsed.horas}h {String(elapsed.minutos).padStart(2, '0')}m sem recair
+                </Text>
               </View>
-            </LinearGradient>
-          </Pressable>
-
-          {/* Patente */}
-          <LinearGradient
-            colors={[Accent.rankStart, Accent.rankEnd]}
-            start={{ x: 0.1, y: 0 }}
-            end={{ x: 0.9, y: 1 }}
-            style={[styles.card, styles.patenteCard]}>
-            <ThemedText type="eyebrow" style={styles.eyebrowGold}>Sua patente</ThemedText>
-
-            <View style={styles.patenteBadgeWrap}>
-              <GlowRing size={BADGE_SIZE} color={PATENTE_THEMES[dados.patenteTheme].cor} />
-              <View style={styles.patenteBadgeClip}>
-                <Image source={patenteBadge} style={styles.patenteBadgeImage} resizeMode="contain" />
-                <ShineSweep size={BADGE_SIZE} />
-              </View>
-            </View>
-
-            <ThemedText type="cardTitle" style={styles.patenteNome}>{patente.nivel.nome}{sublevelLabel}</ThemedText>
-            <ThemedText style={styles.patenteXP}>{totalXP} XP total acumulado</ThemedText>
-
-            <View style={styles.progressContainer}>
-              <View style={styles.progressTrack}>
-                <LinearGradient
-                  colors={[Accent.goldMuted, Accent.gold]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={[styles.progressFill, { width: `${patente.progressoPercent}%` }]}
-                />
-              </View>
-              {patente.proxNivel ? (
-                <ThemedText type="small" style={styles.progressLabel}>
-                  {patente.proxNivel.nome}
-                  {patente.proxNivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.proxNivel.sublevel - 1]}` : ''} em{' '}
-                  {patente.proxNivel.minDias - patente.diasEfetivos} dias
-                </ThemedText>
+            </ProgressRing>
+            <Text style={styles.heroProx}>
+              {proxLabel ? (
+                <>
+                  <Text style={styles.heroProxDias}>{faltamDias} dias</Text> para {proxLabel} · {totalXP} XP
+                </>
               ) : patente.bloqueadoPorPlano ? (
-                <ThemedText type="small" style={styles.progressLabel}>Teto do Free — assine o PRO para continuar</ThemedText>
+                <>Teto do Free · assine o PRO para continuar · {totalXP} XP</>
               ) : (
-                <ThemedText type="small" style={styles.progressLabel}>Nível máximo atingido</ThemedText>
+                <>Nível máximo · {totalXP} XP</>
               )}
+            </Text>
+          </View>
+
+          {/* Régua da semana */}
+          <WeekRuler cumpridos={semana} hoje={hojeIdx} />
+
+          {/* Grid: Batalhas + Frase do dia */}
+          <View style={styles.grid}>
+            <Pressable style={styles.gridCard} onPress={() => router.push('/(tabs)/diario' as Href)}>
+              <Text style={styles.cardLabel}>BATALHAS</Text>
+              <Text style={styles.batalhasNum}>
+                {taxa.resistidas}
+                <Text style={styles.batalhasTotal}> /{dados.entries.length}</Text>
+              </Text>
+              <Text style={styles.batalhasTaxa}>{taxa.percentResistencia}% de resistência</Text>
+            </Pressable>
+
+            <View style={[styles.gridCard, styles.fraseCard]}>
+              <Text style={styles.cardLabel}>FRASE DO DIA</Text>
+              <ThemedText type="quote" style={styles.fraseTexto} numberOfLines={3}>
+                &ldquo;{frase.texto}&rdquo;
+              </ThemedText>
+              <Text style={styles.fraseAutor}>{frase.autor}</Text>
             </View>
-          </LinearGradient>
+          </View>
+        </View>
 
-          {/* Frase do dia */}
-          <GlassCard style={[styles.card, styles.fraseCard]}>
-            <Ionicons name="chatbox-ellipses-outline" size={22} color={Colors.textSecondary} style={styles.fraseIcon} />
-            <ThemedText type="eyebrow" themeColor="textSecondary">Frase do dia</ThemedText>
-            <ThemedText type="quote" style={styles.fraseTexto}>&ldquo;{frase.texto}&rdquo;</ThemedText>
-            <View style={styles.fraseDivider} />
-            <ThemedText type="smallBold" themeColor="textSecondary">{frase.autor}</ThemedText>
-
-            <View style={styles.fraseAcoes}>
-              <Pressable onPress={ouvirFraseDoDia} style={styles.fraseAcaoBtn}>
-                <Ionicons name="volume-medium-outline" size={16} color={Colors.textSecondary} />
-                <ThemedText type="small" themeColor="textSecondary">Ouvir</ThemedText>
-                {!dados.isPro && <Ionicons name="lock-closed" size={11} color={Colors.textTertiary} />}
-              </Pressable>
-              <Pressable onPress={abrirBiblioteca} style={styles.fraseAcaoBtn}>
-                <Ionicons name="library-outline" size={16} color={Colors.textSecondary} />
-                <ThemedText type="small" themeColor="textSecondary">Biblioteca</ThemedText>
-                {!dados.isPro && <Ionicons name="lock-closed" size={11} color={Colors.textTertiary} />}
-              </Pressable>
-            </View>
-          </GlassCard>
-
-          {/* Registrar recaída */}
-          <Pressable onPress={confirmarRecaida} style={styles.recaidaBtn}>
-            <Ionicons name="refresh-outline" size={16} color={Colors.textSecondary} />
-            <ThemedText type="small" themeColor="textSecondary">Registrar recaída</ThemedText>
-          </Pressable>
-
-        </ScrollView>
-
-        {/* Botão de pânico fixo */}
-        <View style={styles.panicoWrap}>
-          <Animated.View style={[styles.panicoGlow, panicoGlowStyle]} />
-          <Pressable
-            style={({ pressed }) => [styles.panicoBtn, pressed && styles.panicoBtnPressed]}
-            onPress={() => router.push('/panico' as Href)}>
-            <Ionicons name="hand-left" size={20} color="#FFFFFF" />
-            <ThemedText style={styles.panicoBtnText}>Preciso de Ajuda</ThemedText>
-          </Pressable>
+        {/* SOS fixo acima da tab bar */}
+        <View style={styles.sosWrap}>
+          <SosButton onPress={() => router.push('/panico' as Href)} />
         </View>
       </SafeAreaView>
     </ThemedView>
@@ -236,208 +126,91 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   safe: { flex: 1 },
-  brandRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.one,
-    paddingHorizontal: Spacing.three,
-    paddingTop: Spacing.one,
-  },
-  brandIcon: {
-    width: 22,
-    height: 22,
-    borderRadius: 5,
-  },
-  brandText: {
-    color: Accent.gold,
-    letterSpacing: 2,
-  },
   content: {
-    padding: Spacing.three,
+    flex: 1,
+    paddingHorizontal: 22,
+    paddingTop: Spacing.three,
     gap: Spacing.three,
-    paddingBottom: 120,
-    alignItems: 'center',
   },
-  header: {
-    width: '100%',
-    alignItems: 'center',
-    gap: Spacing.half,
-    marginBottom: Spacing.half,
+
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  headerData: {
+    fontFamily: Fonts.data.semibold,
+    fontSize: 11,
+    letterSpacing: 2.5,
+    color: 'rgba(244,239,233,0.45)',
   },
-  headerTitle: {
+  patenteChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 4,
+    paddingRight: 11,
+    paddingLeft: 5,
+    borderWidth: 1,
+    borderColor: Accent.bronzeBorda,
+    borderRadius: Radius.pill,
+    backgroundColor: Accent.bronzeFundo,
+  },
+  patenteChipBadge: { width: 20, height: 20 },
+  patenteChipTexto: {
+    fontFamily: Fonts.data.bold,
+    fontSize: 10.5,
+    letterSpacing: 1,
+    color: Accent.bronze,
+  },
+
+  heroWrap: { alignItems: 'center', gap: Spacing.two, marginTop: Spacing.two },
+  heroCenter: { alignItems: 'center', gap: 2 },
+  heroLabel: {
+    fontFamily: Fonts.data.semibold,
+    fontSize: 10,
+    letterSpacing: 3,
+    color: 'rgba(244,239,233,0.5)',
+  },
+  heroHoras: {
+    fontFamily: Fonts.mono,
+    fontSize: 11.5,
+    color: 'rgba(232,180,88,0.75)',
+    marginTop: 5,
+  },
+  heroProx: {
+    fontFamily: Fonts.body.semibold,
+    fontSize: 12.5,
+    color: 'rgba(244,239,233,0.6)',
     textAlign: 'center',
   },
-  card: {
-    width: '100%',
-    maxWidth: 480,
-    borderRadius: Spacing.four,
-    padding: Spacing.four,
-    alignItems: 'center',
+  heroProxDias: { color: Accent.brasaClara, fontFamily: Fonts.body.bold },
+
+  grid: { flexDirection: 'row', gap: 12 },
+  gridCard: {
+    flex: 1,
+    paddingVertical: 14,
+    paddingHorizontal: Radius.card,
+    backgroundColor: Colors.backgroundElement,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: Radius.card,
+    gap: 8,
   },
-  eyebrowOnColor: {
-    color: 'rgba(255,255,255,0.9)',
+  fraseCard: { gap: 6, justifyContent: 'center' },
+  cardLabel: {
+    fontFamily: Fonts.data.semibold,
+    fontSize: 10,
+    letterSpacing: 2,
+    color: 'rgba(232,180,88,0.7)',
   },
-  eyebrowGold: {
-    color: Accent.goldMuted,
+  batalhasNum: { fontFamily: Fonts.data.bold, fontSize: 30, color: Colors.text },
+  batalhasTotal: { fontSize: 14, color: 'rgba(244,239,233,0.4)' },
+  batalhasTaxa: { fontFamily: Fonts.body.bold, fontSize: 11, color: Accent.verde },
+  fraseTexto: { color: 'rgba(244,239,233,0.75)', fontSize: 11.5, lineHeight: 17 },
+  fraseAutor: {
+    fontFamily: Fonts.data.bold,
+    fontSize: 10,
+    letterSpacing: 1.5,
+    color: 'rgba(232,180,88,0.8)',
+    textTransform: 'uppercase',
   },
-  onColorText: {
-    color: 'rgba(255,255,255,0.9)',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  streakPressable: {
-    width: '100%',
-    maxWidth: 480,
-  },
-  streakCard: {
-    gap: Spacing.one,
-    overflow: 'hidden',
-    shadowColor: Accent.fireEnd,
-    shadowOpacity: 0.35,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 6,
-  },
-  emberArea: {
-    height: 120,
-    top: undefined,
-    bottom: 14,
-  },
-  flameBadge: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: 'rgba(255,255,255,0.18)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: Spacing.one,
-  },
-  countdownRow: {
-    flexDirection: 'row',
-    gap: Spacing.two,
-    marginTop: Spacing.one,
-  },
-  patenteCard: {
-    gap: Spacing.one,
-    shadowColor: Accent.rankEnd,
-    shadowOpacity: 0.4,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 6,
-  },
-  patenteBadgeWrap: {
-    width: BADGE_SIZE,
-    height: BADGE_SIZE,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: Spacing.two,
-    marginBottom: Spacing.half,
-  },
-  patenteBadgeClip: {
-    width: BADGE_SIZE,
-    height: BADGE_SIZE,
-    borderRadius: BADGE_SIZE / 2,
-    overflow: 'hidden',
-  },
-  patenteBadgeImage: {
-    width: BADGE_SIZE,
-    height: BADGE_SIZE,
-  },
-  patenteNome: {
-    color: '#FFFFFF',
-    textAlign: 'center',
-  },
-  patenteXP: {
-    color: 'rgba(255,255,255,0.7)',
-    fontSize: 13,
-  },
-  progressContainer: {
-    width: '100%',
-    gap: Spacing.two,
-    marginTop: Spacing.two,
-    alignItems: 'center',
-  },
-  progressTrack: {
-    width: '100%',
-    height: 8,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    borderRadius: 4,
-  },
-  progressLabel: {
-    color: 'rgba(255,255,255,0.75)',
-  },
-  fraseCard: {
-    gap: Spacing.two,
-  },
-  fraseIcon: {
-    marginBottom: -Spacing.one,
-  },
-  fraseTexto: {
-    textAlign: 'center',
-  },
-  fraseDivider: {
-    width: 32,
-    height: 2,
-    borderRadius: 1,
-    marginTop: Spacing.half,
-    backgroundColor: Colors.border,
-  },
-  fraseAcoes: {
-    flexDirection: 'row',
-    gap: Spacing.three,
-    marginTop: Spacing.two,
-  },
-  fraseAcaoBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  recaidaBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.one,
-    paddingVertical: Spacing.two,
-  },
-  panicoWrap: {
-    position: 'absolute',
-    bottom: Spacing.four,
-    left: Spacing.three,
-    right: Spacing.three,
-  },
-  panicoGlow: {
-    position: 'absolute',
-    top: -6,
-    left: -6,
-    right: -6,
-    bottom: -6,
-    borderRadius: Spacing.three + 6,
-    backgroundColor: Accent.danger,
-  },
-  panicoBtn: {
-    flexDirection: 'row',
-    gap: Spacing.two,
-    backgroundColor: Accent.danger,
-    borderRadius: Spacing.three,
-    paddingVertical: Spacing.three,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: Accent.dangerDark,
-    shadowOpacity: 0.5,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 8,
-  },
-  panicoBtnPressed: {
-    backgroundColor: Accent.dangerDark,
-  },
-  panicoBtnText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '700',
-  },
+
+  sosWrap: { paddingHorizontal: 20, paddingBottom: Spacing.two, paddingTop: Spacing.two },
 });

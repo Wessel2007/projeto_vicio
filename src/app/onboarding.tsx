@@ -41,8 +41,7 @@ import { salvarPerfil } from '@/storage/perfil';
 const TOTAL_STEPS = 9;
 const FINAL_STEP_DELAY_MS = 2600;
 const ONBOARDING_GLOW = [
-  { color: Accent.fireMid, top: '10%' as const, left: '20%' as const, size: 560, opacity: 0.2 },
-  { color: '#7846DC', top: '80%' as const, left: '90%' as const, size: 520, opacity: 0.16 },
+  { color: '#FF6B2B', top: '30%' as const, left: '50%' as const, size: 520, opacity: 0.12 },
 ];
 
 export default function OnboardingScreen() {
@@ -155,6 +154,10 @@ export default function OnboardingScreen() {
 
           {step < TOTAL_STEPS && (
             <View style={styles.progressWrap}>
+              <View style={styles.progressTopo}>
+                <ThemedText type="eyebrow" style={styles.progressEyebrow}>A forja esquenta</ThemedText>
+                <ThemedText type="smallBold" themeColor="textTertiary">{step}/{TOTAL_STEPS - 1}</ThemedText>
+              </View>
               <ForgeProgressBar progress={progress} />
             </View>
           )}
@@ -172,7 +175,10 @@ export default function OnboardingScreen() {
                 transition={{ type: 'timing', duration: 260 }}>
                 {step === 1 && (
                   <View style={styles.stepInner}>
-                    <ThemedText type="title" style={styles.titulo}>Bem-vindo ao Forja</ThemedText>
+                    <ThemedText type="eyebrow" style={styles.wordmark}>FORJA</ThemedText>
+                    <ThemedText type="titleBig" style={styles.titulo}>
+                      Você está prestes a forjar uma nova versão de si
+                    </ThemedText>
                     <ThemedText type="default" themeColor="textSecondary" style={styles.descricao}>
                       Antes de começar, algumas perguntas rápidas para moldar sua jornada.
                       {'\n\n'}
@@ -342,15 +348,18 @@ export default function OnboardingScreen() {
 
                 {step === 9 && (
                   <View style={styles.finalStep}>
+                    <ThemedText type="eyebrow" style={styles.primeiraPatente}>Sua primeira patente</ThemedText>
                     <ForgeReveal />
-                    <ThemedText type="title" style={[styles.titulo, styles.centerText]}>
+                    <ThemedText type="titleBig" style={[styles.titulo, styles.centerText]}>
                       Forja concluída
                     </ThemedText>
                     <ThemedText
                       type="default"
                       themeColor="textSecondary"
                       style={[styles.descricao, styles.centerText]}>
-                      Sua jornada foi moldada. A partir de agora, cada dia conta.
+                      Sua jornada foi moldada. Você começa como{' '}
+                      <ThemedText type="smallBold" style={styles.recrutaDestaque}>Recruta I</ThemedText>
+                      {' '}— a partir de agora, cada dia conta.
                     </ThemedText>
                   </View>
                 )}
@@ -383,7 +392,10 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   safe: { flex: 1 },
   flex: { flex: 1 },
-  progressWrap: { paddingHorizontal: Spacing.three, paddingTop: Spacing.three },
+  progressWrap: { paddingHorizontal: Spacing.four, paddingTop: Spacing.three, gap: Spacing.two },
+  progressTopo: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  progressEyebrow: { color: Accent.bronzeMuted },
+  wordmark: { letterSpacing: 6, color: Accent.bronze, textAlign: 'center', marginBottom: Spacing.two },
   content: { padding: Spacing.three, paddingBottom: Spacing.six },
   stepInner: { gap: Spacing.three },
   titulo: { fontSize: 32, lineHeight: 40 },
@@ -420,7 +432,9 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
   },
   notifTextos: { flex: 1, gap: 2 },
-  finalStep: { alignItems: 'center', gap: Spacing.three, paddingTop: Spacing.six },
+  finalStep: { alignItems: 'center', gap: Spacing.three, paddingTop: Spacing.five },
+  primeiraPatente: { color: Accent.bronzeMuted, letterSpacing: 4 },
+  recrutaDestaque: { color: Accent.bronze },
   botoes: {
     flexDirection: 'row',
     alignItems: 'center',

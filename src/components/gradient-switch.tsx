@@ -27,7 +27,7 @@ export function GradientSwitch({ value, onValueChange }: { value: boolean; onVal
     <Pressable onPress={() => onValueChange(!value)} style={styles.track}>
       <Animated.View style={[StyleSheet.absoluteFillObject, trackOpacity]}>
         <LinearGradient
-          colors={[Accent.fireStart, Accent.fireMid]}
+          colors={[Accent.ctaStart, Accent.ctaMid]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.gradientFill}

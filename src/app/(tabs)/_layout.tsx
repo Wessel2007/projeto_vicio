@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Tabs, router, type Href } from 'expo-router';
 import { useEffect } from 'react';
 
-import { Accent, Colors } from '@/constants/theme';
+import { Accent, Colors, Fonts } from '@/constants/theme';
 import { carregarDados } from '@/storage';
 
 export default function TabsLayout() {
@@ -17,14 +17,15 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Accent.orange,
-        tabBarInactiveTintColor: Colors.textTertiary,
+        tabBarActiveTintColor: Accent.brasaTab,
+        tabBarInactiveTintColor: Accent.tabInativa,
         tabBarStyle: {
-          backgroundColor: 'rgba(11,10,13,0.92)',
-          borderTopColor: Colors.border,
+          backgroundColor: Colors.background,
+          borderTopColor: 'rgba(255,255,255,0.06)',
           borderTopWidth: 1,
         },
-        tabBarLabelStyle: { fontWeight: '700' },
+        tabBarLabelStyle: { fontFamily: Fonts.body.bold, fontSize: 9.5, letterSpacing: 0.5 },
+        tabBarIconStyle: { marginTop: 2 },
         headerShown: false,
       }}>
       <Tabs.Screen
