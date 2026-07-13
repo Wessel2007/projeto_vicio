@@ -8,6 +8,10 @@
 - [x] Botão de pânico com respiração guiada
 - [x] Diário de gatilhos — registro (sem insights)
 - [x] Notificação diária de lembrete
+- [x] Onboarding personalizado (fluxo de 9 telas com identidade visual
+      "forja/fogo" — comportamento-alvo, tempo de incômodo, gatilhos,
+      motivo de mudança, estilo motivacional; respostas sigilosas, só
+      no dispositivo)
 - [ ] Widget de tela inicial (streak visível sem abrir o app)
 
 ## PRO (assinatura)

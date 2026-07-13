@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AppData, DEFAULT_DATA, TriggerEntry } from '@/types';
 import { carregarDados, salvarDados } from '@/storage';
+import { apagarPerfil } from '@/storage/perfil';
 import { RECAIDA_PENALIDADE_PERCENT, XP_POR_DIA } from '@/constants/gamification';
 import { calcMaiorStreak, calcPatente, calcStreakDias, calcTotalXP } from '@/utils/gamification';
 import { agendarLembreteDiario } from '@/notifications';
@@ -65,6 +66,7 @@ export function useAppData() {
   const resetarApp = useCallback(async () => {
     const inicial = { ...DEFAULT_DATA };
     await salvarDados(inicial);
+    await apagarPerfil();
     setDados(inicial);
   }, []);
 
