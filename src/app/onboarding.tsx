@@ -15,7 +15,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AmbientGlow } from '@/components/ambient-glow';
 import { ForgeProgressBar } from '@/components/forge-progress-bar';
-import { ForgeReveal } from '@/components/forge-reveal';
 import { GlassCard } from '@/components/glass-card';
 import { GradientButton } from '@/components/gradient-button';
 import { GradientSwitch } from '@/components/gradient-switch';
@@ -43,9 +42,8 @@ import { ativarNotificacoes } from '@/notifications';
 import { carregarDados, salvarDados } from '@/storage';
 import { salvarPerfil } from '@/storage/perfil';
 
-const TOTAL_STEPS = 11;
+const TOTAL_STEPS = 10;
 const MAX_AREAS_MELHORIA = 3;
-const FINAL_STEP_DELAY_MS = 2600;
 const ONBOARDING_GLOW = [
   { color: '#FF6B2B', top: '30%' as const, left: '50%' as const, size: 520, opacity: 0.12 },
 ];
@@ -76,12 +74,6 @@ export default function OnboardingScreen() {
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ y: 0, animated: false });
-  }, [step]);
-
-  useEffect(() => {
-    if (step !== TOTAL_STEPS) return;
-    const timer = setTimeout(() => router.replace('/(tabs)' as Href), FINAL_STEP_DELAY_MS);
-    return () => clearTimeout(timer);
   }, [step]);
 
   function avancar() {
@@ -142,11 +134,11 @@ export default function OnboardingScreen() {
     });
 
     setSalvando(false);
-    avancar();
+    router.replace('/plano-gerado' as Href);
   }
 
   function handleContinuar() {
-    if (step === TOTAL_STEPS - 1) {
+    if (step === TOTAL_STEPS) {
       handleFinalizar();
     } else {
       avancar();
@@ -164,7 +156,7 @@ export default function OnboardingScreen() {
       : true;
 
   const buttonLabel =
-    step === 1 ? 'Começar minha jornada' : step === TOTAL_STEPS - 1 ? 'Forjar' : 'Continuar';
+    step === 1 ? 'Começar minha jornada' : step === TOTAL_STEPS ? 'Forjar' : 'Continuar';
   const progress = Math.min((step - 1) / (TOTAL_STEPS - 1), 1);
 
   return (
@@ -175,15 +167,13 @@ export default function OnboardingScreen() {
           style={styles.flex}
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
 
-          {step < TOTAL_STEPS && (
-            <View style={styles.progressWrap}>
-              <View style={styles.progressTopo}>
-                <ThemedText type="eyebrow" style={styles.progressEyebrow}>A forja esquenta</ThemedText>
-                <ThemedText type="smallBold" themeColor="textTertiary">{step}/{TOTAL_STEPS - 1}</ThemedText>
-              </View>
-              <ForgeProgressBar progress={progress} />
+          <View style={styles.progressWrap}>
+            <View style={styles.progressTopo}>
+              <ThemedText type="eyebrow" style={styles.progressEyebrow}>A forja esquenta</ThemedText>
+              <ThemedText type="smallBold" themeColor="textTertiary">{step}/{TOTAL_STEPS}</ThemedText>
             </View>
-          )}
+            <ForgeProgressBar progress={progress} />
+          </View>
 
           <ScrollView
             ref={scrollRef}
@@ -419,42 +409,23 @@ export default function OnboardingScreen() {
                   </View>
                 )}
 
-                {step === 11 && (
-                  <View style={styles.finalStep}>
-                    <ThemedText type="eyebrow" style={styles.primeiraPatente}>Sua primeira patente</ThemedText>
-                    <ForgeReveal />
-                    <ThemedText type="titleBig" style={[styles.titulo, styles.centerText]}>
-                      Forja concluída
-                    </ThemedText>
-                    <ThemedText
-                      type="default"
-                      themeColor="textSecondary"
-                      style={[styles.descricao, styles.centerText]}>
-                      Sua jornada foi moldada. Você começa como{' '}
-                      <ThemedText type="smallBold" style={styles.recrutaDestaque}>Recruta I</ThemedText>
-                      {' '}— a partir de agora, cada dia conta.
-                    </ThemedText>
-                  </View>
-                )}
               </MotiView>
             </AnimatePresence>
           </ScrollView>
 
-          {step < TOTAL_STEPS && (
-            <View style={styles.botoes}>
-              {step > 1 && (
-                <Pressable style={styles.btnVoltar} onPress={voltar} disabled={salvando}>
-                  <ThemedText type="default" themeColor="textSecondary">Voltar</ThemedText>
-                </Pressable>
-              )}
-              <GradientButton
-                label={salvando ? 'Forjando...' : buttonLabel}
-                onPress={handleContinuar}
-                disabled={!canContinue || salvando}
-                style={step === 1 ? styles.btnAvancarFull : styles.btnAvancar}
-              />
-            </View>
-          )}
+          <View style={styles.botoes}>
+            {step > 1 && (
+              <Pressable style={styles.btnVoltar} onPress={voltar} disabled={salvando}>
+                <ThemedText type="default" themeColor="textSecondary">Voltar</ThemedText>
+              </Pressable>
+            )}
+            <GradientButton
+              label={salvando ? 'Forjando...' : buttonLabel}
+              onPress={handleContinuar}
+              disabled={!canContinue || salvando}
+              style={step === 1 ? styles.btnAvancarFull : styles.btnAvancar}
+            />
+          </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
     </ThemedView>
@@ -516,9 +487,6 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
   },
   notifTextos: { flex: 1, gap: 2 },
-  finalStep: { alignItems: 'center', gap: Spacing.three, paddingTop: Spacing.five },
-  primeiraPatente: { color: Accent.bronzeMuted, letterSpacing: 4 },
-  recrutaDestaque: { color: Accent.bronze },
   botoes: {
     flexDirection: 'row',
     alignItems: 'center',
