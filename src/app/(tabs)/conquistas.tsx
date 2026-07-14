@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { CONQUISTAS_SECRETAS } from '@/constants/conquistas-secretas';
 import { FREE_MAX_RANK_INDEX, NIVEIS, NivelPatente } from '@/constants/gamification';
 import { getPatenteBadge } from '@/constants/patente-badges';
 import { PATENTE_THEMES } from '@/constants/patente-themes';
@@ -50,6 +51,12 @@ export default function PatentesScreen() {
     opacity: 0.5 + ember.value * 0.5,
     transform: [{ scale: 0.96 + ember.value * 0.08 }],
   }));
+
+  const secretasDesbloqueadas = useMemo(() => {
+    if (!dados || !derivado) return new Set<string>();
+    const ctx = { dados, streakDias: derivado.streakDias, totalXP: derivado.totalXP };
+    return new Set(CONQUISTAS_SECRETAS.filter((c) => c.condicao(ctx)).map((c) => c.id));
+  }, [dados, derivado]);
 
   if (carregando || !dados || !derivado) {
     return (
@@ -212,6 +219,36 @@ export default function PatentesScreen() {
               );
             })}
           </View>
+
+          {/* Conquistas secretas */}
+          <View style={styles.secretasHeader}>
+            <Text style={styles.eyebrow}>CONQUISTAS SECRETAS</Text>
+            <Text style={styles.secretasContagem}>
+              {secretasDesbloqueadas.size}/{CONQUISTAS_SECRETAS.length}
+            </Text>
+          </View>
+          <View style={styles.secretasGrid}>
+            {CONQUISTAS_SECRETAS.map((c) => {
+              const desbloqueada = secretasDesbloqueadas.has(c.id);
+              return (
+                <View key={c.id} style={[styles.secretaCard, !desbloqueada && styles.secretaCardBloqueada]}>
+                  <View style={[styles.secretaIconeWrap, desbloqueada && styles.secretaIconeWrapAceso]}>
+                    <Ionicons
+                      name={(desbloqueada ? c.icone : 'lock-closed') as keyof typeof Ionicons.glyphMap}
+                      size={20}
+                      color={desbloqueada ? Accent.bronze : Accent.tabInativa}
+                    />
+                  </View>
+                  <Text style={[styles.secretaNome, !desbloqueada && styles.secretaNomeBloqueada]}>
+                    {desbloqueada ? c.nome : '???'}
+                  </Text>
+                  <Text style={styles.secretaDescricao} numberOfLines={3}>
+                    {desbloqueada ? c.descricao : 'Conquista secreta — continue para descobrir.'}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
         </ScrollView>
       </SafeAreaView>
     </ThemedView>
@@ -336,4 +373,48 @@ const styles = StyleSheet.create({
   gateTextos: { flex: 1 },
   gateTitulo: { fontFamily: Fonts.body.bold, fontSize: 12.5, color: Accent.bronze },
   gateTexto: { fontFamily: Fonts.body.medium, fontSize: 11, lineHeight: 16, color: 'rgba(244,239,233,0.5)', marginTop: 2 },
+
+  secretasHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: Spacing.five,
+    marginBottom: Spacing.two,
+  },
+  secretasContagem: {
+    fontFamily: Fonts.data.bold,
+    fontSize: 12,
+    color: 'rgba(244,239,233,0.5)',
+  },
+  secretasGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
+  secretaCard: {
+    width: '47.5%',
+    padding: Spacing.two + 4,
+    gap: 6,
+    backgroundColor: Colors.backgroundElement,
+    borderWidth: 1,
+    borderColor: 'rgba(232,180,88,0.28)',
+    borderRadius: Radius.card,
+  },
+  secretaCardBloqueada: {
+    borderColor: Colors.border,
+    opacity: 0.6,
+  },
+  secretaIconeWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+  },
+  secretaIconeWrapAceso: { backgroundColor: Accent.bronzeFundo },
+  secretaNome: { fontFamily: Fonts.body.bold, fontSize: 13, color: Colors.text },
+  secretaNomeBloqueada: { color: 'rgba(244,239,233,0.5)' },
+  secretaDescricao: {
+    fontFamily: Fonts.body.medium,
+    fontSize: 11,
+    lineHeight: 15.5,
+    color: 'rgba(244,239,233,0.45)',
+  },
 });

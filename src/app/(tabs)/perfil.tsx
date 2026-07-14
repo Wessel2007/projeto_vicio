@@ -65,6 +65,14 @@ export default function PerfilScreen() {
     router.push('/relatorio' as Href);
   }
 
+  function abrirFrases() {
+    if (!dados?.isPro) {
+      mostrarPaywall('A biblioteca completa de frases');
+      return;
+    }
+    router.push('/frases' as Href);
+  }
+
   function selecionarAura(tema: PatenteTheme) {
     if (!dados?.isPro) {
       mostrarPaywall('A personalização visual da patente');
@@ -246,11 +254,16 @@ export default function PerfilScreen() {
             />
           </View>
 
-          {/* Relatório PRO */}
-          <SecaoHeader titulo="RELATÓRIO" pro />
+          {/* Relatório e conteúdo PRO */}
+          <SecaoHeader titulo="RELATÓRIO E CONTEÚDO" pro />
           <View style={styles.card}>
             <Pressable onPress={abrirRelatorio} style={styles.linha}>
               <Text style={styles.linhaLabel}>Relatório de progresso</Text>
+              <Ionicons name="chevron-forward" size={16} color={Accent.tabInativa} />
+            </Pressable>
+            <View style={styles.divisor} />
+            <Pressable onPress={abrirFrases} style={styles.linha}>
+              <Text style={styles.linhaLabel}>Biblioteca de frases</Text>
               <Ionicons name="chevron-forward" size={16} color={Accent.tabInativa} />
             </Pressable>
           </View>

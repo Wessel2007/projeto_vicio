@@ -73,5 +73,7 @@ export function calcMaiorStreak(
     const diasSegmento = Math.floor((marcos[i] - marcos[i - 1]) / (1000 * 60 * 60 * 24));
     maior = Math.max(maior, diasSegmento);
   }
-  return maior;
+  // A streak em andamento (calculada a partir de streakStartDate, que pode ser
+  // retroativa por causa do onboarding) nunca pode deixar o recorde para trás.
+  return Math.max(maior, calcStreakDias(data.streakStartDate));
 }

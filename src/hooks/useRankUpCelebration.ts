@@ -12,6 +12,12 @@ function rankIndex(nome: string, sublevel: 1 | 2 | 3 | null): number {
   return NIVEIS.findIndex((n) => n.nome === nome && n.sublevel === sublevel);
 }
 
+/** Limpa a patente "já vista" — chamar junto de um reset completo dos dados,
+ * senão a próxima celebração de patente fica presa atrás do recorde antigo. */
+export async function limparRankVisto(): Promise<void> {
+  await AsyncStorage.removeItem(RANK_VISTO_KEY);
+}
+
 /**
  * Dispara a tela de Celebração ao subir de patente. Guarda o índice da patente
  * já "vista" no AsyncStorage: se o índice atual for maior, celebra e atualiza.

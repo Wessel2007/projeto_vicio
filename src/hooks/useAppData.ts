@@ -5,6 +5,7 @@ import { apagarPerfil } from '@/storage/perfil';
 import { RECAIDA_PENALIDADE_PERCENT, REFLEXAO_XP_BONUS, XP_POR_DIA } from '@/constants/gamification';
 import { calcMaiorStreak, calcPatente, calcStreakDias, calcTotalXP } from '@/utils/gamification';
 import { agendarLembreteDiario } from '@/notifications';
+import { limparRankVisto } from '@/hooks/useRankUpCelebration';
 
 export function useAppData() {
   const [dados, setDados] = useState<AppData | null>(null);
@@ -101,6 +102,7 @@ export function useAppData() {
     const inicial = { ...DEFAULT_DATA };
     await salvarDados(inicial);
     await apagarPerfil();
+    await limparRankVisto();
     setDados(inicial);
   }, []);
 
