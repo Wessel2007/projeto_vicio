@@ -18,6 +18,7 @@ import { ThemedView } from '@/components/themed-view';
 import { CONQUISTAS_SECRETAS } from '@/constants/conquistas-secretas';
 import { FREE_MAX_RANK_INDEX, NIVEIS, NivelPatente } from '@/constants/gamification';
 import { getPatenteBadge } from '@/constants/patente-badges';
+import { PATENTE_DESCRICOES } from '@/constants/patente-descricoes';
 import { PATENTE_THEMES } from '@/constants/patente-themes';
 import { Accent, Colors, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
@@ -189,6 +190,9 @@ export default function PatentesScreen() {
                       {faixaDias(grupo.niveis)}
                       {totalmente ? ' · concluída' : isAtual ? ' · em forja' : ''}
                     </Text>
+                    {alcancado && (
+                      <Text style={styles.tierDescricao}>{PATENTE_DESCRICOES[grupo.nome]}</Text>
+                    )}
                   </View>
 
                   {/* Pips de sublevel (só em tiers alcançados com sublevels) */}
@@ -374,6 +378,13 @@ const styles = StyleSheet.create({
   voceAqui: { fontFamily: Fonts.display.bold, fontSize: 10, letterSpacing: 1, color: '#FF8A3D' },
   tierFaixa: { fontFamily: Fonts.body.medium, fontSize: 11, color: 'rgba(244,239,233,0.45)', marginTop: 2 },
   tierFaixaAtual: { color: 'rgba(244,239,233,0.55)' },
+  tierDescricao: {
+    fontFamily: Fonts.body.medium,
+    fontSize: 11,
+    lineHeight: 15,
+    color: 'rgba(244,239,233,0.4)',
+    marginTop: 4,
+  },
 
   pips: { flexDirection: 'row', gap: 5 },
   pip: { width: 8, height: 8, borderRadius: 4 },
