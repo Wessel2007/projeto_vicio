@@ -257,20 +257,22 @@ export default function PatentesScreen() {
                 <Animated.View
                   key={c.id}
                   entering={FadeInDown.delay(Math.min(ci, 10) * 45).duration(340)}
-                  style={[styles.secretaCard, !desbloqueada && styles.secretaCardBloqueada]}>
-                  <View style={[styles.secretaIconeWrap, desbloqueada && styles.secretaIconeWrapAceso]}>
-                    <Ionicons
-                      name={(desbloqueada ? c.icone : 'lock-closed') as keyof typeof Ionicons.glyphMap}
-                      size={20}
-                      color={desbloqueada ? Accent.bronze : Accent.tabInativa}
-                    />
+                  style={[styles.secretaCard, !desbloqueada && styles.secretaCardBorda]}>
+                  <View style={!desbloqueada && styles.secretaCardConteudo}>
+                    <View style={[styles.secretaIconeWrap, desbloqueada && styles.secretaIconeWrapAceso]}>
+                      <Ionicons
+                        name={(desbloqueada ? c.icone : 'lock-closed') as keyof typeof Ionicons.glyphMap}
+                        size={20}
+                        color={desbloqueada ? Accent.bronze : Accent.tabInativa}
+                      />
+                    </View>
+                    <Text style={[styles.secretaNome, !desbloqueada && styles.secretaNomeBloqueada]}>
+                      {desbloqueada ? c.nome : '???'}
+                    </Text>
+                    <Text style={styles.secretaDescricao} numberOfLines={3}>
+                      {desbloqueada ? c.descricao : 'Conquista secreta — continue para descobrir.'}
+                    </Text>
                   </View>
-                  <Text style={[styles.secretaNome, !desbloqueada && styles.secretaNomeBloqueada]}>
-                    {desbloqueada ? c.nome : '???'}
-                  </Text>
-                  <Text style={styles.secretaDescricao} numberOfLines={3}>
-                    {desbloqueada ? c.descricao : 'Conquista secreta — continue para descobrir.'}
-                  </Text>
                 </Animated.View>
               );
             })}
@@ -416,14 +418,16 @@ const styles = StyleSheet.create({
   secretaCard: {
     width: '47.5%',
     padding: Spacing.two + 4,
-    gap: 6,
     backgroundColor: Colors.backgroundElement,
     borderWidth: 1,
     borderColor: 'rgba(232,180,88,0.28)',
     borderRadius: Radius.card,
   },
-  secretaCardBloqueada: {
+  secretaCardBorda: {
     borderColor: Colors.border,
+  },
+  secretaCardConteudo: {
+    gap: 6,
     opacity: 0.6,
   },
   secretaIconeWrap: {
