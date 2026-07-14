@@ -43,6 +43,7 @@ const STAGES = [
 ] as const;
 
 function stageIndexFor(value: number): number {
+  'worklet';
   let idx = 0;
   for (let i = STAGES.length - 1; i >= 0; i--) {
     if (value >= STAGES[i].at) {
@@ -72,14 +73,14 @@ export default function PlanoGeradoScreen() {
 
   useEffect(() => {
     barProgress.value = withSequence(
-      withTiming(0.12, { duration: 480, easing: Easing.out(Easing.quad) }),
-      withTiming(0.3, { duration: 680, easing: Easing.inOut(Easing.quad) }),
-      withTiming(0.35, { duration: 220, easing: Easing.linear }),
-      withTiming(0.58, { duration: 860, easing: Easing.inOut(Easing.quad) }),
-      withTiming(0.64, { duration: 260, easing: Easing.linear }),
-      withTiming(0.83, { duration: 820, easing: Easing.inOut(Easing.quad) }),
-      withTiming(0.88, { duration: 220, easing: Easing.linear }),
-      withTiming(1, { duration: 760, easing: Easing.out(Easing.cubic) }),
+      withTiming(0.12, { duration: 840, easing: Easing.out(Easing.quad) }),
+      withTiming(0.3, { duration: 1190, easing: Easing.inOut(Easing.quad) }),
+      withTiming(0.35, { duration: 380, easing: Easing.linear }),
+      withTiming(0.58, { duration: 1500, easing: Easing.inOut(Easing.quad) }),
+      withTiming(0.64, { duration: 450, easing: Easing.linear }),
+      withTiming(0.83, { duration: 1430, easing: Easing.inOut(Easing.quad) }),
+      withTiming(0.88, { duration: 380, easing: Easing.linear }),
+      withTiming(1, { duration: 1330, easing: Easing.out(Easing.cubic) }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
