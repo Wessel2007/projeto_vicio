@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { router, type Href } from 'expo-router';
 import { AnimatePresence, MotiView } from 'moti';
 import { useEffect, useRef, useState } from 'react';
@@ -181,11 +182,20 @@ export default function OnboardingScreen() {
                     </ThemedText>
                     <ThemedText type="default" themeColor="textSecondary" style={styles.descricao}>
                       Antes de começar, algumas perguntas rápidas para moldar sua jornada.
-                      {'\n\n'}
-                      Suas respostas são só suas: ficam salvas neste aparelho, nunca são
-                      enviadas, sincronizadas ou compartilhadas. Servem só para o Forja
-                      falar com você do jeito certo.
                     </ThemedText>
+                    <GlassCard style={styles.privacyCard}>
+                      <Ionicons name="lock-closed" size={20} color={Accent.verde} />
+                      <View style={styles.privacyTextos}>
+                        <ThemedText type="smallBold" style={styles.privacyTitulo}>
+                          Seus dados são privados
+                        </ThemedText>
+                        <ThemedText type="small" themeColor="textSecondary" style={styles.privacyDescricao}>
+                          Suas respostas ficam salvas só neste aparelho — nunca são enviadas,
+                          sincronizadas ou compartilhadas com ninguém. Sua segurança é sempre
+                          a prioridade número um do Forja.
+                        </ThemedText>
+                      </View>
+                    </GlassCard>
                   </View>
                 )}
 
@@ -405,6 +415,17 @@ const styles = StyleSheet.create({
     padding: Spacing.three,
     gap: Spacing.two,
   },
+  privacyCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: Spacing.two,
+    padding: Spacing.three,
+    borderColor: Accent.verdeFundo,
+    backgroundColor: Accent.verdeFundo,
+  },
+  privacyTextos: { flex: 1, gap: 4 },
+  privacyTitulo: { color: Accent.verde },
+  privacyDescricao: { lineHeight: 20 },
   input: {
     borderWidth: 1,
     borderColor: Colors.border,
