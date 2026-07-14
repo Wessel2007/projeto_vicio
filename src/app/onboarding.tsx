@@ -28,9 +28,13 @@ import { DEFAULT_DATA } from '@/types';
 import {
   ComportamentoAlvo,
   EstiloMotivacional,
+  ImportanciaSobriedade,
+  MarcoEsperado,
   MotivoMudanca,
   OPCOES_COMPORTAMENTO,
   OPCOES_ESTILO,
+  OPCOES_IMPORTANCIA,
+  OPCOES_MARCO,
   OPCOES_MOTIVO,
   OPCOES_TEMPO,
   TempoIncomoda,
@@ -39,7 +43,8 @@ import { ativarNotificacoes } from '@/notifications';
 import { carregarDados, salvarDados } from '@/storage';
 import { salvarPerfil } from '@/storage/perfil';
 
-const TOTAL_STEPS = 9;
+const TOTAL_STEPS = 11;
+const MAX_AREAS_MELHORIA = 3;
 const FINAL_STEP_DELAY_MS = 2600;
 const ONBOARDING_GLOW = [
   { color: '#FF6B2B', top: '30%' as const, left: '50%' as const, size: 520, opacity: 0.12 },
@@ -54,17 +59,19 @@ export default function OnboardingScreen() {
   // Step 2 — ponto de partida
   const [diasInput, setDiasInput] = useState('0');
 
-  // Steps 3, 4, 6, 7 — perfil de personalização (sigiloso, ver types/perfil.ts)
+  // Steps 3, 4, 5, 7, 8, 9 — perfil de personalização (sigiloso, ver types/perfil.ts)
   const [comportamento, setComportamento] = useState<ComportamentoAlvo | null>(null);
   const [tempoIncomoda, setTempoIncomoda] = useState<TempoIncomoda | null>(null);
-  const [motivo, setMotivo] = useState<MotivoMudanca | null>(null);
+  const [importancia, setImportancia] = useState<ImportanciaSobriedade | null>(null);
+  const [areasMelhoria, setAreasMelhoria] = useState<MotivoMudanca[]>([]);
   const [estilo, setEstilo] = useState<EstiloMotivacional | null>(null);
+  const [marco, setMarco] = useState<MarcoEsperado | null>(null);
 
-  // Step 5 — gatilhos
+  // Step 6 — gatilhos
   const [gatilhosSelecionados, setGatilhosSelecionados] = useState<string[]>([]);
   const [gatilhosTexto, setGatilhosTexto] = useState('');
 
-  // Step 8 — notificações
+  // Step 10 — notificações
   const [notificacoesAtivadas, setNotificacoesAtivadas] = useState(true);
 
   useEffect(() => {
@@ -93,6 +100,16 @@ export default function OnboardingScreen() {
     );
   }
 
+  function toggleComCap<T>(lista: T[], item: T, max: number): T[] {
+    if (lista.includes(item)) return lista.filter((x) => x !== item);
+    if (lista.length >= max) return lista;
+    return [...lista, item];
+  }
+
+  function toggleAreaMelhoria(area: MotivoMudanca) {
+    setAreasMelhoria((prev) => toggleComCap(prev, area, MAX_AREAS_MELHORIA));
+  }
+
   async function handleFinalizar() {
     setSalvando(true);
 
@@ -117,9 +134,11 @@ export default function OnboardingScreen() {
     await salvarPerfil({
       comportamentoAlvo: comportamento,
       tempoIncomoda,
+      importanciaSobriedade: importancia,
       gatilhosDetalhes: gatilhosTexto.trim(),
-      motivoMudanca: motivo,
+      areasMelhoria,
       estiloMotivacional: estilo,
+      marcoEsperado: marco,
     });
 
     setSalvando(false);
@@ -127,7 +146,7 @@ export default function OnboardingScreen() {
   }
 
   function handleContinuar() {
-    if (step === 8) {
+    if (step === TOTAL_STEPS - 1) {
       handleFinalizar();
     } else {
       avancar();
@@ -137,12 +156,15 @@ export default function OnboardingScreen() {
   const canContinue =
     (step === 3 && comportamento === null) ||
     (step === 4 && tempoIncomoda === null) ||
-    (step === 6 && motivo === null) ||
-    (step === 7 && estilo === null)
+    (step === 5 && importancia === null) ||
+    (step === 7 && areasMelhoria.length === 0) ||
+    (step === 8 && estilo === null) ||
+    (step === 9 && marco === null)
       ? false
       : true;
 
-  const buttonLabel = step === 1 ? 'Começar minha jornada' : step === 8 ? 'Forjar' : 'Continuar';
+  const buttonLabel =
+    step === 1 ? 'Começar minha jornada' : step === TOTAL_STEPS - 1 ? 'Forjar' : 'Continuar';
   const progress = Math.min((step - 1) / (TOTAL_STEPS - 1), 1);
 
   return (
@@ -262,6 +284,26 @@ export default function OnboardingScreen() {
                 {step === 5 && (
                   <View style={styles.stepInner}>
                     <ThemedText type="title" style={styles.titulo}>
+                      Qual o tamanho da sua urgência agora?
+                    </ThemedText>
+                    <View style={styles.optionsColumn}>
+                      {OPCOES_IMPORTANCIA.map((op) => (
+                        <IgniteChip
+                          key={op.id}
+                          label={op.label}
+                          description={op.description}
+                          wide
+                          selected={importancia === op.id}
+                          onPress={() => setImportancia(op.id)}
+                        />
+                      ))}
+                    </View>
+                  </View>
+                )}
+
+                {step === 6 && (
+                  <View style={styles.stepInner}>
+                    <ThemedText type="title" style={styles.titulo}>
                       Quais situações costumam ser seus gatilhos?
                     </ThemedText>
                     <ThemedText type="default" themeColor="textSecondary" style={styles.descricao}>
@@ -294,25 +336,28 @@ export default function OnboardingScreen() {
                   </View>
                 )}
 
-                {step === 6 && (
+                {step === 7 && (
                   <View style={styles.stepInner}>
                     <ThemedText type="title" style={styles.titulo}>
-                      Qual seu maior motivo pra mudar agora?
+                      O que você quer transformar na sua vida?
+                    </ThemedText>
+                    <ThemedText type="default" themeColor="textSecondary" style={styles.descricao}>
+                      Escolha até 3 — isso ajuda a personalizar sua jornada.
                     </ThemedText>
                     <View style={styles.gatilhosGrid}>
                       {OPCOES_MOTIVO.map((op) => (
                         <IgniteChip
                           key={op.id}
                           label={op.label}
-                          selected={motivo === op.id}
-                          onPress={() => setMotivo(op.id)}
+                          selected={areasMelhoria.includes(op.id)}
+                          onPress={() => toggleAreaMelhoria(op.id)}
                         />
                       ))}
                     </View>
                   </View>
                 )}
 
-                {step === 7 && (
+                {step === 8 && (
                   <View style={styles.stepInner}>
                     <ThemedText type="title" style={styles.titulo}>
                       Como você prefere ser motivado?
@@ -332,7 +377,25 @@ export default function OnboardingScreen() {
                   </View>
                 )}
 
-                {step === 8 && (
+                {step === 9 && (
+                  <View style={styles.stepInner}>
+                    <ThemedText type="title" style={styles.titulo}>
+                      Qual conquista você mais quer sentir primeiro?
+                    </ThemedText>
+                    <View style={styles.gatilhosGrid}>
+                      {OPCOES_MARCO.map((op) => (
+                        <IgniteChip
+                          key={op.id}
+                          label={op.label}
+                          selected={marco === op.id}
+                          onPress={() => setMarco(op.id)}
+                        />
+                      ))}
+                    </View>
+                  </View>
+                )}
+
+                {step === 10 && (
                   <View style={styles.stepInner}>
                     <ThemedText type="title" style={styles.titulo}>Quase lá</ThemedText>
                     <ThemedText type="default" themeColor="textSecondary" style={styles.descricao}>
@@ -356,7 +419,7 @@ export default function OnboardingScreen() {
                   </View>
                 )}
 
-                {step === 9 && (
+                {step === 11 && (
                   <View style={styles.finalStep}>
                     <ThemedText type="eyebrow" style={styles.primeiraPatente}>Sua primeira patente</ThemedText>
                     <ForgeReveal />
