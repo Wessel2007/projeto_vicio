@@ -12,6 +12,8 @@
       "forja/fogo" — comportamento-alvo, tempo de incômodo, gatilhos,
       motivo de mudança, estilo motivacional; respostas sigilosas, só
       no dispositivo)
+- [x] Tempo e dinheiro economizado na streak atual (opcional, configurável em
+      Perfil; reseta junto com o streak na recaída)
 - [ ] Widget de tela inicial (streak visível sem abrir o app)
 
 ## PRO (assinatura)
@@ -42,6 +44,8 @@
 - [x] Lista de gatilhos selecionáveis (usada no onboarding, diário e botão de pânico)
 - [x] Registro de eventos do botão de pânico ("resisti" vs "recaí")
 - [x] Flag de usuário Free/Pro (controla acesso às features acima)
+- [x] Custo/tempo médio do hábito (opcional, usado só para a métrica de
+      tempo e dinheiro economizado)
 
 ## Monetização / Loja
 

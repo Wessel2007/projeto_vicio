@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, type Href } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Image, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -36,6 +36,17 @@ function SecaoHeader({ titulo, pro }: { titulo: string; pro?: boolean }) {
 export default function PerfilScreen() {
   const { dados, atualizar, resetarApp, derivado, carregando } = useAppData();
   const [mostrarSeletorHora, setMostrarSeletorHora] = useState(false);
+  const [custoTexto, setCustoTexto] = useState('');
+  const [tempoTexto, setTempoTexto] = useState('');
+  const bufferEconomiaSincronizado = useRef(false);
+
+  useEffect(() => {
+    if (dados && !bufferEconomiaSincronizado.current) {
+      setCustoTexto(dados.habitoCustoValor != null ? String(dados.habitoCustoValor) : '');
+      setTempoTexto(dados.habitoTempoMinutos != null ? String(dados.habitoTempoMinutos) : '');
+      bufferEconomiaSincronizado.current = true;
+    }
+  }, [dados]);
 
   if (carregando || !dados || !derivado) {
     return (
@@ -108,6 +119,19 @@ export default function PerfilScreen() {
     if (dados.notificationsEnabled) {
       agendarLembreteDiario(hour, minute);
     }
+  }
+
+  function onMudarCusto(texto: string) {
+    setCustoTexto(texto);
+    const normalizado = texto.trim().replace(',', '.');
+    const valor = normalizado === '' ? null : Number(normalizado);
+    atualizar({ habitoCustoValor: valor != null && !Number.isNaN(valor) ? valor : null });
+  }
+
+  function onMudarTempo(texto: string) {
+    setTempoTexto(texto);
+    const valor = texto.trim() === '' ? null : Number(texto);
+    atualizar({ habitoTempoMinutos: valor != null && !Number.isNaN(valor) ? valor : null });
   }
 
   function confirmarReset() {
@@ -250,6 +274,47 @@ export default function PerfilScreen() {
               placeholderTextColor={Colors.textTertiary}
               keyboardType="phone-pad"
               editable={dados.isPro}
+              style={styles.input}
+            />
+          </View>
+
+          {/* Economia estimada */}
+          <SecaoHeader titulo="ECONOMIA" />
+          <View style={[styles.card, styles.cardPad]}>
+            <Text style={styles.ajuda}>
+              Opcional. Usado só para calcular quanto tempo e dinheiro você economiza durante a
+              streak atual — nenhum dos dois campos é obrigatório.
+            </Text>
+            <TextInput
+              value={custoTexto}
+              onChangeText={onMudarCusto}
+              placeholder="Custo médio do hábito (opcional)"
+              placeholderTextColor={Colors.textTertiary}
+              keyboardType="decimal-pad"
+              style={styles.input}
+            />
+            <View style={styles.periodoRow}>
+              <Pressable
+                onPress={() => atualizar({ habitoCustoPeriodo: 'dia' })}
+                style={[styles.periodoChip, dados.habitoCustoPeriodo === 'dia' && styles.periodoChipSel]}>
+                <Text style={[styles.periodoTexto, dados.habitoCustoPeriodo === 'dia' && styles.periodoTextoSel]}>
+                  por dia
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => atualizar({ habitoCustoPeriodo: 'semana' })}
+                style={[styles.periodoChip, dados.habitoCustoPeriodo === 'semana' && styles.periodoChipSel]}>
+                <Text style={[styles.periodoTexto, dados.habitoCustoPeriodo === 'semana' && styles.periodoTextoSel]}>
+                  por semana
+                </Text>
+              </Pressable>
+            </View>
+            <TextInput
+              value={tempoTexto}
+              onChangeText={onMudarTempo}
+              placeholder="Tempo médio por dia, em minutos (opcional)"
+              placeholderTextColor={Colors.textTertiary}
+              keyboardType="number-pad"
               style={styles.input}
             />
           </View>
@@ -410,6 +475,19 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
   testeTextos: { flex: 1, gap: 2 },
+
+  periodoRow: { flexDirection: 'row', gap: 8 },
+  periodoChip: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 9,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.09)',
+  },
+  periodoChipSel: { borderColor: Accent.bronze, backgroundColor: 'rgba(232,180,88,0.07)' },
+  periodoTexto: { fontFamily: Fonts.body.semibold, fontSize: 12.5, color: 'rgba(244,239,233,0.6)' },
+  periodoTextoSel: { color: Accent.bronze, fontFamily: Fonts.body.bold },
 
   rodape: {
     fontFamily: Fonts.body.medium,

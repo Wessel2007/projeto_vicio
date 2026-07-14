@@ -3,6 +3,7 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AmbientGlow } from '@/components/ambient-glow';
+import { EconomiaCard } from '@/components/economia-card';
 import { ProgressRing } from '@/components/progress-ring';
 import { SosButton } from '@/components/sos-button';
 import { ThemedText } from '@/components/themed-text';
@@ -14,6 +15,7 @@ import { Accent, Colors, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
 import { useElapsedTime } from '@/hooks/useElapsedTime';
 import { useRankUpCelebration } from '@/hooks/useRankUpCelebration';
+import { calcEconomia } from '@/utils/economia';
 import { calcTaxaResistencia } from '@/utils/insights';
 import { calcularSemana, formatarCabecalhoData } from '@/utils/datas';
 
@@ -50,6 +52,7 @@ export default function HomeScreen() {
   const hojeIdx = [2, 3, 4, 5, 6, 0, 1].indexOf(new Date().getDay());
 
   const taxa = calcTaxaResistencia(dados.entries);
+  const economia = calcEconomia(dados);
 
   return (
     <ThemedView style={styles.container}>
@@ -88,6 +91,9 @@ export default function HomeScreen() {
               )}
             </Text>
           </View>
+
+          {/* Economia na streak atual */}
+          <EconomiaCard dinheiro={economia.dinheiro} minutos={economia.minutos} moedaCodigo={dados.moedaCodigo} />
 
           {/* Régua da semana */}
           <WeekRuler cumpridos={semana} hoje={hojeIdx} />

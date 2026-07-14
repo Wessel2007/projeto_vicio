@@ -50,6 +50,15 @@ export interface AppData {
   // Contato de confiança para o "contato rápido" do botão de pânico (PRO).
   accountabilityName: string;
   accountabilityPhone: string;
+  // Custo/tempo médio do hábito, preenchidos opcionalmente em Perfil — usados
+  // só para calcular a métrica de "tempo e dinheiro economizado" da streak
+  // atual (ver utils/economia.ts). Cada um pode ficar null se o usuário não
+  // preencher (ex.: hábito sem custo monetário claro).
+  habitoCustoValor: number | null;
+  habitoCustoPeriodo: 'dia' | 'semana';
+  habitoTempoMinutos: number | null;
+  // ISO 4217 — default 'BRL', preparado para outras moedas sem hardcode.
+  moedaCodigo: string;
 }
 
 export const DEFAULT_DATA: AppData = {
@@ -68,4 +77,8 @@ export const DEFAULT_DATA: AppData = {
   patenteTheme: 'ouro' as PatenteTheme,
   accountabilityName: '',
   accountabilityPhone: '',
+  habitoCustoValor: null,
+  habitoCustoPeriodo: 'dia',
+  habitoTempoMinutos: null,
+  moedaCodigo: 'BRL',
 };
