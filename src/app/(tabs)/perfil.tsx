@@ -346,6 +346,15 @@ export default function PerfilScreen() {
             </Pressable>
           </View>
 
+          {/* Sobre */}
+          <SecaoHeader titulo="SOBRE" />
+          <View style={styles.card}>
+            <Pressable onPress={() => router.push('/termos-de-servico' as Href)} style={styles.linha}>
+              <Text style={styles.linhaLabel}>Termos de Serviço</Text>
+              <Ionicons name="chevron-forward" size={16} color={Accent.tabInativa} />
+            </Pressable>
+          </View>
+
           {/* Modo de teste */}
           <SecaoHeader titulo="MODO DE TESTE" />
           <View style={[styles.card, styles.cardPad]}>

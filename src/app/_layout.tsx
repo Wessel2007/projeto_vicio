@@ -140,6 +140,17 @@ export default function RootLayout() {
               headerStyle: { backgroundColor: Colors.background },
             }}
           />
+          <Stack.Screen
+            name="termos-de-servico"
+            options={{
+              presentation: 'modal',
+              headerShown: true,
+              headerTitle: 'Termos de Serviço',
+              headerShadowVisible: false,
+              headerTintColor: Colors.text,
+              headerStyle: { backgroundColor: Colors.background },
+            }}
+          />
         </Stack>
       )}
     </ThemeProvider>
