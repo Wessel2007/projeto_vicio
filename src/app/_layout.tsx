@@ -83,6 +83,13 @@ export default function RootLayout() {
             }}
           />
           <Stack.Screen
+            name="reflexao-recaida"
+            options={{
+              presentation: 'fullScreenModal',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
             name="frases"
             options={{
               presentation: 'modal',

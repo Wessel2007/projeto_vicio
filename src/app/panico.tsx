@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, type Href } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, Linking, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, {
@@ -22,7 +22,7 @@ import { useAppData } from '@/hooks/useAppData';
 import { falarFrase, pararFala } from '@/utils/audio-frases';
 import { mostrarPaywall } from '@/utils/paywall';
 
-type Step = 'respiracao' | 'gatilho' | 'acao' | 'vitoria' | 'recaida';
+type Step = 'respiracao' | 'gatilho' | 'acao' | 'vitoria';
 type Ferramenta = 'meditacao' | 'playlist' | 'contato' | null;
 
 const MEDITACAO_TEXTO =
@@ -103,7 +103,7 @@ function Respiracao({ onConcluir, onFechar }: { onConcluir: () => void; onFechar
 }
 
 export default function PanicoScreen() {
-  const { dados, adicionarEntrada, registrarRecaida } = useAppData();
+  const { dados, adicionarEntrada } = useAppData();
   const [step, setStep] = useState<Step>('respiracao');
   const [gatilhoSelecionado, setGatilhoSelecionado] = useState('');
   const [ferramentaAberta, setFerramentaAberta] = useState<Ferramenta>(null);
@@ -148,25 +148,11 @@ export default function PanicoScreen() {
     setStep('vitoria');
   }
 
-  function confirmarRecaidaPanico() {
-    Alert.alert(
-      'Registrar recaída',
-      'Isso vai zerar seu streak atual e você perde parte do XP dessa sequência. Seu progresso total não zera. Isso realmente aconteceu?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Sim, aconteceu',
-          style: 'destructive',
-          onPress: () => {
-            if (gatilhoSelecionado) {
-              adicionarEntrada({ trigger: gatilhoSelecionado, notes: '', resisted: false });
-            }
-            registrarRecaida();
-            setStep('recaida');
-          },
-        },
-      ],
-    );
+  function irParaReflexaoRecaida() {
+    router.push({
+      pathname: '/reflexao-recaida',
+      params: gatilhoSelecionado ? { gatilho: gatilhoSelecionado } : {},
+    } as unknown as Href);
   }
 
   return (
@@ -235,7 +221,7 @@ export default function PanicoScreen() {
             <View style={styles.acaoRodape}>
               <GradientButton label="Resisti — registrar vitória" onPress={confirmarResistencia} />
               <View style={styles.silenciosasRow}>
-                <Pressable onPress={confirmarRecaidaPanico}>
+                <Pressable onPress={irParaReflexaoRecaida}>
                   <Text style={styles.silenciosa}>Recaí dessa vez</Text>
                 </Pressable>
                 <Pressable onPress={() => router.back()}>
@@ -243,17 +229,6 @@ export default function PanicoScreen() {
                 </Pressable>
               </View>
             </View>
-          </View>
-        )}
-
-        {step === 'recaida' && (
-          <View style={styles.cerimonial}>
-            <ThemedText type="titleBig" style={styles.centro}>Tudo bem. Continue.</ThemedText>
-            <ThemedText type="body" themeColor="textSecondary" style={styles.cerimonialTexto}>
-              Seu streak foi zerado e parte do XP dessa sequência foi perdido. Mas seu progresso não some —
-              cada dia é uma nova escolha.
-            </ThemedText>
-            <GradientButton label="Voltar à forja" onPress={() => router.back()} style={styles.cerimonialBtn} />
           </View>
         )}
 

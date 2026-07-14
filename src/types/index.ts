@@ -6,6 +6,21 @@ export interface TriggerEntry {
   resisted: boolean;
 }
 
+// Reflexão guiada preenchida no fluxo pós-recaída (substitui o reset "seco"
+// do streak). Compartilha as mesmas tags de gatilho do Diário para permitir
+// cruzamento futuro (ver utils/insights.ts), mas fica numa lista separada de
+// `entries` — é um registro de aprendizado, não uma entrada de diário comum.
+export interface RelapseReflection {
+  id: string;
+  date: string;
+  triggerTags: string[];
+  emotionBefore: string | null;
+  whatWouldChange: string;
+  commitment: string;
+  streakAtRelapse: number;
+  xpAwarded: number;
+}
+
 export type PatenteTheme = 'ouro' | 'prata' | 'brasa';
 
 export interface AppData {
@@ -20,6 +35,7 @@ export interface AppData {
   relapseDates: string[];
   savedXP: number;
   entries: TriggerEntry[];
+  relapseReflections: RelapseReflection[];
   selectedTriggers: string[];
   notificationsEnabled: boolean;
   dailyQuoteHour: number;
@@ -43,6 +59,7 @@ export const DEFAULT_DATA: AppData = {
   relapseDates: [],
   savedXP: 0,
   entries: [],
+  relapseReflections: [],
   selectedTriggers: [],
   notificationsEnabled: false,
   dailyQuoteHour: 8,

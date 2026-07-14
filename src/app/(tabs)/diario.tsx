@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router, type Href } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -93,6 +94,14 @@ export default function DiarioScreen() {
 
   function salvarEntrada() {
     if (!gatilhoSelecionado || resistedSelecionado === null) return;
+    if (resistedSelecionado === false) {
+      // Recaída marcada fora do fluxo de pânico: mesmo fluxo de reflexão,
+      // não uma entrada de diário isolada — evita registrar duas vezes e
+      // pula direto pra tela de contexto do gatilho, já pré-selecionado.
+      fecharModal();
+      router.push({ pathname: '/reflexao-recaida', params: { gatilho: gatilhoSelecionado } } as unknown as Href);
+      return;
+    }
     adicionarEntrada({ trigger: gatilhoSelecionado, notes: notas, resisted: resistedSelecionado });
     fecharModal();
   }
