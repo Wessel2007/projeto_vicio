@@ -102,6 +102,48 @@ secundária:
 - Deixar claro nos termos que o app não substitui terapia para compulsão
   sexual — é apoio de hábito, não tratamento clínico
 
+## Internacionalização
+
+- **Biblioteca:** i18next (v26) + react-i18next (v17), com detecção de
+  idioma do dispositivo via expo-localization (v17). Config em `src/i18n/index.ts`.
+- **Idiomas ativos:** `pt-BR` (padrão/fallback), `en`, `es`.
+- **Detecção e persistência:** no primeiro uso, o idioma é detectado a
+  partir do dispositivo (`expo-localization`); qualquer idioma não suportado
+  cai em `pt-BR`. A partir do momento em que o usuário troca manualmente em
+  Perfil > Idioma, a escolha é persistida em AsyncStorage
+  (`src/storage/idioma.ts`, chave própria `idioma_app_v1`, separada de
+  `dados_app_v1`) e passa a ter prioridade sobre o idioma do sistema.
+- **Estrutura de arquivos:** `/locales/<idioma>/<namespace>.json`, um
+  namespace por tela/feature: `common`, `onboarding`, `home`, `panicButton`,
+  `triggerJournal`, `achievements`, `profile`. `common` é o namespace
+  default e concentra o que é reaproveitado entre telas (nomes de patente,
+  nomes de gatilhos, botões genéricos, textos de notificação, paywall,
+  formatação de data).
+- **Convenção de nomenclatura de chaves:** `secao.label` dentro de cada
+  arquivo de namespace (o namespace já identifica a tela, ex.:
+  `onboarding.json` → `step3.title`, `profile.json` → `sections.aura`).
+  Para textos reutilizados entre telas, prefixar o namespace explicitamente
+  na chamada (`t('common:ranks.Guerreiro')`).
+- **Identificadores vs. texto exibido:** valores usados como chave de dados
+  (nome de patente em `NIVEIS`/`PATENTE_BADGES`, string de gatilho em
+  `GATILHOS_COMUNS`/`AppData.selectedTriggers`/`TriggerEntry.trigger`)
+  continuam fixos em pt-BR — são identificadores internos/dados persistidos,
+  não texto de UI. A tradução acontece só na exibição, via
+  `t('common:ranks.<nome>')` / `t('common:gatilhos.<nome>')`.
+- **Nomes de patente traduzidos literalmente** por idioma (ex.: Guerreiro →
+  Warrior → Guerrero) — decisão de produto tomada em 2026-07-14, não é uma
+  tradução automática a ser revisada.
+- **Regra fixa:** toda string nova de UI deve usar `t('chave')`, nunca texto
+  hardcoded. Ao adicionar uma tela nova, criar um namespace próprio (ou
+  reaproveitar `common` se for elemento compartilhado) e extrair as 3
+  traduções (pt-BR/en/es) antes de considerar a feature pronta.
+- **Pendente:** revisão humana das strings sensíveis (Botão de Pânico e
+  Diário de Gatilhos, tradução automática ainda não revisada — ver
+  CHECKLIST.md) e i18n das telas adicionadas depois do MVP original
+  (`celebracao`, `frases`, `patente-revelada`, `plano-gerado`,
+  `reflexao-recaida`, `relatorio`, `streak-detalhe`, `termos-de-servico`),
+  que hoje seguem hardcoded em pt-BR.
+
 ## Status Atual do Projeto
 
 - [x] Ideação e validação de conceito

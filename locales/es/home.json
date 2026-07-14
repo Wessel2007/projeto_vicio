@@ -1,0 +1,56 @@
+{
+  "header": {
+    "eyebrow": "TU FORJA · {{data}}"
+  },
+  "hero": {
+    "daysLabel": "DÍAS EN LA FORJA",
+    "hoursSuffix": "sin recaer",
+    "daysToNextBold": "{{dias}} días",
+    "daysToNextRest": "para {{proximo}} · {{xp}} XP",
+    "freeCap": "Tope del plan Free · suscríbete a PRO para continuar · {{xp}} XP",
+    "maxLevel": "Nivel máximo · {{xp}} XP"
+  },
+  "grid": {
+    "battlesLabel": "BATALLAS",
+    "resistancePercent": "{{percent}}% de resistencia",
+    "quoteLabel": "FRASE DEL DÍA"
+  },
+  "economiaCard": {
+    "nudge": "Configura el costo/tiempo de tu hábito en Perfil para ver cuánto has ahorrado ya.",
+    "label": "AHORRO EN LA RACHA",
+    "money": "ahorrados",
+    "time": "de tiempo libre"
+  },
+  "quotes": {
+    "0": { "texto": "No tienes control sobre lo que te sucede, pero sí tienes control sobre cómo respondes.", "autor": "Epicteto" },
+    "1": { "texto": "El hombre que se conquista a sí mismo es más grande que quien conquista mil batallas.", "autor": "Buda" },
+    "2": { "texto": "La primera y mejor victoria es conquistarse a uno mismo.", "autor": "Platón" },
+    "3": { "texto": "Sufre el dolor del entrenamiento o sufre el dolor de la mediocridad. La elección es tuya.", "autor": "David Goggins" },
+    "4": { "texto": "No pidas una vida más fácil. Pide fuerzas para soportar una más difícil.", "autor": "Bruce Lee" },
+    "5": { "texto": "El placer que buscas ahora es el peso que cargarás mañana.", "autor": "Séneca" },
+    "6": { "texto": "La disciplina es el puente entre las metas y los logros.", "autor": "Jim Rohn" },
+    "7": { "texto": "Siéntete cómodo con la incomodidad de crecer.", "autor": "David Goggins" },
+    "8": { "texto": "El vicio comienza como diversión y termina como grillete.", "autor": "Baltasar Gracián" },
+    "9": { "texto": "Quien lucha con monstruos debe cuidar de no convertirse él mismo en un monstruo.", "autor": "Nietzsche" },
+    "10": { "texto": "La debilidad de actitud se convierte en debilidad de carácter.", "autor": "Albert Einstein" },
+    "11": { "texto": "Toda batalla se gana antes de ser librada.", "autor": "Sun Tzu" },
+    "12": { "texto": "Eres el resultado de tus decisiones más repetidas.", "autor": "Aristóteles" },
+    "13": { "texto": "El más valiente de los hombres es aquel que conquista sus propios deseos.", "autor": "Aristóteles" },
+    "14": { "texto": "No es porque las cosas son difíciles que no nos atrevemos; es porque no nos atrevemos que son difíciles.", "autor": "Séneca" },
+    "15": { "texto": "Gobierna tu mente o ella te gobernará a ti.", "autor": "Horacio" },
+    "16": { "texto": "El mayor logro de un hombre es la autoconciencia.", "autor": "Marco Aurelio" },
+    "17": { "texto": "Quédate con lo difícil. La facilidad es la salida más cara.", "autor": "David Goggins" },
+    "18": { "texto": "La mente que se abre a una nueva idea jamás vuelve a su tamaño original.", "autor": "Albert Einstein" },
+    "19": { "texto": "El sufrimiento que evitas hoy vuelve con intereses mañana.", "autor": "Carl Jung" },
+    "20": { "texto": "Quien se conoce a sí mismo es sabio; quien se conquista a sí mismo es fuerte.", "autor": "Lao Tsé" },
+    "21": { "texto": "La libertad no es la ausencia de compromiso; es la capacidad de elegir lo correcto.", "autor": "Paulo Coelho" },
+    "22": { "texto": "El cuerpo soporta casi todo. Es la mente la que tienes que convencer.", "autor": "David Goggins" },
+    "23": { "texto": "Conócete a ti mismo.", "autor": "Sócrates" },
+    "24": { "texto": "Te convertirás en aquello en lo que habitualmente piensas.", "autor": "Marco Aurelio" },
+    "25": { "texto": "Aprende a decir que no. Eso te servirá más que la lógica latina.", "autor": "Epicteto" },
+    "26": { "texto": "La autodisciplina comienza con el dominio de tus pensamientos.", "autor": "Napoleon Hill" },
+    "27": { "texto": "Toda crisis es una oportunidad disfrazada de problema.", "autor": "Confucio" },
+    "28": { "texto": "El ganador es simplemente aquel que nunca se rindió.", "autor": "Anónimo" },
+    "29": { "texto": "Ayer dijiste mañana. Hoy es el día.", "autor": "Nike" }
+  }
+}

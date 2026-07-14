@@ -1,0 +1,49 @@
+{
+  "header": {
+    "title": "Diario",
+    "subtitleOne": "batalla registrada",
+    "subtitleMany": "batallas registradas",
+    "subtitleWon": " · {{percent}}% ganadas"
+  },
+  "insightsPaywallReason": "Los insights del diario de detonantes",
+  "insights": {
+    "pillLabel": "Insights",
+    "proTag": "·PRO",
+    "modalTitle": "Insights",
+    "empty": "Registra batallas en tu diario para ver tus patrones aquí.",
+    "resistanceRate": "TASA DE RESISTENCIA",
+    "resistedRecaidas": "{{resistidas}} resistidas · {{recaidas}} recaídas",
+    "weeklyTrend": "TENDENCIA SEMANAL",
+    "weeklyTrendText": "{{atual}} registros en los últimos 7 días",
+    "weeklyTrendPrev": " ({{anterior}} en la semana anterior)",
+    "commonTriggers": "DETONANTES MÁS COMUNES",
+    "commonTime": "HORARIO MÁS RECURRENTE"
+  },
+  "empty": {
+    "title": "Todavía no hay batallas",
+    "text": "Registra tus detonantes para empezar a ver patrones — horario, situación, qué funciona."
+  },
+  "teaser": {
+    "title": "Está surgiendo un patrón",
+    "text": "Tus detonantes se concentran en \"{{horario}}\". Mira el análisis completo en PRO."
+  },
+  "cta": "+ Registrar detonante",
+  "badge": { "resisted": "RESISTÍ", "relapsed": "RECAÍDA" },
+  "horarios": {
+    "madrugada": "Madrugada (0h–6h)",
+    "manha": "Mañana (6h–12h)",
+    "tarde": "Tarde (12h–18h)",
+    "noite": "Noche (18h–24h)"
+  },
+  "modal": {
+    "title": "Nueva batalla",
+    "cancel": "Cancelar",
+    "triggerLabel": "¿QUÉ DETONANTE?",
+    "outcomeLabel": "¿QUÉ PASÓ?",
+    "resisted": "Resistí",
+    "relapsed": "Recaí",
+    "notesLabel": "NOTAS (OPCIONAL)",
+    "notesPlaceholder": "¿Qué estabas haciendo? ¿Cómo te sentiste?",
+    "save": "Guardar"
+  }
+}

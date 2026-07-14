@@ -1,0 +1,84 @@
+{
+  "title": "Perfil",
+  "warrior": {
+    "streakAndXp": "Racha de {{dias}} días · {{xp}} XP"
+  },
+  "pro": {
+    "activeTitle": "FORJA PRO activo",
+    "activeBenef": "Tienes acceso a todos los rangos y herramientas.",
+    "brand": "FORJA PRO",
+    "title": "Forja tu camino hasta Inmortal",
+    "benef": "Rangos más allá de Guerrero · insights del diario · herramientas de crisis ampliadas",
+    "price": "R$9.90/mes",
+    "subscribe": "Suscribirme",
+    "paywallReason": "El plan FORJA PRO"
+  },
+  "sections": {
+    "settings": "CONFIGURACIÓN",
+    "aura": "AURA DEL RANGO",
+    "contact": "CONTACTO DE CONFIANZA",
+    "savings": "AHORRO",
+    "reportContent": "INFORME Y CONTENIDO",
+    "data": "DATOS",
+    "about": "ACERCA DE",
+    "testMode": "MODO DE PRUEBA",
+    "language": "IDIOMA"
+  },
+  "settings": {
+    "dailyNotifications": "Notificaciones diarias",
+    "reminderTime": "Horario del recordatorio",
+    "proTag": "·PRO",
+    "permissionDeniedTitle": "Permiso denegado",
+    "permissionDeniedMessage": "Para recibir recordatorios diarios, permite las notificaciones de FORJA en la configuración de tu dispositivo.",
+    "reminderPaywallReason": "Personalizar el horario del recordatorio"
+  },
+  "aura": {
+    "paywallReason": "La personalización visual del rango"
+  },
+  "auraNames": {
+    "ouro": "Oro",
+    "prata": "Plata",
+    "brasa": "Brasa"
+  },
+  "contact": {
+    "help": "Se usa en el contacto rápido del botón de pánico.",
+    "namePlaceholder": "Nombre (ej.: Juan — hermano)",
+    "phonePlaceholder": "Teléfono"
+  },
+  "savings": {
+    "help": "Opcional. Se usa solo para calcular cuánto tiempo y dinero ahorras durante tu racha actual — ninguno de los dos campos es obligatorio.",
+    "costPlaceholder": "Costo promedio del hábito (opcional)",
+    "perDay": "por día",
+    "perWeek": "por semana",
+    "timePlaceholder": "Tiempo promedio por día, en minutos (opcional)"
+  },
+  "reportContent": {
+    "report": "Informe de progreso",
+    "reportPaywallReason": "El informe de progreso",
+    "library": "Biblioteca de frases",
+    "libraryPaywallReason": "La biblioteca completa de frases"
+  },
+  "data": {
+    "export": "Exportar mis datos",
+    "exportAlertTitle": "Exportar",
+    "exportAlertMessage": "Próximamente: exportación de tus datos en JSON.",
+    "deleteAll": "Borrar todos los datos",
+    "deleteAllConfirmTitle": "Borrar todos los datos",
+    "deleteAllConfirmMessage": "Esto eliminará tu historial, racha y XP de forma permanente. Esta acción no se puede deshacer.",
+    "cancel": "Cancelar",
+    "deleteAllConfirm": "Borrar todo"
+  },
+  "about": {
+    "terms": "Términos de Servicio"
+  },
+  "testMode": {
+    "simulatePro": "Simular suscripción PRO",
+    "help": "Sin cobro real — la integración de pagos todavía no está lista. Úsalo para probar las funciones PRO."
+  },
+  "language": {
+    "pt-BR": "Português (Brasil)",
+    "en": "English",
+    "es": "Español"
+  },
+  "footer": "FORJA es una herramienta de apoyo de hábitos — no sustituye el acompañamiento terapéutico profesional."
+}

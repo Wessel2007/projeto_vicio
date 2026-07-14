@@ -1,0 +1,55 @@
+{
+  "loading": "Carregando...",
+  "tabs": {
+    "home": "Home",
+    "diario": "Diário",
+    "conquistas": "Patente",
+    "perfil": "Perfil"
+  },
+  "buttons": {
+    "continue": "Continuar",
+    "back": "Voltar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "save": "Salvar"
+  },
+  "ranks": {
+    "Recruta": "Recruta",
+    "Aprendiz": "Aprendiz",
+    "Guerreiro": "Guerreiro",
+    "Guardião": "Guardião",
+    "Espartano": "Espartano",
+    "Monge": "Monge",
+    "Mestre": "Mestre",
+    "Lenda": "Lenda",
+    "Imortal": "Imortal"
+  },
+  "gatilhos": {
+    "Tédio": "Tédio",
+    "Solidão": "Solidão",
+    "Estresse": "Estresse",
+    "Ansiedade": "Ansiedade",
+    "Conflito / Briga": "Conflito / Briga",
+    "Cansaço": "Cansaço",
+    "Redes sociais": "Redes sociais",
+    "Álcool ou outras substâncias": "Álcool ou outras substâncias",
+    "Excesso de tempo livre": "Excesso de tempo livre",
+    "Notificações / celular": "Notificações / celular"
+  },
+  "paywall": {
+    "title": "Recurso PRO",
+    "message": "{{recurso}} é exclusivo do plano PRO. Assine para desbloquear."
+  },
+  "notifications": {
+    "dailyReminderTitle": "🔥 Sua disciplina de hoje",
+    "dailyReminderBody": "Sua frase do dia e sua patente estão te esperando. Abra o FORJA.",
+    "channelName": "Lembretes diários"
+  },
+  "dates": {
+    "weekdaysShort": ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SÁB"],
+    "monthsShort": ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"],
+    "today": "HOJE",
+    "yesterday": "ONTEM",
+    "weekRulerInitials": ["T", "Q", "Q", "S", "S", "D", "S"]
+  }
+}

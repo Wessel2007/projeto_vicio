@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router, type Href } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, Linking, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
@@ -25,26 +26,21 @@ import { mostrarPaywall } from '@/utils/paywall';
 type Step = 'respiracao' | 'gatilho' | 'acao' | 'vitoria';
 type Ferramenta = 'meditacao' | 'playlist' | 'contato' | null;
 
-const MEDITACAO_TEXTO =
-  'Feche os olhos, se puder. Sinta o peso do seu corpo apoiado onde você está. ' +
-  'Perceba o ar entrando e saindo, sem forçar nada. O desejo que você sente agora é uma onda: ' +
-  'ela sobe, atinge um pico e sempre desce — mesmo que você não faça nada. Você não precisa agir agora. ' +
-  'Você só precisa esperar a onda passar. Repita mentalmente: isso vai passar, e eu escolho quem eu sou.';
-
 const PLAYLISTS_FOCO = [
-  { label: 'Foco profundo', url: 'https://open.spotify.com/search/foco%20profundo' },
-  { label: 'Lo-fi para estudo', url: 'https://open.spotify.com/search/lo-fi%20estudo' },
-  { label: 'Música calma', url: 'https://open.spotify.com/search/musica%20calma' },
-  { label: 'Instrumental sem letra (YouTube)', url: 'https://www.youtube.com/results?search_query=musica+para+foco+sem+letra' },
-];
+  { key: 'deepFocus', url: 'https://open.spotify.com/search/foco%20profundo' },
+  { key: 'lofi', url: 'https://open.spotify.com/search/lo-fi%20estudo' },
+  { key: 'calm', url: 'https://open.spotify.com/search/musica%20calma' },
+  { key: 'instrumental', url: 'https://www.youtube.com/results?search_query=musica+para+foco+sem+letra' },
+] as const;
 
 // 4-4-4 box breathing: inspire 4s, segure 4s, expire 4s = 12s por ciclo.
 const FASE_DURACAO = 4000;
-const FASES = ['Inspire', 'Segure', 'Expire'];
+const FASES = ['inspire', 'hold', 'exhale'] as const;
 const CICLOS_TOTAL = 3;
 const ORB_SIZE = 236;
 
 function Respiracao({ onConcluir, onFechar }: { onConcluir: () => void; onFechar: () => void }) {
+  const { t } = useTranslation('panicButton');
   const [fase, setFase] = useState(0);
   const [ciclo, setCiclo] = useState(0);
   const escala = useSharedValue(0.8);
@@ -75,7 +71,7 @@ function Respiracao({ onConcluir, onFechar }: { onConcluir: () => void; onFechar
   return (
     <View style={styles.respFlex}>
       <View style={styles.respHeader}>
-        <Text style={styles.ciclo}>CICLO {Math.min(ciclo + 1, CICLOS_TOTAL)} DE {CICLOS_TOTAL}</Text>
+        <Text style={styles.ciclo}>{t('breathing.cycle', { atual: Math.min(ciclo + 1, CICLOS_TOTAL), total: CICLOS_TOTAL })}</Text>
         <Pressable onPress={onFechar} style={styles.fecharBtn}>
           <Ionicons name="close" size={18} color="rgba(244,239,233,0.5)" />
         </Pressable>
@@ -86,23 +82,22 @@ function Respiracao({ onConcluir, onFechar }: { onConcluir: () => void; onFechar
           <RippleRings size={280} color="rgba(255,122,54,0.25)" />
           <Animated.View style={orbStyle}>
             <EmberOrb size={ORB_SIZE}>
-              <Text style={styles.orbPalavra}>{FASES[fase]}</Text>
+              <Text style={styles.orbPalavra}>{t(`breathing.phases.${FASES[fase]}`)}</Text>
             </EmberOrb>
           </Animated.View>
         </View>
-        <Text style={styles.respInstrucao}>
-          Respire com a brasa.{'\n'}Inspire quando expande, expire quando contrai.
-        </Text>
+        <Text style={styles.respInstrucao}>{t('breathing.instruction')}</Text>
       </View>
 
       <Pressable onPress={onConcluir} style={styles.pularBtn}>
-        <Text style={styles.pularTexto}>Pular respiração</Text>
+        <Text style={styles.pularTexto}>{t('breathing.skip')}</Text>
       </Pressable>
     </View>
   );
 }
 
 export default function PanicoScreen() {
+  const { t } = useTranslation('panicButton');
   const { dados, adicionarEntrada } = useAppData();
   const [step, setStep] = useState<Step>('respiracao');
   const [gatilhoSelecionado, setGatilhoSelecionado] = useState('');
@@ -112,7 +107,7 @@ export default function PanicoScreen() {
 
   function abrirFerramenta(f: Exclude<Ferramenta, null>) {
     if (!dados?.isPro) {
-      mostrarPaywall('As ferramentas expandidas do botão de pânico');
+      mostrarPaywall(t('paywallReason'));
       return;
     }
     setFerramentaAberta(f);
@@ -125,7 +120,7 @@ export default function PanicoScreen() {
 
   function ligarContato() {
     if (!dados?.accountabilityPhone) {
-      Alert.alert('Nenhum contato salvo', 'Cadastre um contato de confiança em Perfil > Contato de confiança.');
+      Alert.alert(t('tools.noContactAlertTitle'), t('tools.noContactAlertMessage'));
       return;
     }
     Linking.openURL(`tel:${dados.accountabilityPhone}`);
@@ -133,7 +128,7 @@ export default function PanicoScreen() {
 
   function mandarMensagem() {
     if (!dados?.accountabilityPhone) {
-      Alert.alert('Nenhum contato salvo', 'Cadastre um contato de confiança em Perfil > Contato de confiança.');
+      Alert.alert(t('tools.noContactAlertTitle'), t('tools.noContactAlertMessage'));
       return;
     }
     Linking.openURL(`sms:${dados.accountabilityPhone}`);
@@ -164,10 +159,10 @@ export default function PanicoScreen() {
 
         {step === 'gatilho' && (
           <ScrollView contentContainerStyle={styles.content}>
-            <Text style={styles.eyebrow}>ANTES DE AGIR</Text>
-            <ThemedText type="titleBig">O que você está sentindo?</ThemedText>
+            <Text style={styles.eyebrow}>{t('trigger.eyebrow')}</Text>
+            <ThemedText type="titleBig">{t('trigger.title')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              Identificar o gatilho é o primeiro passo para vencê-lo.
+              {t('trigger.subtitle')}
             </ThemedText>
 
             <View style={styles.gatilhosGrid}>
@@ -178,14 +173,14 @@ export default function PanicoScreen() {
                     key={g}
                     onPress={() => setGatilhoSelecionado(g)}
                     style={[styles.gatilhoChip, sel && styles.gatilhoChipSel]}>
-                    <Text style={[styles.gatilhoChipTxt, sel && styles.gatilhoChipTxtSel]}>{g}</Text>
+                    <Text style={[styles.gatilhoChipTxt, sel && styles.gatilhoChipTxtSel]}>{t(`common:gatilhos.${g}`)}</Text>
                   </Pressable>
                 );
               })}
             </View>
 
             <GradientButton
-              label="Continuar"
+              label={t('trigger.continue')}
               disabled={!gatilhoSelecionado}
               onPress={() => gatilhoSelecionado && setStep('acao')}
               style={styles.btnMargin}
@@ -196,36 +191,36 @@ export default function PanicoScreen() {
         {step === 'acao' && (
           <View style={styles.content}>
             <View style={styles.gatilhoIdRow}>
-              <Text style={styles.eyebrow}>GATILHO IDENTIFICADO</Text>
+              <Text style={styles.eyebrow}>{t('action.eyebrowIdentified')}</Text>
               <View style={styles.gatilhoIdChip}>
-                <Text style={styles.gatilhoIdChipTxt}>{gatilhoSelecionado}</Text>
+                <Text style={styles.gatilhoIdChipTxt}>{t(`common:gatilhos.${gatilhoSelecionado}`)}</Text>
               </View>
             </View>
 
-            <ThemedText type="titleBig">Faça isso agora</ThemedText>
+            <ThemedText type="titleBig">{t('action.title')}</ThemedText>
 
             <View style={styles.acaoCard}>
               <View style={styles.acaoLuz} />
               <Text style={styles.acaoTexto}>{getAcaoPorGatilho(gatilhoSelecionado)}</Text>
               <Text style={styles.acaoInstrucao}>
-                Faça a ação primeiro. Quando terminar, volte aqui — a onda passa.
+                {t('action.instruction')}
               </Text>
             </View>
 
             <View style={styles.ferramentasRow}>
-              <FerramentaBtn icone="leaf-outline" label="Meditação" onPress={() => abrirFerramenta('meditacao')} />
-              <FerramentaBtn icone="musical-notes-outline" label="Playlist" onPress={() => abrirFerramenta('playlist')} />
-              <FerramentaBtn icone="call-outline" label="Contato" onPress={() => abrirFerramenta('contato')} />
+              <FerramentaBtn icone="leaf-outline" label={t('action.toolMeditation')} onPress={() => abrirFerramenta('meditacao')} />
+              <FerramentaBtn icone="musical-notes-outline" label={t('action.toolPlaylist')} onPress={() => abrirFerramenta('playlist')} />
+              <FerramentaBtn icone="call-outline" label={t('action.toolContact')} onPress={() => abrirFerramenta('contato')} />
             </View>
 
             <View style={styles.acaoRodape}>
-              <GradientButton label="Resisti — registrar vitória" onPress={confirmarResistencia} />
+              <GradientButton label={t('action.resistButton')} onPress={confirmarResistencia} />
               <View style={styles.silenciosasRow}>
                 <Pressable onPress={irParaReflexaoRecaida}>
-                  <Text style={styles.silenciosa}>Recaí dessa vez</Text>
+                  <Text style={styles.silenciosa}>{t('action.relapsedLink')}</Text>
                 </Pressable>
                 <Pressable onPress={() => router.back()}>
-                  <Text style={styles.silenciosa}>Sair sem registrar</Text>
+                  <Text style={styles.silenciosa}>{t('action.exitLink')}</Text>
                 </Pressable>
               </View>
             </View>
@@ -240,14 +235,14 @@ export default function PanicoScreen() {
               </EmberOrb>
             </BadgeHalo>
 
-            <Text style={styles.eyebrowBronze}>MAIS UMA MARTELADA</Text>
-            <ThemedText type="titleBig" style={styles.centro}>Vitória forjada</ThemedText>
+            <Text style={styles.eyebrowBronze}>{t('victory.eyebrow')}</Text>
+            <ThemedText type="titleBig" style={styles.centro}>{t('victory.title')}</ThemedText>
             <ThemedText type="body" themeColor="textSecondary" style={styles.cerimonialTexto}>
-              Cada vez que você resiste, você constrói quem você quer ser. Isso ficou salvo no seu diário.
+              {t('victory.text')}
             </ThemedText>
 
             <Pressable onPress={() => router.back()} style={styles.outlineBtn}>
-              <Text style={styles.outlineBtnTxt}>Voltar à forja</Text>
+              <Text style={styles.outlineBtnTxt}>{t('victory.backButton')}</Text>
             </Pressable>
           </View>
         )}
@@ -257,23 +252,23 @@ export default function PanicoScreen() {
         <ThemedView style={styles.modal}>
           <View style={styles.modalHeader}>
             <ThemedText type="subtitle">
-              {ferramentaAberta === 'meditacao' && 'Meditação guiada'}
-              {ferramentaAberta === 'playlist' && 'Playlist de foco'}
-              {ferramentaAberta === 'contato' && 'Contato rápido'}
+              {ferramentaAberta === 'meditacao' && t('tools.meditationTitle')}
+              {ferramentaAberta === 'playlist' && t('tools.playlistTitle')}
+              {ferramentaAberta === 'contato' && t('tools.contactTitle')}
             </ThemedText>
             <Pressable onPress={fecharFerramenta}>
-              <ThemedText type="small" themeColor="textSecondary">Fechar</ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">{t('tools.close')}</ThemedText>
             </Pressable>
           </View>
 
           <ScrollView contentContainerStyle={styles.modalContent}>
             {ferramentaAberta === 'meditacao' && (
               <>
-                <ThemedText type="body" style={styles.meditacaoTexto}>{MEDITACAO_TEXTO}</ThemedText>
+                <ThemedText type="body" style={styles.meditacaoTexto}>{t('tools.meditationText')}</ThemedText>
                 <GradientButton
-                  label="Ouvir narração"
+                  label={t('tools.listenButton')}
                   icon={<Ionicons name="volume-medium-outline" size={18} color="#FFFFFF" />}
-                  onPress={() => falarFrase(MEDITACAO_TEXTO)}
+                  onPress={() => falarFrase(t('tools.meditationText'))}
                   style={styles.btnMargin}
                 />
               </>
@@ -282,12 +277,12 @@ export default function PanicoScreen() {
             {ferramentaAberta === 'playlist' && (
               <View style={{ gap: Spacing.two }}>
                 <ThemedText type="small" themeColor="textSecondary">
-                  Abre em um app externo (Spotify ou YouTube).
+                  {t('tools.playlistHint')}
                 </ThemedText>
                 {PLAYLISTS_FOCO.map((p) => (
                   <Pressable key={p.url} onPress={() => Linking.openURL(p.url)} style={styles.playlistItem}>
                     <Ionicons name="play-circle-outline" size={20} color={Accent.brasa} />
-                    <ThemedText type="default">{p.label}</ThemedText>
+                    <ThemedText type="default">{t(`tools.playlists.${p.key}`)}</ThemedText>
                   </Pressable>
                 ))}
               </View>
@@ -297,16 +292,16 @@ export default function PanicoScreen() {
               <View style={{ gap: Spacing.two }}>
                 {dados?.accountabilityPhone ? (
                   <>
-                    <ThemedText type="default">{dados.accountabilityName || 'Seu contato de confiança'}</ThemedText>
-                    <GradientButton label="Ligar agora" onPress={ligarContato} />
+                    <ThemedText type="default">{dados.accountabilityName || t('tools.defaultContactName')}</ThemedText>
+                    <GradientButton label={t('tools.callNow')} onPress={ligarContato} />
                     <Pressable onPress={mandarMensagem} style={styles.playlistItem}>
                       <Ionicons name="chatbubble-outline" size={20} color={Accent.brasa} />
-                      <ThemedText type="default">Enviar mensagem</ThemedText>
+                      <ThemedText type="default">{t('tools.sendMessage')}</ThemedText>
                     </Pressable>
                   </>
                 ) : (
                   <ThemedText type="small" themeColor="textSecondary">
-                    Nenhum contato salvo. Cadastre em Perfil {'>'} Contato de confiança.
+                    {t('tools.noContact')}
                   </ThemedText>
                 )}
               </View>
@@ -327,13 +322,14 @@ function FerramentaBtn({
   label: string;
   onPress: () => void;
 }) {
+  const { t } = useTranslation('panicButton');
   return (
     <Pressable onPress={onPress} style={styles.ferramenta}>
       <View style={styles.ferramentaCirc}>
         <Ionicons name={icone} size={19} color="#A79C8F" />
       </View>
       <Text style={styles.ferramentaLabel}>
-        {label} <Text style={styles.proTag}>·PRO</Text>
+        {label} <Text style={styles.proTag}>{t('action.proTag')}</Text>
       </Text>
     </Pressable>
   );

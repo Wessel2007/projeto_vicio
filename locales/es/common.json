@@ -1,0 +1,55 @@
+{
+  "loading": "Cargando...",
+  "tabs": {
+    "home": "Inicio",
+    "diario": "Diario",
+    "conquistas": "Rango",
+    "perfil": "Perfil"
+  },
+  "buttons": {
+    "continue": "Continuar",
+    "back": "Atrás",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "save": "Guardar"
+  },
+  "ranks": {
+    "Recruta": "Recluta",
+    "Aprendiz": "Aprendiz",
+    "Guerreiro": "Guerrero",
+    "Guardião": "Guardián",
+    "Espartano": "Espartano",
+    "Monge": "Monje",
+    "Mestre": "Maestro",
+    "Lenda": "Leyenda",
+    "Imortal": "Inmortal"
+  },
+  "gatilhos": {
+    "Tédio": "Aburrimiento",
+    "Solidão": "Soledad",
+    "Estresse": "Estrés",
+    "Ansiedade": "Ansiedad",
+    "Conflito / Briga": "Conflicto / Discusión",
+    "Cansaço": "Cansancio",
+    "Redes sociais": "Redes sociales",
+    "Álcool ou outras substâncias": "Alcohol u otras sustancias",
+    "Excesso de tempo livre": "Exceso de tiempo libre",
+    "Notificações / celular": "Notificaciones / celular"
+  },
+  "paywall": {
+    "title": "Función PRO",
+    "message": "{{recurso}} es exclusivo del plan PRO. Suscríbete para desbloquearlo."
+  },
+  "notifications": {
+    "dailyReminderTitle": "🔥 Tu disciplina de hoy",
+    "dailyReminderBody": "Tu frase del día y tu rango te están esperando. Abre FORJA.",
+    "channelName": "Recordatorios diarios"
+  },
+  "dates": {
+    "weekdaysShort": ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"],
+    "monthsShort": ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"],
+    "today": "HOY",
+    "yesterday": "AYER",
+    "weekRulerInitials": ["M", "X", "J", "V", "S", "D", "L"]
+  }
+}

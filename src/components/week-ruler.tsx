@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
@@ -9,9 +10,6 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { Accent, Colors, Radius, Fonts } from '@/constants/theme';
-
-// Rótulos fixos do protótipo (régua começa numa terça): T Q Q S S D S.
-const LABELS = ['T', 'Q', 'Q', 'S', 'S', 'D', 'S'];
 
 /**
  * Régua da semana — card chapa com 7 brasas. Dias cumpridos acesos em brasa,
@@ -25,6 +23,8 @@ export function WeekRuler({
   cumpridos: boolean[];
   hoje?: number;
 }) {
+  const { t } = useTranslation('common');
+  const labels = t('dates.weekRulerInitials', { returnObjects: true }) as string[];
   const pulse = useSharedValue(0.5);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export function WeekRuler({
 
   return (
     <View style={styles.card}>
-      {LABELS.map((label, i) => {
+      {labels.map((label, i) => {
         const feito = cumpridos[i];
         const ehHoje = i === hoje;
         return (

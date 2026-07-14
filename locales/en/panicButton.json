@@ -1,0 +1,68 @@
+{
+  "sosLabel": "I NEED HELP",
+  "breathing": {
+    "cycle": "CYCLE {{atual}} OF {{total}}",
+    "instruction": "Breathe with the ember.\nInhale as it expands, exhale as it contracts.",
+    "skip": "Skip breathing",
+    "phases": { "inspire": "Inhale", "hold": "Hold", "exhale": "Exhale" }
+  },
+  "trigger": {
+    "eyebrow": "BEFORE YOU ACT",
+    "title": "What are you feeling?",
+    "subtitle": "Identifying the trigger is the first step to overcoming it.",
+    "continue": "Continue"
+  },
+  "action": {
+    "eyebrowIdentified": "TRIGGER IDENTIFIED",
+    "title": "Do this right now",
+    "instruction": "Do the action first. When you're done, come back here — the wave will pass.",
+    "toolMeditation": "Meditation",
+    "toolPlaylist": "Playlist",
+    "toolContact": "Contact",
+    "proTag": "·PRO",
+    "resistButton": "I resisted — log the win",
+    "relapsedLink": "I relapsed this time",
+    "exitLink": "Exit without logging"
+  },
+  "victory": {
+    "eyebrow": "ANOTHER HAMMER STRIKE",
+    "title": "Victory forged",
+    "text": "Every time you resist, you build who you want to become. This has been saved to your journal.",
+    "backButton": "Back to the forge"
+  },
+  "tools": {
+    "meditationTitle": "Guided meditation",
+    "playlistTitle": "Focus playlist",
+    "contactTitle": "Quick contact",
+    "close": "Close",
+    "meditationText": "Close your eyes, if you can. Feel the weight of your body resting where you are. Notice the air moving in and out, without forcing anything. The urge you feel right now is a wave: it rises, peaks, and always falls — even if you do nothing. You don't need to act now. You just need to wait for the wave to pass. Repeat to yourself: this will pass, and I choose who I am.",
+    "listenButton": "Listen to narration",
+    "playlistHint": "Opens in an external app (Spotify or YouTube).",
+    "playlists": {
+      "deepFocus": "Deep focus",
+      "lofi": "Lo-fi for studying",
+      "calm": "Calm music",
+      "instrumental": "Instrumental, no lyrics (YouTube)"
+    },
+    "noContact": "No contact saved. Add one in Profile > Trusted contact.",
+    "defaultContactName": "Your trusted contact",
+    "callNow": "Call now",
+    "sendMessage": "Send message",
+    "noContactAlertTitle": "No contact saved",
+    "noContactAlertMessage": "Add a trusted contact in Profile > Trusted contact."
+  },
+  "paywallReason": "The panic button's expanded tools",
+  "gatilhoAcoes": {
+    "Tédio": "Do 20 push-ups right now. Movement changes your mental state.",
+    "Solidão": "Call someone — a friend, family. Real connection is stronger than any addiction.",
+    "Estresse": "Go for a 10-minute walk. New environment, new mind.",
+    "Ansiedade": "Write down 3 things you're grateful for right now.",
+    "Conflito / Briga": "Step away from the situation for 15 minutes before reacting.",
+    "Cansaço": "Sleep. Fatigue is the most underrated trigger. Your brain needs to recover.",
+    "Redes sociais": "Put your phone in another room for 30 minutes. Literally — physical distance works.",
+    "Álcool ou outras substâncias": "Drink a glass of water right now and call someone you trust.",
+    "Excesso de tempo livre": "Open your calendar and plan the next hour around a concrete task.",
+    "Notificações / celular": "Turn on do-not-disturb and put your phone face down.",
+    "default": "Take a deep breath, count to 10, and remember why you started."
+  }
+}

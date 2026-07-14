@@ -1,0 +1,84 @@
+{
+  "title": "Profile",
+  "warrior": {
+    "streakAndXp": "{{dias}}-day streak · {{xp}} XP"
+  },
+  "pro": {
+    "activeTitle": "FORJA PRO active",
+    "activeBenef": "You have access to all ranks and tools.",
+    "brand": "FORJA PRO",
+    "title": "Forge your way to Immortal",
+    "benef": "Ranks beyond Warrior · journal insights · expanded crisis tools",
+    "price": "R$9.90/month",
+    "subscribe": "Subscribe",
+    "paywallReason": "The FORJA PRO plan"
+  },
+  "sections": {
+    "settings": "SETTINGS",
+    "aura": "RANK AURA",
+    "contact": "TRUSTED CONTACT",
+    "savings": "SAVINGS",
+    "reportContent": "REPORT & CONTENT",
+    "data": "DATA",
+    "about": "ABOUT",
+    "testMode": "TEST MODE",
+    "language": "LANGUAGE"
+  },
+  "settings": {
+    "dailyNotifications": "Daily notifications",
+    "reminderTime": "Reminder time",
+    "proTag": "·PRO",
+    "permissionDeniedTitle": "Permission denied",
+    "permissionDeniedMessage": "To receive daily reminders, allow notifications for FORJA in your device settings.",
+    "reminderPaywallReason": "Customizing the reminder time"
+  },
+  "aura": {
+    "paywallReason": "Rank visual customization"
+  },
+  "auraNames": {
+    "ouro": "Gold",
+    "prata": "Silver",
+    "brasa": "Ember"
+  },
+  "contact": {
+    "help": "Used for the panic button's quick contact.",
+    "namePlaceholder": "Name (e.g., John — brother)",
+    "phonePlaceholder": "Phone number"
+  },
+  "savings": {
+    "help": "Optional. Used only to calculate how much time and money you're saving during your current streak — neither field is required.",
+    "costPlaceholder": "Average cost of the habit (optional)",
+    "perDay": "per day",
+    "perWeek": "per week",
+    "timePlaceholder": "Average time per day, in minutes (optional)"
+  },
+  "reportContent": {
+    "report": "Progress report",
+    "reportPaywallReason": "The progress report",
+    "library": "Quote library",
+    "libraryPaywallReason": "The full quote library"
+  },
+  "data": {
+    "export": "Export my data",
+    "exportAlertTitle": "Export",
+    "exportAlertMessage": "Coming soon: export your data as JSON.",
+    "deleteAll": "Delete all data",
+    "deleteAllConfirmTitle": "Delete all data",
+    "deleteAllConfirmMessage": "This will permanently remove your history, streak, and XP. This action cannot be undone.",
+    "cancel": "Cancel",
+    "deleteAllConfirm": "Delete everything"
+  },
+  "about": {
+    "terms": "Terms of Service"
+  },
+  "testMode": {
+    "simulatePro": "Simulate PRO subscription",
+    "help": "No real charge — payment integration isn't set up yet. Use this to test PRO features."
+  },
+  "language": {
+    "pt-BR": "Português (Brasil)",
+    "en": "English",
+    "es": "Español"
+  },
+  "footer": "FORJA is a habit-support tool — it doesn't replace professional therapeutic care."
+}

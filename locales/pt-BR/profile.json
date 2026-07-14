@@ -1,0 +1,84 @@
+{
+  "title": "Perfil",
+  "warrior": {
+    "streakAndXp": "{{dias}} dias de streak · {{xp}} XP"
+  },
+  "pro": {
+    "activeTitle": "FORJA PRO ativo",
+    "activeBenef": "Você tem acesso a todas as patentes e ferramentas.",
+    "brand": "FORJA PRO",
+    "title": "Forje até o Imortal",
+    "benef": "Patentes além do Guerreiro · insights do diário · ferramentas de crise expandidas",
+    "price": "R$ 9,90/mês",
+    "subscribe": "Assinar",
+    "paywallReason": "O plano FORJA PRO"
+  },
+  "sections": {
+    "settings": "CONFIGURAÇÕES",
+    "aura": "AURA DA PATENTE",
+    "contact": "CONTATO DE CONFIANÇA",
+    "savings": "ECONOMIA",
+    "reportContent": "RELATÓRIO E CONTEÚDO",
+    "data": "DADOS",
+    "about": "SOBRE",
+    "testMode": "MODO DE TESTE",
+    "language": "IDIOMA"
+  },
+  "settings": {
+    "dailyNotifications": "Notificações diárias",
+    "reminderTime": "Horário do lembrete",
+    "proTag": "·PRO",
+    "permissionDeniedTitle": "Permissão negada",
+    "permissionDeniedMessage": "Para receber lembretes diários, permita notificações para o FORJA nas configurações do aparelho.",
+    "reminderPaywallReason": "Personalizar o horário do lembrete"
+  },
+  "aura": {
+    "paywallReason": "A personalização visual da patente"
+  },
+  "auraNames": {
+    "ouro": "Ouro",
+    "prata": "Prata",
+    "brasa": "Brasa"
+  },
+  "contact": {
+    "help": "Usado no contato rápido do botão de pânico.",
+    "namePlaceholder": "Nome (ex.: João — irmão)",
+    "phonePlaceholder": "Telefone (com DDD)"
+  },
+  "savings": {
+    "help": "Opcional. Usado só para calcular quanto tempo e dinheiro você economiza durante a streak atual — nenhum dos dois campos é obrigatório.",
+    "costPlaceholder": "Custo médio do hábito (opcional)",
+    "perDay": "por dia",
+    "perWeek": "por semana",
+    "timePlaceholder": "Tempo médio por dia, em minutos (opcional)"
+  },
+  "reportContent": {
+    "report": "Relatório de progresso",
+    "reportPaywallReason": "O relatório de progresso",
+    "library": "Biblioteca de frases",
+    "libraryPaywallReason": "A biblioteca completa de frases"
+  },
+  "data": {
+    "export": "Exportar meus dados",
+    "exportAlertTitle": "Exportar",
+    "exportAlertMessage": "Em breve: exportação dos seus dados em JSON.",
+    "deleteAll": "Apagar todos os dados",
+    "deleteAllConfirmTitle": "Apagar todos os dados",
+    "deleteAllConfirmMessage": "Isso vai remover seu histórico, streak e XP permanentemente. Esta ação não pode ser desfeita.",
+    "cancel": "Cancelar",
+    "deleteAllConfirm": "Apagar tudo"
+  },
+  "about": {
+    "terms": "Termos de Serviço"
+  },
+  "testMode": {
+    "simulatePro": "Simular assinatura PRO",
+    "help": "Sem cobrança real — a loja de pagamento ainda não está integrada. Use para testar as features PRO."
+  },
+  "language": {
+    "pt-BR": "Português (Brasil)",
+    "en": "English",
+    "es": "Español"
+  },
+  "footer": "O Forja é um apoio de hábito — não substitui acompanhamento terapêutico profissional."
+}

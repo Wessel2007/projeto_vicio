@@ -1,0 +1,56 @@
+{
+  "header": {
+    "eyebrow": "YOUR FORGE · {{data}}"
+  },
+  "hero": {
+    "daysLabel": "DAYS IN THE FORGE",
+    "hoursSuffix": "relapse-free",
+    "daysToNextBold": "{{dias}} days",
+    "daysToNextRest": "to {{proximo}} · {{xp}} XP",
+    "freeCap": "Free plan cap · subscribe to PRO to continue · {{xp}} XP",
+    "maxLevel": "Max level · {{xp}} XP"
+  },
+  "grid": {
+    "battlesLabel": "BATTLES",
+    "resistancePercent": "{{percent}}% resistance rate",
+    "quoteLabel": "QUOTE OF THE DAY"
+  },
+  "economiaCard": {
+    "nudge": "Set your habit's cost/time in Profile to see how much you've already saved.",
+    "label": "STREAK SAVINGS",
+    "money": "saved",
+    "time": "of free time"
+  },
+  "quotes": {
+    "0": { "texto": "You have no control over what happens to you, but you do have control over how you respond.", "autor": "Epictetus" },
+    "1": { "texto": "The man who conquers himself is greater than the one who conquers a thousand battles.", "autor": "Buddha" },
+    "2": { "texto": "The first and best victory is to conquer yourself.", "autor": "Plato" },
+    "3": { "texto": "Suffer the pain of training, or suffer the pain of mediocrity. The choice is yours.", "autor": "David Goggins" },
+    "4": { "texto": "Do not pray for an easy life; pray for the strength to endure a difficult one.", "autor": "Bruce Lee" },
+    "5": { "texto": "The pleasure you chase now is the weight you'll carry tomorrow.", "autor": "Seneca" },
+    "6": { "texto": "Discipline is the bridge between goals and accomplishment.", "autor": "Jim Rohn" },
+    "7": { "texto": "Get comfortable with the discomfort of growing.", "autor": "David Goggins" },
+    "8": { "texto": "Addiction begins as entertainment and ends as a shackle.", "autor": "Baltasar Gracián" },
+    "9": { "texto": "He who fights with monsters should look to it that he himself does not become a monster.", "autor": "Nietzsche" },
+    "10": { "texto": "Weakness of attitude becomes weakness of character.", "autor": "Albert Einstein" },
+    "11": { "texto": "Every battle is won before it is ever fought.", "autor": "Sun Tzu" },
+    "12": { "texto": "You are the result of your most repeated choices.", "autor": "Aristotle" },
+    "13": { "texto": "The bravest of all men is the one who conquers his own desires.", "autor": "Aristotle" },
+    "14": { "texto": "It's not because things are difficult that we don't dare; it's because we don't dare that they're difficult.", "autor": "Seneca" },
+    "15": { "texto": "Rule your mind, or it will rule you.", "autor": "Horace" },
+    "16": { "texto": "A man's greatest achievement is self-awareness.", "autor": "Marcus Aurelius" },
+    "17": { "texto": "Stick with what's hard. Ease is the most expensive way out.", "autor": "David Goggins" },
+    "18": { "texto": "The mind that opens to a new idea never returns to its original size.", "autor": "Albert Einstein" },
+    "19": { "texto": "The suffering you avoid today comes back with interest tomorrow.", "autor": "Carl Jung" },
+    "20": { "texto": "He who knows himself is wise; he who conquers himself is strong.", "autor": "Lao Tzu" },
+    "21": { "texto": "Freedom is not the absence of commitment; it's the ability to choose what's right.", "autor": "Paulo Coelho" },
+    "22": { "texto": "The body can withstand almost anything. It's the mind you have to convince.", "autor": "David Goggins" },
+    "23": { "texto": "Know thyself.", "autor": "Socrates" },
+    "24": { "texto": "You will become what you habitually think about.", "autor": "Marcus Aurelius" },
+    "25": { "texto": "Learn to say no. It will serve you better than Latin logic.", "autor": "Epictetus" },
+    "26": { "texto": "Self-discipline begins with the mastery of your thoughts.", "autor": "Napoleon Hill" },
+    "27": { "texto": "Every crisis is an opportunity in disguise.", "autor": "Confucius" },
+    "28": { "texto": "The winner is simply the one who never gave up.", "autor": "Anonymous" },
+    "29": { "texto": "Yesterday you said tomorrow. Today is the day.", "autor": "Nike" }
+  }
+}

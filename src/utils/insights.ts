@@ -16,15 +16,17 @@ export function contarGatilhos(entries: TriggerEntry[]): ContagemGatilho[] {
     .sort((a, b) => b.total - a.total);
 }
 
+// `key` é o identificador estável usado para traduzir o rótulo (ver
+// triggerJournal.json > horarios.<key>) — não muda por idioma.
 const FAIXAS_HORARIO = [
-  { label: 'Madrugada (0h–6h)', inicio: 0, fim: 6 },
-  { label: 'Manhã (6h–12h)', inicio: 6, fim: 12 },
-  { label: 'Tarde (12h–18h)', inicio: 12, fim: 18 },
-  { label: 'Noite (18h–24h)', inicio: 18, fim: 24 },
-];
+  { key: 'madrugada', inicio: 0, fim: 6 },
+  { key: 'manha', inicio: 6, fim: 12 },
+  { key: 'tarde', inicio: 12, fim: 18 },
+  { key: 'noite', inicio: 18, fim: 24 },
+] as const;
 
 export interface ContagemHorario {
-  label: string;
+  key: string;
   total: number;
   percent: number;
 }
@@ -32,7 +34,7 @@ export interface ContagemHorario {
 /** Distribuição das entradas por faixa de horário do dia. */
 export function contarPorHorario(entries: TriggerEntry[]): ContagemHorario[] {
   const contagem = FAIXAS_HORARIO.map((faixa) => ({
-    label: faixa.label,
+    key: faixa.key,
     total: entries.filter((e) => {
       const hora = new Date(e.date).getHours();
       return hora >= faixa.inicio && hora < faixa.fim;

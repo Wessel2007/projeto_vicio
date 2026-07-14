@@ -1,11 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs, router, type Href } from 'expo-router';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Accent, Colors, Fonts } from '@/constants/theme';
 import { carregarDados } from '@/storage';
 
 export default function TabsLayout() {
+  const { t } = useTranslation('common');
   useEffect(() => {
     carregarDados().then((dados) => {
       if (!dados.onboardingDone) {
@@ -31,28 +33,28 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: t('tabs.home'),
           tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="diario"
         options={{
-          title: 'Diário',
+          title: t('tabs.diario'),
           tabBarIcon: ({ color, size }) => <Ionicons name="journal-outline" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="conquistas"
         options={{
-          title: 'Patente',
+          title: t('tabs.conquistas'),
           tabBarIcon: ({ color, size }) => <Ionicons name="shield-outline" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="perfil"
         options={{
-          title: 'Perfil',
+          title: t('tabs.perfil'),
           tabBarIcon: ({ color, size }) => <Ionicons name="person-outline" size={size} color={color} />,
         }}
       />

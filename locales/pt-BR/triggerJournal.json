@@ -1,0 +1,49 @@
+{
+  "header": {
+    "title": "Diário",
+    "subtitleOne": "batalha registrada",
+    "subtitleMany": "batalhas registradas",
+    "subtitleWon": " · {{percent}}% vencidas"
+  },
+  "insightsPaywallReason": "Insights do diário de gatilhos",
+  "insights": {
+    "pillLabel": "Insights",
+    "proTag": "·PRO",
+    "modalTitle": "Insights",
+    "empty": "Registre batalhas no diário para ver seus padrões aqui.",
+    "resistanceRate": "TAXA DE RESISTÊNCIA",
+    "resistedRecaidas": "{{resistidas}} resistidas · {{recaidas}} recaídas",
+    "weeklyTrend": "TENDÊNCIA SEMANAL",
+    "weeklyTrendText": "{{atual}} registros nos últimos 7 dias",
+    "weeklyTrendPrev": " ({{anterior}} na semana anterior)",
+    "commonTriggers": "GATILHOS MAIS COMUNS",
+    "commonTime": "HORÁRIO MAIS RECORRENTE"
+  },
+  "empty": {
+    "title": "Nenhuma batalha ainda",
+    "text": "Registre seus gatilhos para começar a enxergar padrões — horário, situação, o que funciona."
+  },
+  "teaser": {
+    "title": "Um padrão está surgindo",
+    "text": "Seus gatilhos concentram-se em \"{{horario}}\". Veja a análise completa no PRO."
+  },
+  "cta": "+ Registrar gatilho",
+  "badge": { "resisted": "RESISTI", "relapsed": "RECAÍDA" },
+  "horarios": {
+    "madrugada": "Madrugada (0h–6h)",
+    "manha": "Manhã (6h–12h)",
+    "tarde": "Tarde (12h–18h)",
+    "noite": "Noite (18h–24h)"
+  },
+  "modal": {
+    "title": "Nova batalha",
+    "cancel": "Cancelar",
+    "triggerLabel": "QUAL GATILHO?",
+    "outcomeLabel": "O QUE ACONTECEU?",
+    "resisted": "Resisti",
+    "relapsed": "Recaí",
+    "notesLabel": "OBSERVAÇÕES (OPCIONAL)",
+    "notesPlaceholder": "O que você estava fazendo? Como se sentiu?",
+    "save": "Salvar"
+  }
+}

@@ -1,11 +1,19 @@
-// Helpers de data em pt-BR usados no redesign "Aço & Brasa".
+// Helpers de data usados no redesign "Aço & Brasa". Os rótulos (dias da
+// semana, meses, "hoje"/"ontem") vêm de common.json e seguem o idioma ativo
+// do i18next — a lógica de cálculo de datas em si não muda por idioma.
+import i18n from '@/i18n';
 
-const DIAS_SEMANA = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB'];
-const MESES = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+function diasSemana(): string[] {
+  return i18n.t('common:dates.weekdaysShort', { returnObjects: true }) as string[];
+}
+
+function meses(): string[] {
+  return i18n.t('common:dates.monthsShort', { returnObjects: true }) as string[];
+}
 
 /** Ex.: "SEG, 13 JUL" — usado no header da Home. */
 export function formatarCabecalhoData(d = new Date()): string {
-  return `${DIAS_SEMANA[d.getDay()]}, ${d.getDate()} ${MESES[d.getMonth()]}`;
+  return `${diasSemana()[d.getDay()]}, ${d.getDate()} ${meses()[d.getMonth()]}`;
 }
 
 /** Rótulo de agrupamento da timeline do diário: "HOJE", "ONTEM" ou "SEX, 10 JUL". */
@@ -13,9 +21,9 @@ export function rotuloDiaTimeline(iso: string, hoje = new Date()): string {
   const d = new Date(iso);
   const meiaNoite = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
   const diffDias = Math.round((meiaNoite(hoje) - meiaNoite(d)) / (24 * 60 * 60 * 1000));
-  if (diffDias <= 0) return 'HOJE';
-  if (diffDias === 1) return 'ONTEM';
-  return `${DIAS_SEMANA[d.getDay()]}, ${d.getDate()} ${MESES[d.getMonth()]}`;
+  if (diffDias <= 0) return i18n.t('common:dates.today');
+  if (diffDias === 1) return i18n.t('common:dates.yesterday');
+  return `${diasSemana()[d.getDay()]}, ${d.getDate()} ${meses()[d.getMonth()]}`;
 }
 
 /** Chave de dia (YYYY-MM-DD local) para agrupar entradas. */

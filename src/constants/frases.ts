@@ -41,10 +41,18 @@ export const FRASES: Frase[] = [
 
 export const TEMAS_FRASES: TemaFrase[] = ['Estoicismo', 'Disciplina', 'Superação', 'Autoconhecimento', 'Motivação'];
 
-export function getFraseDoDia(): Frase {
+/** Índice do dia (0..FRASES.length-1), estável entre idiomas — usado para
+ * buscar a tradução da frase do dia em home.json (chave `quotes.<indice>`). */
+export function getFraseDoDiaIndex(): number {
   const today = new Date();
   const dayOfYear = Math.floor(
     (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24)
   );
-  return FRASES[dayOfYear % FRASES.length];
+  return dayOfYear % FRASES.length;
+}
+
+/** Frase do dia em pt-BR (fallback). Para exibição na Home, prefira traduzir
+ * via `t('home:quotes.' + getFraseDoDiaIndex())`, que resolve no idioma ativo. */
+export function getFraseDoDia(): Frase {
+  return FRASES[getFraseDoDiaIndex()];
 }

@@ -1,0 +1,49 @@
+{
+  "header": {
+    "title": "Journal",
+    "subtitleOne": "battle logged",
+    "subtitleMany": "battles logged",
+    "subtitleWon": " · {{percent}}% won"
+  },
+  "insightsPaywallReason": "Trigger journal insights",
+  "insights": {
+    "pillLabel": "Insights",
+    "proTag": "·PRO",
+    "modalTitle": "Insights",
+    "empty": "Log battles in your journal to see your patterns here.",
+    "resistanceRate": "RESISTANCE RATE",
+    "resistedRecaidas": "{{resistidas}} resisted · {{recaidas}} relapsed",
+    "weeklyTrend": "WEEKLY TREND",
+    "weeklyTrendText": "{{atual}} entries in the last 7 days",
+    "weeklyTrendPrev": " ({{anterior}} in the previous week)",
+    "commonTriggers": "MOST COMMON TRIGGERS",
+    "commonTime": "MOST RECURRING TIME"
+  },
+  "empty": {
+    "title": "No battles yet",
+    "text": "Log your triggers to start seeing patterns — time of day, situation, what works."
+  },
+  "teaser": {
+    "title": "A pattern is emerging",
+    "text": "Your triggers are concentrated around \"{{horario}}\". See the full analysis in PRO."
+  },
+  "cta": "+ Log trigger",
+  "badge": { "resisted": "RESISTED", "relapsed": "RELAPSED" },
+  "horarios": {
+    "madrugada": "Late night (12am–6am)",
+    "manha": "Morning (6am–12pm)",
+    "tarde": "Afternoon (12pm–6pm)",
+    "noite": "Evening (6pm–12am)"
+  },
+  "modal": {
+    "title": "New battle",
+    "cancel": "Cancel",
+    "triggerLabel": "WHICH TRIGGER?",
+    "outcomeLabel": "WHAT HAPPENED?",
+    "resisted": "I resisted",
+    "relapsed": "I relapsed",
+    "notesLabel": "NOTES (OPTIONAL)",
+    "notesPlaceholder": "What were you doing? How did you feel?",
+    "save": "Save"
+  }
+}

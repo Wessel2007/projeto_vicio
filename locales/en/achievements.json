@@ -1,0 +1,42 @@
+{
+  "eyebrowJourney": "THE WARRIOR'S JOURNEY",
+  "title": "Ranks",
+  "youAreHere": " · YOU ARE HERE",
+  "daysRange": "{{min}}–{{max}} days",
+  "daysRangeNoCeiling": "{{min}}+ days",
+  "completed": " · completed",
+  "inProgress": " · in the forge",
+  "daysUntilNext": "{{dias}} days to {{proximo}}",
+  "freeCap": "Free plan cap — subscribe to PRO to continue",
+  "maxLevel": "Max level reached",
+  "xpAndStreak": "{{xp}} XP · {{dias}}-day streak",
+  "proGate": {
+    "title": "Advanced forge · PRO",
+    "text": "From Guardian to Immortal — 6 ranks and 351 days of journey."
+  },
+  "secrets": {
+    "eyebrow": "SECRET ACHIEVEMENTS",
+    "locked": "???",
+    "lockedText": "Secret achievement — keep going to discover it."
+  },
+  "descricoes": {
+    "Recruta": "The first cut into the old routine. You traded the excuse for a decision — the forge has only just begun.",
+    "Aprendiz": "The urge still knocks, but it no longer chooses for you. The metal starts to answer the hammer.",
+    "Guerreiro": "The hottest phase of the fire. Every trigger you resist is a hammer blow that hardens what you're becoming.",
+    "Guardião": "A month of edge. You're no longer fighting just for yourself — you know how to protect what you've built.",
+    "Espartano": "Discipline became habit, not willpower. The blade cuts without hesitation now.",
+    "Monge": "The silence has arrived. The urge still appears, but it meets a steel that no longer trembles.",
+    "Mestre": "You no longer need the forge to stay sharp — now you're the one forging the next step.",
+    "Lenda": "Few sustain this length of tempering. Your story is already a reference for those just starting out.",
+    "Imortal": "No ceiling, no deadline. Recovery isn't a goal anymore — it's who you are."
+  },
+  "secretas": {
+    "primeira-resistencia": { "nome": "First Victory", "descricao": "Resisted a trigger for the first time using the panic button." },
+    "cronista": { "nome": "Chronicler", "descricao": "Logged 10 entries in the trigger journal." },
+    "semana-inabalavel": { "nome": "Unshakable Week", "descricao": "Resisted a trigger 7 times." },
+    "multi-gatilho": { "nome": "Self-Awareness", "descricao": "Identified 5 different triggers in the journal." },
+    "fenix": { "nome": "Phoenix", "descricao": "Reached a 7-day streak again after a relapse." },
+    "guarda-noturno": { "nome": "Night Watch", "descricao": "Resisted a trigger in the middle of the night (12am–5am)." },
+    "mil-guerreiro": { "nome": "A Thousand Days of Forging", "descricao": "Accumulated 1000 total XP." }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "eyebrowJourney": "JORNADA DO GUERREIRO",
+  "title": "Patentes",
+  "youAreHere": " · VOCÊ ESTÁ AQUI",
+  "daysRange": "{{min}}–{{max}} dias",
+  "daysRangeNoCeiling": "{{min}}+ dias",
+  "completed": " · concluída",
+  "inProgress": " · em forja",
+  "daysUntilNext": "{{dias}} dias para {{proximo}}",
+  "freeCap": "Teto do Free — assine o PRO para continuar",
+  "maxLevel": "Nível máximo atingido",
+  "xpAndStreak": "{{xp}} XP · {{dias}} dias de streak",
+  "proGate": {
+    "title": "Forja avançada · PRO",
+    "text": "Do Guardião ao Imortal — 6 patentes e 351 dias de jornada."
+  },
+  "secrets": {
+    "eyebrow": "CONQUISTAS SECRETAS",
+    "locked": "???",
+    "lockedText": "Conquista secreta — continue para descobrir."
+  },
+  "descricoes": {
+    "Recruta": "O primeiro corte na rotina antiga. Você trocou a desculpa pela decisão — a forja apenas começou.",
+    "Aprendiz": "A vontade ainda bate, mas já não escolhe por você. O metal começa a responder ao martelo.",
+    "Guerreiro": "A fase mais quente do fogo. Cada gatilho resistido é uma marretada que endurece o que você está virando.",
+    "Guardião": "Um mês de fio. Você não luta mais só por si — já sabe proteger o que construiu.",
+    "Espartano": "Disciplina virou hábito, não força de vontade. A lâmina já corta sem hesitar.",
+    "Monge": "O silêncio chegou. O impulso ainda aparece, mas encontra um aço que não vibra mais.",
+    "Mestre": "Você deixou de precisar da forja para se manter afiado — agora é você quem forja o próximo passo.",
+    "Lenda": "Poucos sustentam esse tempo de têmpera. Sua história já é referência para quem começa agora.",
+    "Imortal": "Sem teto, sem prazo. A recuperação não é mais uma meta — é quem você é."
+  },
+  "secretas": {
+    "primeira-resistencia": { "nome": "Primeira Vitória", "descricao": "Resistiu a um gatilho pela primeira vez usando o botão de pânico." },
+    "cronista": { "nome": "Cronista", "descricao": "Registrou 10 entradas no diário de gatilhos." },
+    "semana-inabalavel": { "nome": "Semana Inabalável", "descricao": "Resistiu a um gatilho 7 vezes." },
+    "multi-gatilho": { "nome": "Autoconhecimento", "descricao": "Identificou 5 gatilhos diferentes no diário." },
+    "fenix": { "nome": "Fênix", "descricao": "Voltou a 7 dias de streak depois de uma recaída." },
+    "guarda-noturno": { "nome": "Guarda-Noturno", "descricao": "Resistiu a um gatilho de madrugada (0h–5h)." },
+    "mil-guerreiro": { "nome": "Mil Dias de Forja", "descricao": "Acumulou 1000 XP total." }
+  }
+}

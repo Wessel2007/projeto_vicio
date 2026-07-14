@@ -36,6 +36,32 @@
 - [ ] Modo "recaída controlada" (fluxo de reflexão pós-recaída, não só reset)
 - [ ] Tela de upgrade Free → Pro (copy definida, ver seção abaixo)
 
+## Internacionalização (i18n)
+
+- [x] Setup i18next + react-i18next + expo-localization, detecção automática
+      de idioma do dispositivo com fallback pt-BR (ver CLAUDE.md, seção
+      Internacionalização)
+- [x] Seletor de idioma manual em Perfil, com persistência local
+      (`src/storage/idioma.ts`)
+- [x] Extração e tradução (pt-BR/en/es) das 6 telas do MVP — Onboarding,
+      Home, Botão de Pânico, Diário de Gatilhos, Conquistas/Patente, Perfil
+      — e das constants/utils compartilhados (gatilhos, patentes, frase do
+      dia, notificações, paywall, formatação de data/moeda)
+- [ ] **Revisão humana obrigatória** das strings de apoio emocional/sensível
+      traduzidas automaticamente em `locales/en/panicButton.json` e
+      `locales/en/triggerJournal.json` (e os respectivos `locales/es/...`)
+      antes de ir para produção — inclui script de respiração, meditação
+      guiada e sugestões de ação por gatilho
+- [ ] i18n das telas adicionadas depois do MVP original: `celebracao.tsx`,
+      `frases.tsx`, `patente-revelada.tsx`, `plano-gerado.tsx`,
+      `reflexao-recaida.tsx`, `relatorio.tsx`, `streak-detalhe.tsx`,
+      `termos-de-servico.tsx` — hoje ainda hardcoded em pt-BR
+- [ ] Localização de metadata da App Store/Play Store (nome, descrição,
+      screenshots, palavras-chave) para en/es
+- [ ] Testar o app em dispositivo real (iOS/Android) com o idioma do sistema
+      em inglês e espanhol, e validar quebras de layout com textos mais
+      longos (alemão/espanhol tendem a ser ~20% mais longos que o pt-BR)
+
 ## Estrutura de dados a implementar (lógica base)
 
 - [x] Streak atual (reseta na recaída)

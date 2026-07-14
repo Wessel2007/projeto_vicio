@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router, type Href } from 'expo-router';
 import { AnimatePresence, MotiView } from 'moti';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -49,6 +50,7 @@ const ONBOARDING_GLOW = [
 ];
 
 export default function OnboardingScreen() {
+  const { t } = useTranslation('onboarding');
   const [step, setStep] = useState(1);
   const [dir, setDir] = useState(1);
   const [salvando, setSalvando] = useState(false);
@@ -156,7 +158,7 @@ export default function OnboardingScreen() {
       : true;
 
   const buttonLabel =
-    step === 1 ? 'Começar minha jornada' : step === TOTAL_STEPS ? 'Forjar' : 'Continuar';
+    step === 1 ? t('buttons.start') : step === TOTAL_STEPS ? t('buttons.forge') : t('buttons.continue');
   const progress = Math.min((step - 1) / (TOTAL_STEPS - 1), 1);
 
   return (
@@ -169,7 +171,7 @@ export default function OnboardingScreen() {
 
           <View style={styles.progressWrap}>
             <View style={styles.progressTopo}>
-              <ThemedText type="eyebrow" style={styles.progressEyebrow}>A forja esquenta</ThemedText>
+              <ThemedText type="eyebrow" style={styles.progressEyebrow}>{t('progress.eyebrow')}</ThemedText>
               <ThemedText type="smallBold" themeColor="textTertiary">{step}/{TOTAL_STEPS}</ThemedText>
             </View>
             <ForgeProgressBar progress={progress} />
@@ -188,23 +190,21 @@ export default function OnboardingScreen() {
                 transition={{ type: 'timing', duration: 260 }}>
                 {step === 1 && (
                   <View style={styles.stepInner}>
-                    <ThemedText type="eyebrow" style={styles.wordmark}>FORJA</ThemedText>
+                    <ThemedText type="eyebrow" style={styles.wordmark}>{t('step1.wordmark')}</ThemedText>
                     <ThemedText type="titleBig" style={styles.titulo}>
-                      Você está prestes a forjar uma nova versão de si
+                      {t('step1.title')}
                     </ThemedText>
                     <ThemedText type="default" themeColor="textSecondary" style={styles.descricao}>
-                      Antes de começar, algumas perguntas rápidas para moldar sua jornada.
+                      {t('step1.subtitle')}
                     </ThemedText>
                     <GlassCard style={styles.privacyCard}>
                       <Ionicons name="lock-closed" size={20} color={Accent.verde} />
                       <View style={styles.privacyTextos}>
                         <ThemedText type="smallBold" style={styles.privacyTitulo}>
-                          Seus dados são privados
+                          {t('step1.privacyTitle')}
                         </ThemedText>
                         <ThemedText type="small" themeColor="textSecondary" style={styles.privacyDescricao}>
-                          Suas respostas ficam salvas só neste aparelho — nunca são enviadas,
-                          sincronizadas ou compartilhadas com ninguém. Sua segurança é sempre
-                          a prioridade número um do Forja.
+                          {t('step1.privacyText')}
                         </ThemedText>
                       </View>
                     </GlassCard>
@@ -213,9 +213,9 @@ export default function OnboardingScreen() {
 
                 {step === 2 && (
                   <View style={styles.stepInner}>
-                    <ThemedText type="title" style={styles.titulo}>Seu ponto de partida</ThemedText>
+                    <ThemedText type="title" style={styles.titulo}>{t('step2.title')}</ThemedText>
                     <ThemedText type="default" themeColor="textSecondary" style={styles.descricao}>
-                      Há quantos dias você está sem recair?
+                      {t('step2.subtitle')}
                     </ThemedText>
                     <GlassCard style={styles.card}>
                       <TextInput
@@ -227,7 +227,7 @@ export default function OnboardingScreen() {
                         selectTextOnFocus
                       />
                       <ThemedText type="small" themeColor="textSecondary" style={styles.centerText}>
-                        Se acabou de começar, deixe 0.
+                        {t('step2.hint')}
                       </ThemedText>
                     </GlassCard>
                   </View>
@@ -236,16 +236,16 @@ export default function OnboardingScreen() {
                 {step === 3 && (
                   <View style={styles.stepInner}>
                     <ThemedText type="title" style={styles.titulo}>
-                      Qual comportamento você quer trabalhar?
+                      {t('step3.title')}
                     </ThemedText>
                     <View style={styles.optionsColumn}>
                       {OPCOES_COMPORTAMENTO.map((op) => (
                         <IgniteChip
-                          key={op.id}
-                          label={op.label}
+                          key={op}
+                          label={t(`comportamento.${op}`)}
                           wide
-                          selected={comportamento === op.id}
-                          onPress={() => setComportamento(op.id)}
+                          selected={comportamento === op}
+                          onPress={() => setComportamento(op)}
                         />
                       ))}
                     </View>
@@ -255,16 +255,16 @@ export default function OnboardingScreen() {
                 {step === 4 && (
                   <View style={styles.stepInner}>
                     <ThemedText type="title" style={styles.titulo}>
-                      Há quanto tempo isso te incomoda?
+                      {t('step4.title')}
                     </ThemedText>
                     <View style={styles.optionsColumn}>
                       {OPCOES_TEMPO.map((op) => (
                         <IgniteChip
-                          key={op.id}
-                          label={op.label}
+                          key={op}
+                          label={t(`tempoIncomoda.${op}`)}
                           wide
-                          selected={tempoIncomoda === op.id}
-                          onPress={() => setTempoIncomoda(op.id)}
+                          selected={tempoIncomoda === op}
+                          onPress={() => setTempoIncomoda(op)}
                         />
                       ))}
                     </View>
@@ -274,17 +274,17 @@ export default function OnboardingScreen() {
                 {step === 5 && (
                   <View style={styles.stepInner}>
                     <ThemedText type="title" style={styles.titulo}>
-                      Qual o tamanho da sua urgência agora?
+                      {t('step5.title')}
                     </ThemedText>
                     <View style={styles.optionsColumn}>
                       {OPCOES_IMPORTANCIA.map((op) => (
                         <IgniteChip
-                          key={op.id}
-                          label={op.label}
-                          description={op.description}
+                          key={op}
+                          label={t(`importancia.${op}.label`)}
+                          description={t(`importancia.${op}.description`)}
                           wide
-                          selected={importancia === op.id}
-                          onPress={() => setImportancia(op.id)}
+                          selected={importancia === op}
+                          onPress={() => setImportancia(op)}
                         />
                       ))}
                     </View>
@@ -294,17 +294,16 @@ export default function OnboardingScreen() {
                 {step === 6 && (
                   <View style={styles.stepInner}>
                     <ThemedText type="title" style={styles.titulo}>
-                      Quais situações costumam ser seus gatilhos?
+                      {t('step6.title')}
                     </ThemedText>
                     <ThemedText type="default" themeColor="textSecondary" style={styles.descricao}>
-                      Selecione quantas fizerem sentido. Isso ajuda o app a sugerir ações mais
-                      certeiras no momento difícil.
+                      {t('step6.subtitle')}
                     </ThemedText>
                     <View style={styles.gatilhosGrid}>
                       {GATILHOS_COMUNS.map((g) => (
                         <IgniteChip
                           key={g}
-                          label={g}
+                          label={t(`common:gatilhos.${g}`)}
                           selected={gatilhosSelecionados.includes(g)}
                           onPress={() => toggleGatilho(g)}
                         />
@@ -312,12 +311,12 @@ export default function OnboardingScreen() {
                     </View>
                     <GlassCard style={styles.card}>
                       <ThemedText type="small" themeColor="textSecondary">
-                        Outra situação (opcional)
+                        {t('step6.otherLabel')}
                       </ThemedText>
                       <TextInput
                         value={gatilhosTexto}
                         onChangeText={setGatilhosTexto}
-                        placeholder="Descreva com suas palavras..."
+                        placeholder={t('step6.otherPlaceholder')}
                         placeholderTextColor={Colors.textTertiary}
                         style={styles.textArea}
                         multiline
@@ -329,18 +328,18 @@ export default function OnboardingScreen() {
                 {step === 7 && (
                   <View style={styles.stepInner}>
                     <ThemedText type="title" style={styles.titulo}>
-                      O que você quer transformar na sua vida?
+                      {t('step7.title')}
                     </ThemedText>
                     <ThemedText type="default" themeColor="textSecondary" style={styles.descricao}>
-                      Escolha até 3 — isso ajuda a personalizar sua jornada.
+                      {t('step7.subtitle')}
                     </ThemedText>
                     <View style={styles.gatilhosGrid}>
                       {OPCOES_MOTIVO.map((op) => (
                         <IgniteChip
-                          key={op.id}
-                          label={op.label}
-                          selected={areasMelhoria.includes(op.id)}
-                          onPress={() => toggleAreaMelhoria(op.id)}
+                          key={op}
+                          label={t(`motivo.${op}`)}
+                          selected={areasMelhoria.includes(op)}
+                          onPress={() => toggleAreaMelhoria(op)}
                         />
                       ))}
                     </View>
@@ -350,17 +349,17 @@ export default function OnboardingScreen() {
                 {step === 8 && (
                   <View style={styles.stepInner}>
                     <ThemedText type="title" style={styles.titulo}>
-                      Como você prefere ser motivado?
+                      {t('step8.title')}
                     </ThemedText>
                     <View style={styles.optionsColumn}>
                       {OPCOES_ESTILO.map((op) => (
                         <IgniteChip
-                          key={op.id}
-                          label={op.label}
-                          description={op.description}
+                          key={op}
+                          label={t(`estilo.${op}.label`)}
+                          description={t(`estilo.${op}.description`)}
                           wide
-                          selected={estilo === op.id}
-                          onPress={() => setEstilo(op.id)}
+                          selected={estilo === op}
+                          onPress={() => setEstilo(op)}
                         />
                       ))}
                     </View>
@@ -370,15 +369,15 @@ export default function OnboardingScreen() {
                 {step === 9 && (
                   <View style={styles.stepInner}>
                     <ThemedText type="title" style={styles.titulo}>
-                      Qual conquista você mais quer sentir primeiro?
+                      {t('step9.title')}
                     </ThemedText>
                     <View style={styles.gatilhosGrid}>
                       {OPCOES_MARCO.map((op) => (
                         <IgniteChip
-                          key={op.id}
-                          label={op.label}
-                          selected={marco === op.id}
-                          onPress={() => setMarco(op.id)}
+                          key={op}
+                          label={t(`marco.${op}`)}
+                          selected={marco === op}
+                          onPress={() => setMarco(op)}
                         />
                       ))}
                     </View>
@@ -387,17 +386,16 @@ export default function OnboardingScreen() {
 
                 {step === 10 && (
                   <View style={styles.stepInner}>
-                    <ThemedText type="title" style={styles.titulo}>Quase lá</ThemedText>
+                    <ThemedText type="title" style={styles.titulo}>{t('step10.title')}</ThemedText>
                     <ThemedText type="default" themeColor="textSecondary" style={styles.descricao}>
-                      Um lembrete diário ajuda a manter o hábito. Você pode mudar isso depois em
-                      Perfil.
+                      {t('step10.subtitle')}
                     </ThemedText>
                     <GlassCard style={styles.card}>
                       <View style={styles.notifRow}>
                         <View style={styles.notifTextos}>
-                          <ThemedText type="default">Lembrete diário</ThemedText>
+                          <ThemedText type="default">{t('step10.reminderLabel')}</ThemedText>
                           <ThemedText type="small" themeColor="textSecondary">
-                            Receba sua frase do dia às 8h
+                            {t('step10.reminderTime')}
                           </ThemedText>
                         </View>
                         <GradientSwitch
@@ -416,11 +414,11 @@ export default function OnboardingScreen() {
           <View style={styles.botoes}>
             {step > 1 && (
               <Pressable style={styles.btnVoltar} onPress={voltar} disabled={salvando}>
-                <ThemedText type="default" themeColor="textSecondary">Voltar</ThemedText>
+                <ThemedText type="default" themeColor="textSecondary">{t('buttons.back')}</ThemedText>
               </Pressable>
             )}
             <GradientButton
-              label={salvando ? 'Forjando...' : buttonLabel}
+              label={salvando ? t('buttons.forging') : buttonLabel}
               onPress={handleContinuar}
               disabled={!canContinue || salvando}
               style={step === 1 ? styles.btnAvancarFull : styles.btnAvancar}

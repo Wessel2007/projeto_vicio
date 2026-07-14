@@ -1,4 +1,5 @@
 import { router, type Href } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -9,7 +10,7 @@ import { SosButton } from '@/components/sos-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { WeekRuler } from '@/components/week-ruler';
-import { getFraseDoDia } from '@/constants/frases';
+import { getFraseDoDia, getFraseDoDiaIndex } from '@/constants/frases';
 import { getPatenteBadge } from '@/constants/patente-badges';
 import { Accent, Colors, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
@@ -25,6 +26,7 @@ const HOME_GLOW = [
 ];
 
 export default function HomeScreen() {
+  const { t } = useTranslation(['home', 'common']);
   const { dados, derivado, carregando } = useAppData();
   const elapsed = useElapsedTime(dados?.streakStartDate ?? null);
   useRankUpCelebration(derivado?.patente, derivado?.streakDias ?? 0);
@@ -32,19 +34,23 @@ export default function HomeScreen() {
   if (carregando || !dados || !derivado) {
     return (
       <ThemedView style={styles.loadingContainer}>
-        <ThemedText>Carregando...</ThemedText>
+        <ThemedText>{t('common:loading')}</ThemedText>
       </ThemedView>
     );
   }
 
-  const frase = getFraseDoDia();
+  const fraseIdx = getFraseDoDiaIndex();
+  const fraseFallback = getFraseDoDia();
+  const fraseTexto = t(`quotes.${fraseIdx}.texto`, { defaultValue: fraseFallback.texto });
+  const fraseAutor = t(`quotes.${fraseIdx}.autor`, { defaultValue: fraseFallback.autor });
   const { totalXP, patente } = derivado;
   const sublevelLabel = patente.nivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.nivel.sublevel - 1]}` : '';
   const patenteBadge = getPatenteBadge(patente.nivel.nome, patente.nivel.sublevel);
-  const patenteLabelCaps = `${patente.nivel.nome}${sublevelLabel}`.toUpperCase();
+  const patenteNomeTraduzido = t(`common:ranks.${patente.nivel.nome}`);
+  const patenteLabelCaps = `${patenteNomeTraduzido}${sublevelLabel}`.toUpperCase();
 
   const proxLabel = patente.proxNivel
-    ? `${patente.proxNivel.nome}${patente.proxNivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.proxNivel.sublevel - 1]}` : ''}`
+    ? `${t(`common:ranks.${patente.proxNivel.nome}`)}${patente.proxNivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.proxNivel.sublevel - 1]}` : ''}`
     : null;
   const faltamDias = patente.proxNivel ? Math.max(0, patente.proxNivel.minDias - patente.diasEfetivos) : 0;
 
@@ -61,7 +67,7 @@ export default function HomeScreen() {
         <View style={styles.content}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.headerData}>SUA FORJA · {formatarCabecalhoData()}</Text>
+            <Text style={styles.headerData}>{t('header.eyebrow', { data: formatarCabecalhoData() })}</Text>
             <View style={styles.patenteChip}>
               <Image source={patenteBadge} style={styles.patenteChipBadge} resizeMode="contain" />
               <Text style={styles.patenteChipTexto}>{patenteLabelCaps}</Text>
@@ -73,21 +79,22 @@ export default function HomeScreen() {
             <ProgressRing size={236} progress={patente.progressoPercent / 100}>
               <View style={styles.heroCenter}>
                 <ThemedText type="heroNumber">{elapsed.dias}</ThemedText>
-                <Text style={styles.heroLabel}>DIAS NA FORJA</Text>
+                <Text style={styles.heroLabel}>{t('hero.daysLabel')}</Text>
                 <Text style={styles.heroHoras}>
-                  + {elapsed.horas}h {String(elapsed.minutos).padStart(2, '0')}m sem recair
+                  + {elapsed.horas}h {String(elapsed.minutos).padStart(2, '0')}m {t('hero.hoursSuffix')}
                 </Text>
               </View>
             </ProgressRing>
             <Text style={styles.heroProx}>
               {proxLabel ? (
                 <>
-                  <Text style={styles.heroProxDias}>{faltamDias} dias</Text> para {proxLabel} · {totalXP} XP
+                  <Text style={styles.heroProxDias}>{t('hero.daysToNextBold', { dias: faltamDias })}</Text>{' '}
+                  {t('hero.daysToNextRest', { proximo: proxLabel, xp: totalXP })}
                 </>
               ) : patente.bloqueadoPorPlano ? (
-                <>Teto do Free · assine o PRO para continuar · {totalXP} XP</>
+                <>{t('hero.freeCap', { xp: totalXP })}</>
               ) : (
-                <>Nível máximo · {totalXP} XP</>
+                <>{t('hero.maxLevel', { xp: totalXP })}</>
               )}
             </Text>
           </View>
@@ -101,20 +108,20 @@ export default function HomeScreen() {
           {/* Grid: Batalhas + Frase do dia */}
           <View style={styles.grid}>
             <Pressable style={styles.gridCard} onPress={() => router.push('/(tabs)/diario' as Href)}>
-              <Text style={styles.cardLabel}>BATALHAS</Text>
+              <Text style={styles.cardLabel}>{t('grid.battlesLabel')}</Text>
               <Text style={styles.batalhasNum}>
                 {taxa.resistidas}
                 <Text style={styles.batalhasTotal}> /{dados.entries.length}</Text>
               </Text>
-              <Text style={styles.batalhasTaxa}>{taxa.percentResistencia}% de resistência</Text>
+              <Text style={styles.batalhasTaxa}>{t('grid.resistancePercent', { percent: taxa.percentResistencia })}</Text>
             </Pressable>
 
             <View style={[styles.gridCard, styles.fraseCard]}>
-              <Text style={styles.cardLabel}>FRASE DO DIA</Text>
+              <Text style={styles.cardLabel}>{t('grid.quoteLabel')}</Text>
               <ThemedText type="quote" style={styles.fraseTexto} numberOfLines={3}>
-                &ldquo;{frase.texto}&rdquo;
+                &ldquo;{fraseTexto}&rdquo;
               </ThemedText>
-              <Text style={styles.fraseAutor}>{frase.autor}</Text>
+              <Text style={styles.fraseAutor}>{fraseAutor}</Text>
             </View>
           </View>
         </View>

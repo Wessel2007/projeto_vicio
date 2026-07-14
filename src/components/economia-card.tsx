@@ -1,4 +1,5 @@
 import { router, type Href } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Accent, Colors, Fonts, Radius } from '@/constants/theme';
@@ -14,34 +15,33 @@ export function EconomiaCard({
   minutos: number | null;
   moedaCodigo: string;
 }) {
+  const { t } = useTranslation('home');
   const dinheiroAnimado = useCountUp(dinheiro);
   const minutosAnimado = useCountUp(minutos);
 
   if (dinheiro == null && minutos == null) {
     return (
       <Pressable style={styles.nudge} onPress={() => router.push('/(tabs)/perfil' as Href)}>
-        <Text style={styles.nudgeTexto}>
-          Configure o custo/tempo do seu hábito em Perfil para ver quanto você já economizou.
-        </Text>
+        <Text style={styles.nudgeTexto}>{t('economiaCard.nudge')}</Text>
       </Pressable>
     );
   }
 
   return (
     <View style={styles.card}>
-      <Text style={styles.cardLabel}>ECONOMIA NA STREAK</Text>
+      <Text style={styles.cardLabel}>{t('economiaCard.label')}</Text>
       <View style={styles.linha}>
         {dinheiro != null && (
           <View style={styles.stat}>
             <Text style={styles.statValor}>{formatarMoeda(dinheiroAnimado ?? 0, moedaCodigo)}</Text>
-            <Text style={styles.statLabel}>economizados</Text>
+            <Text style={styles.statLabel}>{t('economiaCard.money')}</Text>
           </View>
         )}
         {dinheiro != null && minutos != null && <View style={styles.divisor} />}
         {minutos != null && (
           <View style={styles.stat}>
             <Text style={styles.statValor}>{formatarTempoEconomizado(minutosAnimado ?? 0)}</Text>
-            <Text style={styles.statLabel}>de tempo livre</Text>
+            <Text style={styles.statLabel}>{t('economiaCard.time')}</Text>
           </View>
         )}
       </View>

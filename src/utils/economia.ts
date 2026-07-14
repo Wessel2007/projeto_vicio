@@ -1,6 +1,16 @@
+import i18n from '@/i18n';
 import { AppData } from '@/types';
 
 const MS_POR_DIA = 1000 * 60 * 60 * 24;
+
+// Mapeia o idioma ativo do app para uma localidade do Intl — só afeta a
+// formatação (separador decimal, posição do símbolo), não o código da moeda,
+// que continua vindo de AppData.moedaCodigo.
+const INTL_LOCALE_POR_IDIOMA: Record<string, string> = {
+  'pt-BR': 'pt-BR',
+  en: 'en-US',
+  es: 'es-ES',
+};
 
 export interface EconomiaEconomizada {
   dinheiro: number | null;
@@ -32,7 +42,8 @@ export function calcEconomia(
 }
 
 export function formatarMoeda(valor: number, moedaCodigo: string = 'BRL'): string {
-  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: moedaCodigo }).format(valor);
+  const locale = INTL_LOCALE_POR_IDIOMA[i18n.language] ?? 'pt-BR';
+  return new Intl.NumberFormat(locale, { style: 'currency', currency: moedaCodigo }).format(valor);
 }
 
 export function formatarTempoEconomizado(minutos: number): string {

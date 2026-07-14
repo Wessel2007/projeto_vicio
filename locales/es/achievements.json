@@ -1,0 +1,42 @@
+{
+  "eyebrowJourney": "EL CAMINO DEL GUERRERO",
+  "title": "Rangos",
+  "youAreHere": " · ESTÁS AQUÍ",
+  "daysRange": "{{min}}–{{max}} días",
+  "daysRangeNoCeiling": "{{min}}+ días",
+  "completed": " · completado",
+  "inProgress": " · en la forja",
+  "daysUntilNext": "{{dias}} días para {{proximo}}",
+  "freeCap": "Tope del plan Free — suscríbete a PRO para continuar",
+  "maxLevel": "Nivel máximo alcanzado",
+  "xpAndStreak": "{{xp}} XP · racha de {{dias}} días",
+  "proGate": {
+    "title": "Forja avanzada · PRO",
+    "text": "De Guardián a Inmortal — 6 rangos y 351 días de camino."
+  },
+  "secrets": {
+    "eyebrow": "LOGROS SECRETOS",
+    "locked": "???",
+    "lockedText": "Logro secreto — sigue avanzando para descubrirlo."
+  },
+  "descricoes": {
+    "Recruta": "El primer corte en la rutina antigua. Cambiaste la excusa por la decisión — la forja apenas comienza.",
+    "Aprendiz": "El deseo todavía llama, pero ya no decide por ti. El metal empieza a responder al martillo.",
+    "Guerreiro": "La fase más ardiente del fuego. Cada detonante resistido es un golpe de martillo que endurece en quién te estás convirtiendo.",
+    "Guardião": "Un mes de filo. Ya no luchas solo por ti — sabes proteger lo que has construido.",
+    "Espartano": "La disciplina se volvió hábito, no fuerza de voluntad. La hoja ya corta sin dudar.",
+    "Monge": "Llegó el silencio. El impulso todavía aparece, pero encuentra un acero que ya no vibra.",
+    "Mestre": "Dejaste de necesitar la forja para mantenerte afilado — ahora eres tú quien forja el siguiente paso.",
+    "Lenda": "Pocos sostienen este tiempo de templado. Tu historia ya es referencia para quienes recién empiezan.",
+    "Imortal": "Sin techo, sin plazo. La recuperación ya no es una meta — es quién eres."
+  },
+  "secretas": {
+    "primeira-resistencia": { "nome": "Primera Victoria", "descricao": "Resististe un detonante por primera vez usando el botón de pánico." },
+    "cronista": { "nome": "Cronista", "descricao": "Registraste 10 entradas en el diario de detonantes." },
+    "semana-inabalavel": { "nome": "Semana Inquebrantable", "descricao": "Resististe un detonante 7 veces." },
+    "multi-gatilho": { "nome": "Autoconocimiento", "descricao": "Identificaste 5 detonantes diferentes en el diario." },
+    "fenix": { "nome": "Fénix", "descricao": "Volviste a una racha de 7 días después de una recaída." },
+    "guarda-noturno": { "nome": "Guardia Nocturno", "descricao": "Resististe un detonante en la madrugada (0h–5h)." },
+    "mil-guerreiro": { "nome": "Mil Días de Forja", "descricao": "Acumulaste 1000 XP en total." }
+  }
+}

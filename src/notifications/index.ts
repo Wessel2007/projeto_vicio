@@ -1,6 +1,8 @@
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
+import i18n from '@/i18n';
+
 const DAILY_QUOTE_ID = 'lembrete-diario';
 const CANAL_ANDROID = 'lembretes-diarios';
 
@@ -16,7 +18,7 @@ Notifications.setNotificationHandler({
 async function configurarCanalAndroid() {
   if (Platform.OS !== 'android') return;
   await Notifications.setNotificationChannelAsync(CANAL_ANDROID, {
-    name: 'Lembretes diários',
+    name: i18n.t('common:notifications.channelName'),
     importance: Notifications.AndroidImportance.DEFAULT,
   });
 }
@@ -34,8 +36,8 @@ export async function agendarLembreteDiario(hour: number, minute: number): Promi
   await Notifications.scheduleNotificationAsync({
     identifier: DAILY_QUOTE_ID,
     content: {
-      title: '🔥 Sua disciplina de hoje',
-      body: 'Sua frase do dia e sua patente estão te esperando. Abra o FORJA.',
+      title: i18n.t('common:notifications.dailyReminderTitle'),
+      body: i18n.t('common:notifications.dailyReminderBody'),
       sound: true,
     },
     trigger: {

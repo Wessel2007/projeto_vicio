@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, type Href } from 'expo-router';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -22,16 +23,17 @@ import {
 import { mostrarPaywall } from '@/utils/paywall';
 
 function EntradaItem({ entry }: { entry: TriggerEntry }) {
+  const { t } = useTranslation(['triggerJournal', 'common']);
   return (
     <View style={styles.entrada}>
       <Text style={styles.entradaHora}>{horaCurta(entry.date)}</Text>
       <View style={styles.entradaCorpo}>
-        <Text style={styles.entradaGatilho}>{entry.trigger}</Text>
+        <Text style={styles.entradaGatilho}>{t(`common:gatilhos.${entry.trigger}`, { defaultValue: entry.trigger })}</Text>
         {entry.notes ? <Text style={styles.entradaNota}>{entry.notes}</Text> : null}
       </View>
       <View style={[styles.badge, entry.resisted ? styles.badgeResisti : styles.badgeRecaida]}>
         <Text style={[styles.badgeTxt, entry.resisted ? styles.badgeTxtResisti : styles.badgeTxtRecaida]}>
-          {entry.resisted ? 'RESISTI' : 'RECAÍDA'}
+          {entry.resisted ? t('badge.resisted') : t('badge.relapsed')}
         </Text>
       </View>
     </View>
@@ -53,6 +55,7 @@ function BarraInsight({ label, total, percent }: { label: string; total: number;
 }
 
 export default function DiarioScreen() {
+  const { t } = useTranslation(['triggerJournal', 'common']);
   const { dados, adicionarEntrada, carregando } = useAppData();
   const [modalAberto, setModalAberto] = useState(false);
   const [insightsAberto, setInsightsAberto] = useState(false);
@@ -79,7 +82,7 @@ export default function DiarioScreen() {
 
   function abrirInsights() {
     if (!dados?.isPro) {
-      mostrarPaywall('Insights do diário de gatilhos');
+      mostrarPaywall(t('insightsPaywallReason'));
       return;
     }
     setInsightsAberto(true);
@@ -109,7 +112,7 @@ export default function DiarioScreen() {
   if (carregando || !dados) {
     return (
       <ThemedView style={styles.loading}>
-        <ThemedText>Carregando...</ThemedText>
+        <ThemedText>{t('common:loading')}</ThemedText>
       </ThemedView>
     );
   }
@@ -125,15 +128,15 @@ export default function DiarioScreen() {
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerTextos}>
-            <ThemedText type="title">Diário</ThemedText>
+            <ThemedText type="title">{t('header.title')}</ThemedText>
             <Text style={styles.subtitulo}>
-              {dados.entries.length} {dados.entries.length === 1 ? 'batalha registrada' : 'batalhas registradas'}
-              {dados.entries.length > 0 ? ` · ${taxa.percentResistencia}% vencidas` : ''}
+              {dados.entries.length} {dados.entries.length === 1 ? t('header.subtitleOne') : t('header.subtitleMany')}
+              {dados.entries.length > 0 ? t('header.subtitleWon', { percent: taxa.percentResistencia }) : ''}
             </Text>
           </View>
           <Pressable onPress={abrirInsights} style={styles.insightsPill}>
             <Ionicons name="stats-chart" size={13} color={Accent.bronze} />
-            <Text style={styles.insightsPillTxt}>Insights <Text style={styles.proTag}>·PRO</Text></Text>
+            <Text style={styles.insightsPillTxt}>{t('insights.pillLabel')} <Text style={styles.proTag}>{t('insights.proTag')}</Text></Text>
           </Pressable>
         </View>
 
@@ -142,9 +145,9 @@ export default function DiarioScreen() {
             <View style={styles.vazioIcone}>
               <Ionicons name="book-outline" size={26} color={Accent.bronze} />
             </View>
-            <ThemedText type="subtitle" style={styles.vazioTitulo}>Nenhuma batalha ainda</ThemedText>
+            <ThemedText type="subtitle" style={styles.vazioTitulo}>{t('empty.title')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary" style={styles.vazioTexto}>
-              Registre seus gatilhos para começar a enxergar padrões — horário, situação, o que funciona.
+              {t('empty.text')}
             </ThemedText>
           </View>
         ) : (
@@ -162,9 +165,9 @@ export default function DiarioScreen() {
               <Pressable onPress={abrirInsights} style={styles.teaser}>
                 <Ionicons name="stats-chart" size={20} color={Accent.bronze} />
                 <View style={styles.teaserTextos}>
-                  <Text style={styles.teaserTitulo}>Um padrão está surgindo</Text>
+                  <Text style={styles.teaserTitulo}>{t('teaser.title')}</Text>
                   <Text style={styles.teaserTexto}>
-                    Seus gatilhos concentram-se em &ldquo;{horarioTop.label}&rdquo;. Veja a análise completa no PRO.
+                    {t('teaser.text', { horario: t(`horarios.${horarioTop.key}`) })}
                   </Text>
                 </View>
               </Pressable>
@@ -179,7 +182,7 @@ export default function DiarioScreen() {
           style={styles.ctaWrap}
           pointerEvents="box-none">
           <GradientButton
-            label="+ Registrar gatilho"
+            label={t('cta')}
             onPress={() => setModalAberto(true)}
             style={styles.ctaBtn}
           />
@@ -190,14 +193,14 @@ export default function DiarioScreen() {
       <Modal visible={modalAberto} animationType="slide" presentationStyle="pageSheet">
         <ThemedView style={styles.modal}>
           <View style={styles.modalHeader}>
-            <ThemedText type="subtitle">Nova batalha</ThemedText>
+            <ThemedText type="subtitle">{t('modal.title')}</ThemedText>
             <Pressable onPress={fecharModal}>
-              <ThemedText type="small" themeColor="textSecondary">Cancelar</ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">{t('modal.cancel')}</ThemedText>
             </Pressable>
           </View>
 
           <ScrollView contentContainerStyle={styles.modalContent}>
-            <Text style={styles.campoLabel}>QUAL GATILHO?</Text>
+            <Text style={styles.campoLabel}>{t('modal.triggerLabel')}</Text>
             <View style={styles.gatilhosGrid}>
               {GATILHOS_COMUNS.map((g) => {
                 const sel = gatilhoSelecionado === g;
@@ -206,38 +209,38 @@ export default function DiarioScreen() {
                     key={g}
                     onPress={() => setGatilhoSelecionado(g)}
                     style={[styles.chip, sel && styles.chipSel]}>
-                    <Text style={[styles.chipTxt, sel && styles.chipTxtSel]}>{g}</Text>
+                    <Text style={[styles.chipTxt, sel && styles.chipTxtSel]}>{t(`common:gatilhos.${g}`)}</Text>
                   </Pressable>
                 );
               })}
             </View>
 
-            <Text style={[styles.campoLabel, styles.campoLabelSpaced]}>O QUE ACONTECEU?</Text>
+            <Text style={[styles.campoLabel, styles.campoLabelSpaced]}>{t('modal.outcomeLabel')}</Text>
             <View style={styles.resultadoRow}>
               <Pressable
                 onPress={() => setResistedSelecionado(true)}
                 style={[styles.resultadoBtn, resistedSelecionado === true && styles.resultadoResisti]}>
-                <Text style={[styles.resultadoTxt, resistedSelecionado === true && styles.badgeTxtResisti]}>Resisti</Text>
+                <Text style={[styles.resultadoTxt, resistedSelecionado === true && styles.badgeTxtResisti]}>{t('modal.resisted')}</Text>
               </Pressable>
               <Pressable
                 onPress={() => setResistedSelecionado(false)}
                 style={[styles.resultadoBtn, resistedSelecionado === false && styles.resultadoRecaida]}>
-                <Text style={[styles.resultadoTxt, resistedSelecionado === false && styles.badgeTxtRecaida]}>Recaí</Text>
+                <Text style={[styles.resultadoTxt, resistedSelecionado === false && styles.badgeTxtRecaida]}>{t('modal.relapsed')}</Text>
               </Pressable>
             </View>
 
-            <Text style={[styles.campoLabel, styles.campoLabelSpaced]}>OBSERVAÇÕES (OPCIONAL)</Text>
+            <Text style={[styles.campoLabel, styles.campoLabelSpaced]}>{t('modal.notesLabel')}</Text>
             <TextInput
               value={notas}
               onChangeText={setNotas}
-              placeholder="O que você estava fazendo? Como se sentiu?"
+              placeholder={t('modal.notesPlaceholder')}
               placeholderTextColor={Colors.textTertiary}
               multiline
               style={styles.textInput}
             />
 
             <GradientButton
-              label="Salvar"
+              label={t('modal.save')}
               disabled={!gatilhoSelecionado || resistedSelecionado === null}
               onPress={salvarEntrada}
               style={styles.salvarBtn}
@@ -250,16 +253,16 @@ export default function DiarioScreen() {
       <Modal visible={insightsAberto} animationType="slide" presentationStyle="pageSheet">
         <ThemedView style={styles.modal}>
           <View style={styles.modalHeader}>
-            <ThemedText type="subtitle">Insights</ThemedText>
+            <ThemedText type="subtitle">{t('insights.modalTitle')}</ThemedText>
             <Pressable onPress={() => setInsightsAberto(false)}>
-              <ThemedText type="small" themeColor="textSecondary">Fechar</ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">{t('common:buttons.close')}</ThemedText>
             </Pressable>
           </View>
 
           <ScrollView contentContainerStyle={styles.modalContent}>
             {dados.entries.length === 0 ? (
               <ThemedText type="small" themeColor="textSecondary">
-                Registre batalhas no diário para ver seus padrões aqui.
+                {t('insights.empty')}
               </ThemedText>
             ) : (
               (() => {
@@ -268,34 +271,34 @@ export default function DiarioScreen() {
                 return (
                   <>
                     <View style={styles.insightCard}>
-                      <Text style={styles.cardLabel}>TAXA DE RESISTÊNCIA</Text>
+                      <Text style={styles.cardLabel}>{t('insights.resistanceRate')}</Text>
                       <Text style={styles.insightBig}>{taxa.percentResistencia}%</Text>
                       <ThemedText type="small" themeColor="textSecondary">
-                        {taxa.resistidas} resistidas · {taxa.recaidas} recaídas
+                        {t('insights.resistedRecaidas', { resistidas: taxa.resistidas, recaidas: taxa.recaidas })}
                       </ThemedText>
                     </View>
 
                     <View style={styles.insightCard}>
-                      <Text style={styles.cardLabel}>TENDÊNCIA SEMANAL</Text>
+                      <Text style={styles.cardLabel}>{t('insights.weeklyTrend')}</Text>
                       <ThemedText type="default">
-                        {tendencia.semanaAtual} registros nos últimos 7 dias
+                        {t('insights.weeklyTrendText', { atual: tendencia.semanaAtual })}
                         {tendencia.semanaAnterior > 0 || tendencia.semanaAtual > 0
-                          ? ` (${tendencia.semanaAnterior} na semana anterior)`
+                          ? t('insights.weeklyTrendPrev', { anterior: tendencia.semanaAnterior })
                           : ''}
                       </ThemedText>
                     </View>
 
                     <View style={styles.insightCard}>
-                      <Text style={[styles.cardLabel, styles.cardLabelMb]}>GATILHOS MAIS COMUNS</Text>
+                      <Text style={[styles.cardLabel, styles.cardLabelMb]}>{t('insights.commonTriggers')}</Text>
                       {gatilhos.map((g) => (
-                        <BarraInsight key={g.gatilho} label={g.gatilho} total={g.total} percent={g.percent} />
+                        <BarraInsight key={g.gatilho} label={t(`common:gatilhos.${g.gatilho}`, { defaultValue: g.gatilho })} total={g.total} percent={g.percent} />
                       ))}
                     </View>
 
                     <View style={styles.insightCard}>
-                      <Text style={[styles.cardLabel, styles.cardLabelMb]}>HORÁRIO MAIS RECORRENTE</Text>
+                      <Text style={[styles.cardLabel, styles.cardLabelMb]}>{t('insights.commonTime')}</Text>
                       {horarios.map((h) => (
-                        <BarraInsight key={h.label} label={h.label} total={h.total} percent={h.percent} />
+                        <BarraInsight key={h.key} label={t(`horarios.${h.key}`)} total={h.total} percent={h.percent} />
                       ))}
                     </View>
                   </>

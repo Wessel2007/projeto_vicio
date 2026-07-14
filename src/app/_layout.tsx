@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 
 import { IntroScreen } from '@/components/intro-screen';
 import { Colors } from '@/constants/theme';
+import { initI18n } from '@/i18n';
 import '@/notifications';
 
 const INTRO_DURATION_MS = 2000;
@@ -45,16 +46,21 @@ export default function RootLayout() {
   });
 
   const [showIntro, setShowIntro] = useState(true);
+  const [i18nReady, setI18nReady] = useState(false);
 
   useEffect(() => {
-    if (fontsLoaded) {
+    initI18n().then(() => setI18nReady(true));
+  }, []);
+
+  useEffect(() => {
+    if (fontsLoaded && i18nReady) {
       SplashScreen.hideAsync();
       const timer = setTimeout(() => setShowIntro(false), INTRO_DURATION_MS);
       return () => clearTimeout(timer);
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, i18nReady]);
 
-  if (!fontsLoaded) {
+  if (!fontsLoaded || !i18nReady) {
     return null;
   }
 

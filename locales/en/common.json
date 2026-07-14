@@ -1,0 +1,55 @@
+{
+  "loading": "Loading...",
+  "tabs": {
+    "home": "Home",
+    "diario": "Journal",
+    "conquistas": "Ranks",
+    "perfil": "Profile"
+  },
+  "buttons": {
+    "continue": "Continue",
+    "back": "Back",
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save"
+  },
+  "ranks": {
+    "Recruta": "Recruit",
+    "Aprendiz": "Apprentice",
+    "Guerreiro": "Warrior",
+    "Guardião": "Guardian",
+    "Espartano": "Spartan",
+    "Monge": "Monk",
+    "Mestre": "Master",
+    "Lenda": "Legend",
+    "Imortal": "Immortal"
+  },
+  "gatilhos": {
+    "Tédio": "Boredom",
+    "Solidão": "Loneliness",
+    "Estresse": "Stress",
+    "Ansiedade": "Anxiety",
+    "Conflito / Briga": "Conflict / Argument",
+    "Cansaço": "Fatigue",
+    "Redes sociais": "Social media",
+    "Álcool ou outras substâncias": "Alcohol or other substances",
+    "Excesso de tempo livre": "Too much free time",
+    "Notificações / celular": "Notifications / phone"
+  },
+  "paywall": {
+    "title": "PRO Feature",
+    "message": "{{recurso}} is exclusive to the PRO plan. Subscribe to unlock it."
+  },
+  "notifications": {
+    "dailyReminderTitle": "🔥 Your discipline today",
+    "dailyReminderBody": "Your quote of the day and your rank are waiting for you. Open FORJA.",
+    "channelName": "Daily reminders"
+  },
+  "dates": {
+    "weekdaysShort": ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
+    "monthsShort": ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+    "today": "TODAY",
+    "yesterday": "YESTERDAY",
+    "weekRulerInitials": ["T", "W", "T", "F", "S", "S", "M"]
+  }
+}

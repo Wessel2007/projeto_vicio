@@ -1,0 +1,98 @@
+{
+  "progress": {
+    "eyebrow": "The forge is heating up"
+  },
+  "buttons": {
+    "start": "Start my journey",
+    "forge": "Forge",
+    "continue": "Continue",
+    "forging": "Forging...",
+    "back": "Back"
+  },
+  "step1": {
+    "wordmark": "FORJA",
+    "title": "You're about to forge a new version of yourself",
+    "subtitle": "Before we start, a few quick questions to shape your journey.",
+    "privacyTitle": "Your data is private",
+    "privacyText": "Your answers are stored only on this device — never sent, synced, or shared with anyone. Your safety is always FORJA's top priority."
+  },
+  "step2": {
+    "title": "Your starting point",
+    "subtitle": "How many days have you been relapse-free?",
+    "hint": "If you're just starting out, leave it at 0."
+  },
+  "step3": {
+    "title": "Which behavior do you want to work on?"
+  },
+  "step4": {
+    "title": "How long has this been bothering you?"
+  },
+  "step5": {
+    "title": "How urgent is this for you right now?"
+  },
+  "step6": {
+    "title": "Which situations tend to be your triggers?",
+    "subtitle": "Select as many as apply. This helps the app suggest more precise actions in tough moments.",
+    "otherLabel": "Another situation (optional)",
+    "otherPlaceholder": "Describe it in your own words..."
+  },
+  "step7": {
+    "title": "What do you want to transform in your life?",
+    "subtitle": "Choose up to 3 — this helps personalize your journey."
+  },
+  "step8": {
+    "title": "How do you prefer to be motivated?"
+  },
+  "step9": {
+    "title": "Which achievement do you want to feel first?"
+  },
+  "step10": {
+    "title": "Almost there",
+    "subtitle": "A daily reminder helps keep the habit going. You can change this later in Profile.",
+    "reminderLabel": "Daily reminder",
+    "reminderTime": "Get your quote of the day at 8am"
+  },
+  "comportamento": {
+    "conteudo_adulto": "Compulsive consumption of adult content",
+    "masturbacao_compulsiva": "Compulsive masturbation",
+    "ambos": "Both",
+    "prefiro_nao_dizer": "I'd rather not say right now"
+  },
+  "tempoIncomoda": {
+    "menos_6_meses": "Less than 6 months",
+    "alguns_anos": "A few years",
+    "a_vida_toda": "My whole life"
+  },
+  "importancia": {
+    "urgente": { "label": "Urgent", "description": "I need to change now, I can't take it anymore" },
+    "alta": { "label": "High", "description": "It's my number one priority" },
+    "moderada": { "label": "Moderate", "description": "I want to improve, but it's not everything yet" },
+    "exploracao": { "label": "Exploring", "description": "I'm just testing the waters for now" }
+  },
+  "motivo": {
+    "saude_mental": "Mental health",
+    "controle_da_vida": "Regain control",
+    "saude_fisica": "Physical health",
+    "relacionamentos": "Relationships",
+    "vida_espiritual": "Spiritual life",
+    "autoestima": "Self-esteem and pride",
+    "produtividade": "Productivity and focus",
+    "sono_e_energia": "Sleep and energy",
+    "financas": "Finances",
+    "outro": "Other"
+  },
+  "estilo": {
+    "direto": { "label": "Direct and challenging", "description": "Quotes that push and confront. Like David Goggins." },
+    "acolhedor": { "label": "Warm and gentle", "description": "Quotes that support with compassion, without heavy pressure." }
+  },
+  "marco": {
+    "primeiras_24h": "First 24 hours",
+    "fim_de_semana": "Surviving the weekend",
+    "uma_semana": "Completing a full week",
+    "um_mes": "A month of discipline",
+    "dizer_nao": "Learning to say \"no\" to the trigger",
+    "superar_recorde": "Beating my current record",
+    "acordar_em_paz": "Waking up at peace for the first time",
+    "outro": "Other"
+  }
+}

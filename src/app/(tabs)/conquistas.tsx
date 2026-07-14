@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
@@ -18,7 +19,6 @@ import { ThemedView } from '@/components/themed-view';
 import { CONQUISTAS_SECRETAS } from '@/constants/conquistas-secretas';
 import { FREE_MAX_RANK_INDEX, NIVEIS, NivelPatente } from '@/constants/gamification';
 import { getPatenteBadge } from '@/constants/patente-badges';
-import { PATENTE_DESCRICOES } from '@/constants/patente-descricoes';
 import { PATENTE_THEMES } from '@/constants/patente-themes';
 import { Accent, Colors, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
@@ -36,14 +36,15 @@ const GRUPOS = NIVEIS.reduce<{ nome: string; niveis: NivelPatente[]; minIdx: num
   return acc;
 }, []);
 
-function faixaDias(niveis: NivelPatente[]): string {
+function faixaDias(niveis: NivelPatente[], t: (key: string, options?: Record<string, unknown>) => string): string {
   const primeiro = niveis[0];
   const ultimo = niveis[niveis.length - 1];
-  if (primeiro.sublevel === null) return `${primeiro.minDias}+ dias`;
-  return `${primeiro.minDias}–${ultimo.minDias} dias`;
+  if (primeiro.sublevel === null) return t('daysRangeNoCeiling', { min: primeiro.minDias });
+  return t('daysRange', { min: primeiro.minDias, max: ultimo.minDias });
 }
 
 export default function PatentesScreen() {
+  const { t } = useTranslation(['achievements', 'common']);
   const { dados, derivado, carregando } = useAppData();
 
   const ember = useSharedValue(0.5);
@@ -83,7 +84,7 @@ export default function PatentesScreen() {
   if (carregando || !dados || !derivado) {
     return (
       <ThemedView style={styles.loading}>
-        <ThemedText>Carregando...</ThemedText>
+        <ThemedText>{t('common:loading')}</ThemedText>
       </ThemedView>
     );
   }
@@ -97,7 +98,7 @@ export default function PatentesScreen() {
   const auraCor = (PATENTE_THEMES[dados.patenteTheme] ?? PATENTE_THEMES.ouro).cor;
 
   const proxLabel = patente.proxNivel
-    ? `${patente.proxNivel.nome}${patente.proxNivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.proxNivel.sublevel - 1]}` : ''}`
+    ? `${t(`common:ranks.${patente.proxNivel.nome}`)}${patente.proxNivel.sublevel ? ` ${SUBLEVEL_LABEL[patente.proxNivel.sublevel - 1]}` : ''}`
     : null;
   const faltamDias = patente.proxNivel ? Math.max(0, patente.proxNivel.minDias - dias) : 0;
 
@@ -105,8 +106,8 @@ export default function PatentesScreen() {
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safe} edges={['top']}>
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          <Text style={styles.eyebrow}>JORNADA DO GUERREIRO</Text>
-          <ThemedText type="title" style={styles.titulo}>Patentes</ThemedText>
+          <Text style={styles.eyebrow}>{t('eyebrowJourney')}</Text>
+          <ThemedText type="title" style={styles.titulo}>{t('title')}</ThemedText>
 
           {/* Hero: patente atual */}
           <Animated.View entering={FadeIn.duration(450)} style={styles.hero}>
@@ -115,8 +116,8 @@ export default function PatentesScreen() {
               <View style={[styles.heroRing, { borderColor: auraCor + '5A' }]} />
               <Image source={getPatenteBadge(nomeAtual, sublevelAtual)} style={styles.heroBadge} resizeMode="contain" />
             </Animated.View>
-            <ThemedText type="subtitle" style={styles.heroNome}>{nomeAtual}{sublevelLabelAtual}</ThemedText>
-            <Text style={styles.heroStats}>{totalXP} XP · {streakDias} dias de streak</Text>
+            <ThemedText type="subtitle" style={styles.heroNome}>{t(`common:ranks.${nomeAtual}`)}{sublevelLabelAtual}</ThemedText>
+            <Text style={styles.heroStats}>{t('xpAndStreak', { xp: totalXP, dias: streakDias })}</Text>
             <View style={styles.heroTrack}>
               <Animated.View style={[styles.heroFill, heroFillStyle]}>
                 <LinearGradient
@@ -129,10 +130,10 @@ export default function PatentesScreen() {
             </View>
             <Text style={styles.heroProx}>
               {proxLabel
-                ? `${faltamDias} dias para ${proxLabel}`
+                ? t('daysUntilNext', { dias: faltamDias, proximo: proxLabel })
                 : patente.bloqueadoPorPlano
-                  ? 'Teto do Free — assine o PRO para continuar'
-                  : 'Nível máximo atingido'}
+                  ? t('freeCap')
+                  : t('maxLevel')}
             </Text>
           </Animated.View>
 
@@ -182,16 +183,16 @@ export default function PatentesScreen() {
                   <View style={styles.tierTextos}>
                     <View style={styles.tierNomeRow}>
                       <Text style={[styles.tierNome, isAtual && styles.tierNomeAtual, !alcancado && styles.tierNomeLocked]}>
-                        {grupo.nome}
+                        {t(`common:ranks.${grupo.nome}`)}
                       </Text>
-                      {isAtual && <Text style={styles.voceAqui}> · VOCÊ ESTÁ AQUI</Text>}
+                      {isAtual && <Text style={styles.voceAqui}>{t('youAreHere')}</Text>}
                     </View>
                     <Text style={[styles.tierFaixa, isAtual && styles.tierFaixaAtual]}>
-                      {faixaDias(grupo.niveis)}
-                      {totalmente ? ' · concluída' : isAtual ? ' · em forja' : ''}
+                      {faixaDias(grupo.niveis, t)}
+                      {totalmente ? t('completed') : isAtual ? t('inProgress') : ''}
                     </Text>
                     {alcancado && (
-                      <Text style={styles.tierDescricao}>{PATENTE_DESCRICOES[grupo.nome]}</Text>
+                      <Text style={styles.tierDescricao}>{t(`descricoes.${grupo.nome}`)}</Text>
                     )}
                   </View>
 
@@ -235,9 +236,9 @@ export default function PatentesScreen() {
                       style={styles.gatePro}>
                       <Ionicons name="star" size={18} color={Accent.bronze} />
                       <View style={styles.gateTextos}>
-                        <Text style={styles.gateTitulo}>Forja avançada · PRO</Text>
+                        <Text style={styles.gateTitulo}>{t('proGate.title')}</Text>
                         <Text style={styles.gateTexto}>
-                          Do Guardião ao Imortal — 6 patentes e 351 dias de jornada.
+                          {t('proGate.text')}
                         </Text>
                       </View>
                     </LinearGradient>
@@ -249,7 +250,7 @@ export default function PatentesScreen() {
 
           {/* Conquistas secretas */}
           <View style={styles.secretasHeader}>
-            <Text style={styles.eyebrow}>CONQUISTAS SECRETAS</Text>
+            <Text style={styles.eyebrow}>{t('secrets.eyebrow')}</Text>
             <Text style={styles.secretasContagem}>
               {secretasDesbloqueadas.size}/{CONQUISTAS_SECRETAS.length}
             </Text>
@@ -271,10 +272,10 @@ export default function PatentesScreen() {
                       />
                     </View>
                     <Text style={[styles.secretaNome, !desbloqueada && styles.secretaNomeBloqueada]}>
-                      {desbloqueada ? c.nome : '???'}
+                      {desbloqueada ? t(`secretas.${c.id}.nome`) : t('secrets.locked')}
                     </Text>
                     <Text style={styles.secretaDescricao} numberOfLines={3}>
-                      {desbloqueada ? c.descricao : 'Conquista secreta — continue para descobrir.'}
+                      {desbloqueada ? t(`secretas.${c.id}.descricao`) : t('secrets.lockedText')}
                     </Text>
                   </View>
                 </Animated.View>

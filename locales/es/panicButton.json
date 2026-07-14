@@ -1,0 +1,68 @@
+{
+  "sosLabel": "NECESITO AYUDA",
+  "breathing": {
+    "cycle": "CICLO {{atual}} DE {{total}}",
+    "instruction": "Respira con la brasa.\nInhala cuando se expande, exhala cuando se contrae.",
+    "skip": "Saltar respiración",
+    "phases": { "inspire": "Inhala", "hold": "Sostén", "exhale": "Exhala" }
+  },
+  "trigger": {
+    "eyebrow": "ANTES DE ACTUAR",
+    "title": "¿Qué estás sintiendo?",
+    "subtitle": "Identificar el detonante es el primer paso para vencerlo.",
+    "continue": "Continuar"
+  },
+  "action": {
+    "eyebrowIdentified": "DETONANTE IDENTIFICADO",
+    "title": "Haz esto ahora",
+    "instruction": "Haz la acción primero. Cuando termines, vuelve aquí — la ola pasará.",
+    "toolMeditation": "Meditación",
+    "toolPlaylist": "Playlist",
+    "toolContact": "Contacto",
+    "proTag": "·PRO",
+    "resistButton": "Resistí — registrar victoria",
+    "relapsedLink": "Recaí esta vez",
+    "exitLink": "Salir sin registrar"
+  },
+  "victory": {
+    "eyebrow": "OTRO GOLPE DE MARTILLO",
+    "title": "Victoria forjada",
+    "text": "Cada vez que resistes, construyes quién quieres ser. Esto quedó guardado en tu diario.",
+    "backButton": "Volver a la forja"
+  },
+  "tools": {
+    "meditationTitle": "Meditación guiada",
+    "playlistTitle": "Playlist de enfoque",
+    "contactTitle": "Contacto rápido",
+    "close": "Cerrar",
+    "meditationText": "Cierra los ojos, si puedes. Siente el peso de tu cuerpo apoyado donde estás. Percibe el aire entrando y saliendo, sin forzar nada. El deseo que sientes ahora es una ola: sube, alcanza un pico y siempre baja — aunque no hagas nada. No necesitas actuar ahora. Solo necesitas esperar a que la ola pase. Repite mentalmente: esto va a pasar, y yo elijo quién soy.",
+    "listenButton": "Escuchar narración",
+    "playlistHint": "Se abre en una app externa (Spotify o YouTube).",
+    "playlists": {
+      "deepFocus": "Enfoque profundo",
+      "lofi": "Lo-fi para estudiar",
+      "calm": "Música tranquila",
+      "instrumental": "Instrumental sin letra (YouTube)"
+    },
+    "noContact": "Ningún contacto guardado. Regístralo en Perfil > Contacto de confianza.",
+    "defaultContactName": "Tu contacto de confianza",
+    "callNow": "Llamar ahora",
+    "sendMessage": "Enviar mensaje",
+    "noContactAlertTitle": "Ningún contacto guardado",
+    "noContactAlertMessage": "Registra un contacto de confianza en Perfil > Contacto de confianza."
+  },
+  "paywallReason": "Las herramientas expandidas del botón de pánico",
+  "gatilhoAcoes": {
+    "Tédio": "Haz 20 flexiones ahora mismo. El movimiento cambia el estado mental.",
+    "Solidão": "Llama a alguien — un amigo, un familiar. La conexión real es más fuerte que cualquier adicción.",
+    "Estresse": "Sal a caminar durante 10 minutos. Ambiente nuevo, mente nueva.",
+    "Ansiedade": "Escribe 3 cosas por las que estás agradecido en este momento.",
+    "Conflito / Briga": "Aléjate de la situación por 15 minutos antes de reaccionar.",
+    "Cansaço": "Duerme. El cansancio es el detonante más subestimado. Tu cerebro necesita recuperarse.",
+    "Redes sociais": "Pon el celular en otra habitación por 30 minutos. Literalmente — la distancia física funciona.",
+    "Álcool ou outras substâncias": "Bebe un vaso de agua ahora y llama a alguien de confianza.",
+    "Excesso de tempo livre": "Abre tu agenda y planea la próxima hora con una tarea concreta.",
+    "Notificações / celular": "Activa el modo no molestar y coloca el celular boca abajo.",
+    "default": "Respira hondo, cuenta hasta 10 y recuerda por qué empezaste."
+  }
+}

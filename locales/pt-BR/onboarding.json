@@ -1,0 +1,98 @@
+{
+  "progress": {
+    "eyebrow": "A forja esquenta"
+  },
+  "buttons": {
+    "start": "Começar minha jornada",
+    "forge": "Forjar",
+    "continue": "Continuar",
+    "forging": "Forjando...",
+    "back": "Voltar"
+  },
+  "step1": {
+    "wordmark": "FORJA",
+    "title": "Você está prestes a forjar uma nova versão de si",
+    "subtitle": "Antes de começar, algumas perguntas rápidas para moldar sua jornada.",
+    "privacyTitle": "Seus dados são privados",
+    "privacyText": "Suas respostas ficam salvas só neste aparelho — nunca são enviadas, sincronizadas ou compartilhadas com ninguém. Sua segurança é sempre a prioridade número um do Forja."
+  },
+  "step2": {
+    "title": "Seu ponto de partida",
+    "subtitle": "Há quantos dias você está sem recair?",
+    "hint": "Se acabou de começar, deixe 0."
+  },
+  "step3": {
+    "title": "Qual comportamento você quer trabalhar?"
+  },
+  "step4": {
+    "title": "Há quanto tempo isso te incomoda?"
+  },
+  "step5": {
+    "title": "Qual o tamanho da sua urgência agora?"
+  },
+  "step6": {
+    "title": "Quais situações costumam ser seus gatilhos?",
+    "subtitle": "Selecione quantas fizerem sentido. Isso ajuda o app a sugerir ações mais certeiras no momento difícil.",
+    "otherLabel": "Outra situação (opcional)",
+    "otherPlaceholder": "Descreva com suas palavras..."
+  },
+  "step7": {
+    "title": "O que você quer transformar na sua vida?",
+    "subtitle": "Escolha até 3 — isso ajuda a personalizar sua jornada."
+  },
+  "step8": {
+    "title": "Como você prefere ser motivado?"
+  },
+  "step9": {
+    "title": "Qual conquista você mais quer sentir primeiro?"
+  },
+  "step10": {
+    "title": "Quase lá",
+    "subtitle": "Um lembrete diário ajuda a manter o hábito. Você pode mudar isso depois em Perfil.",
+    "reminderLabel": "Lembrete diário",
+    "reminderTime": "Receba sua frase do dia às 8h"
+  },
+  "comportamento": {
+    "conteudo_adulto": "Consumo compulsivo de conteúdo adulto",
+    "masturbacao_compulsiva": "Masturbação compulsiva",
+    "ambos": "Os dois",
+    "prefiro_nao_dizer": "Prefiro não dizer agora"
+  },
+  "tempoIncomoda": {
+    "menos_6_meses": "Menos de 6 meses",
+    "alguns_anos": "Alguns anos",
+    "a_vida_toda": "A vida toda"
+  },
+  "importancia": {
+    "urgente": { "label": "Urgente", "description": "Preciso mudar agora, não aguento mais" },
+    "alta": { "label": "Alta", "description": "É a minha prioridade número um" },
+    "moderada": { "label": "Moderada", "description": "Quero melhorar, mas ainda não é tudo" },
+    "exploracao": { "label": "Exploração", "description": "Só estou testando o terreno por enquanto" }
+  },
+  "motivo": {
+    "saude_mental": "Saúde mental",
+    "controle_da_vida": "Retomar o controle",
+    "saude_fisica": "Saúde física",
+    "relacionamentos": "Relacionamentos",
+    "vida_espiritual": "Vida espiritual",
+    "autoestima": "Autoestima e orgulho",
+    "produtividade": "Produtividade e foco",
+    "sono_e_energia": "Sono e energia",
+    "financas": "Finanças",
+    "outro": "Outro"
+  },
+  "estilo": {
+    "direto": { "label": "Direto e desafiador", "description": "Frases que cobram e confrontam. Tipo David Goggins." },
+    "acolhedor": { "label": "Acolhedor e gentil", "description": "Frases que acompanham com compaixão, sem cobrança pesada." }
+  },
+  "marco": {
+    "primeiras_24h": "Primeiras 24 horas",
+    "fim_de_semana": "Sobreviver ao fim de semana",
+    "uma_semana": "Completar uma semana inteira",
+    "um_mes": "Um mês de disciplina",
+    "dizer_nao": "Aprender a dizer \"não\" no gatilho",
+    "superar_recorde": "Superar meu recorde atual",
+    "acordar_em_paz": "Acordar em paz pela primeira vez",
+    "outro": "Outro"
+  }
+}

@@ -3,6 +3,7 @@ import DateTimePicker, { type DateTimePickerEvent } from '@react-native-communit
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, type Href } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, Image, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -13,6 +14,7 @@ import { getPatenteBadge } from '@/constants/patente-badges';
 import { PATENTE_THEMES } from '@/constants/patente-themes';
 import { Accent, Colors, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
+import { AppLanguage, mudarIdioma, SUPPORTED_LANGUAGES } from '@/i18n';
 import { agendarLembreteDiario, ativarNotificacoes, desativarNotificacoes } from '@/notifications';
 import { PatenteTheme } from '@/types';
 import { mostrarPaywall } from '@/utils/paywall';
@@ -25,15 +27,17 @@ const AURA_GRADIENTES: Record<PatenteTheme, [string, string, string]> = {
 };
 
 function SecaoHeader({ titulo, pro }: { titulo: string; pro?: boolean }) {
+  const { t } = useTranslation('profile');
   return (
     <Text style={styles.secaoHeader}>
       {titulo}
-      {pro ? <Text style={styles.proTag}> · PRO</Text> : null}
+      {pro ? <Text style={styles.proTag}> {t('settings.proTag')}</Text> : null}
     </Text>
   );
 }
 
 export default function PerfilScreen() {
+  const { t, i18n } = useTranslation('profile');
   const { dados, atualizar, resetarApp, derivado, carregando } = useAppData();
   const [mostrarSeletorHora, setMostrarSeletorHora] = useState(false);
   const [custoTexto, setCustoTexto] = useState('');
@@ -51,7 +55,7 @@ export default function PerfilScreen() {
   if (carregando || !dados || !derivado) {
     return (
       <ThemedView style={styles.loading}>
-        <ThemedText>Carregando...</ThemedText>
+        <ThemedText>{t('common:loading')}</ThemedText>
       </ThemedView>
     );
   }
@@ -62,7 +66,7 @@ export default function PerfilScreen() {
 
   function abrirSeletorHora() {
     if (!dados?.isPro) {
-      mostrarPaywall('Personalizar o horário do lembrete');
+      mostrarPaywall(t('settings.reminderPaywallReason'));
       return;
     }
     setMostrarSeletorHora(true);
@@ -70,7 +74,7 @@ export default function PerfilScreen() {
 
   function abrirRelatorio() {
     if (!dados?.isPro) {
-      mostrarPaywall('O relatório de progresso');
+      mostrarPaywall(t('reportContent.reportPaywallReason'));
       return;
     }
     router.push('/relatorio' as Href);
@@ -78,7 +82,7 @@ export default function PerfilScreen() {
 
   function abrirFrases() {
     if (!dados?.isPro) {
-      mostrarPaywall('A biblioteca completa de frases');
+      mostrarPaywall(t('reportContent.libraryPaywallReason'));
       return;
     }
     router.push('/frases' as Href);
@@ -86,7 +90,7 @@ export default function PerfilScreen() {
 
   function selecionarAura(tema: PatenteTheme) {
     if (!dados?.isPro) {
-      mostrarPaywall('A personalização visual da patente');
+      mostrarPaywall(t('aura.paywallReason'));
       return;
     }
     atualizar({ patenteTheme: tema });
@@ -98,8 +102,8 @@ export default function PerfilScreen() {
       const permitido = await ativarNotificacoes(dados.dailyQuoteHour, dados.dailyQuoteMinute);
       if (!permitido) {
         Alert.alert(
-          'Permissão negada',
-          'Para receber lembretes diários, permita notificações para o FORJA nas configurações do aparelho.',
+          t('settings.permissionDeniedTitle'),
+          t('settings.permissionDeniedMessage'),
         );
         return;
       }
@@ -108,6 +112,10 @@ export default function PerfilScreen() {
       await desativarNotificacoes();
       atualizar({ notificationsEnabled: false });
     }
+  }
+
+  async function selecionarIdioma(idioma: AppLanguage) {
+    await mudarIdioma(idioma);
   }
 
   function onMudarHora(event: DateTimePickerEvent, date?: Date) {
@@ -136,11 +144,11 @@ export default function PerfilScreen() {
 
   function confirmarReset() {
     Alert.alert(
-      'Apagar todos os dados',
-      'Isso vai remover seu histórico, streak e XP permanentemente. Esta ação não pode ser desfeita.',
+      t('data.deleteAllConfirmTitle'),
+      t('data.deleteAllConfirmMessage'),
       [
-        { text: 'Cancelar', style: 'cancel' },
-        { text: 'Apagar tudo', style: 'destructive', onPress: () => resetarApp() },
+        { text: t('data.cancel'), style: 'cancel' },
+        { text: t('data.deleteAllConfirm'), style: 'destructive', onPress: () => resetarApp() },
       ],
     );
   }
@@ -149,14 +157,14 @@ export default function PerfilScreen() {
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safe} edges={['top']}>
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          <ThemedText type="title">Perfil</ThemedText>
+          <ThemedText type="title">{t('title')}</ThemedText>
 
           {/* Cartão de guerreiro */}
           <Pressable style={styles.guerreiroCard} onPress={() => router.push('/streak-detalhe' as Href)}>
             <Image source={getPatenteBadge(patente.nome, patente.sublevel)} style={styles.guerreiroBadge} resizeMode="contain" />
             <View style={styles.guerreiroTextos}>
-              <Text style={styles.guerreiroNome}>{patente.nome}{sublevelLabel}</Text>
-              <Text style={styles.guerreiroStats}>{derivado.streakDias} dias de streak · {derivado.totalXP} XP</Text>
+              <Text style={styles.guerreiroNome}>{t(`common:ranks.${patente.nome}`)}{sublevelLabel}</Text>
+              <Text style={styles.guerreiroStats}>{t('warrior.streakAndXp', { dias: derivado.streakDias, xp: derivado.totalXP })}</Text>
             </View>
             <Ionicons name="chevron-forward" size={18} color={Accent.tabInativa} />
           </Pressable>
@@ -166,8 +174,8 @@ export default function PerfilScreen() {
             <View style={styles.proAtivoCard}>
               <Ionicons name="star" size={15} color={Accent.bronze} />
               <View style={styles.proAtivoTextos}>
-                <Text style={styles.proAtivoTitulo}>FORJA PRO ativo</Text>
-                <Text style={styles.proBenef}>Você tem acesso a todas as patentes e ferramentas.</Text>
+                <Text style={styles.proAtivoTitulo}>{t('pro.activeTitle')}</Text>
+                <Text style={styles.proBenef}>{t('pro.activeBenef')}</Text>
               </View>
             </View>
           ) : (
@@ -178,20 +186,20 @@ export default function PerfilScreen() {
               style={styles.proCard}>
               <View style={styles.proTopo}>
                 <Ionicons name="star" size={15} color={Accent.bronze} />
-                <Text style={styles.proMarca}>FORJA PRO</Text>
+                <Text style={styles.proMarca}>{t('pro.brand')}</Text>
               </View>
-              <Text style={styles.proTitulo}>Forje até o Imortal</Text>
-              <Text style={styles.proBenef}>Patentes além do Guerreiro · insights do diário · ferramentas de crise expandidas</Text>
+              <Text style={styles.proTitulo}>{t('pro.title')}</Text>
+              <Text style={styles.proBenef}>{t('pro.benef')}</Text>
               <View style={styles.proRodape}>
-                <Text style={styles.proPreco}>R$ 9,90/mês</Text>
-                <Pressable onPress={() => mostrarPaywall('O plano FORJA PRO')}>
+                <Text style={styles.proPreco}>{t('pro.price')}</Text>
+                <Pressable onPress={() => mostrarPaywall(t('pro.paywallReason'))}>
                   <LinearGradient
                     colors={[Accent.ctaStart, Accent.ctaMid, Accent.ctaEnd]}
                     locations={Accent.ctaLocations}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={styles.assinarBtn}>
-                    <Text style={styles.assinarTxt}>Assinar</Text>
+                    <Text style={styles.assinarTxt}>{t('pro.subscribe')}</Text>
                   </LinearGradient>
                 </Pressable>
               </View>
@@ -199,10 +207,10 @@ export default function PerfilScreen() {
           )}
 
           {/* Configurações */}
-          <SecaoHeader titulo="CONFIGURAÇÕES" />
+          <SecaoHeader titulo={t('sections.settings')} />
           <View style={styles.card}>
             <View style={styles.linha}>
-              <Text style={styles.linhaLabel}>Notificações diárias</Text>
+              <Text style={styles.linhaLabel}>{t('settings.dailyNotifications')}</Text>
               <GradientSwitch value={dados.notificationsEnabled} onValueChange={alternarNotificacoes} />
             </View>
             {dados.notificationsEnabled && (
@@ -210,7 +218,7 @@ export default function PerfilScreen() {
                 <View style={styles.divisor} />
                 <Pressable onPress={abrirSeletorHora} style={styles.linha}>
                   <Text style={styles.linhaLabel}>
-                    Horário do lembrete <Text style={styles.proTag}>·PRO</Text>
+                    {t('settings.reminderTime')} <Text style={styles.proTag}>{t('settings.proTag')}</Text>
                   </Text>
                   <View style={styles.valorRow}>
                     <Text style={styles.valorMono}>{horaFormatada}</Text>
@@ -232,7 +240,7 @@ export default function PerfilScreen() {
           )}
 
           {/* Aura da patente */}
-          <SecaoHeader titulo="AURA DA PATENTE" pro />
+          <SecaoHeader titulo={t('sections.aura')} pro />
           <View style={styles.card}>
             <View style={styles.aurasRow}>
               {(Object.keys(PATENTE_THEMES) as PatenteTheme[]).map((tema) => {
@@ -248,7 +256,7 @@ export default function PerfilScreen() {
                       end={{ x: 1, y: 1 }}
                       style={styles.auraSwatch}
                     />
-                    <Text style={[styles.auraLabel, sel && styles.auraLabelSel]}>{PATENTE_THEMES[tema].nome}</Text>
+                    <Text style={[styles.auraLabel, sel && styles.auraLabelSel]}>{t(`auraNames.${tema}`)}</Text>
                   </Pressable>
                 );
               })}
@@ -256,13 +264,13 @@ export default function PerfilScreen() {
           </View>
 
           {/* Contato de confiança */}
-          <SecaoHeader titulo="CONTATO DE CONFIANÇA" pro />
+          <SecaoHeader titulo={t('sections.contact')} pro />
           <View style={[styles.card, styles.cardPad]}>
-            <Text style={styles.ajuda}>Usado no contato rápido do botão de pânico.</Text>
+            <Text style={styles.ajuda}>{t('contact.help')}</Text>
             <TextInput
               value={dados.accountabilityName}
               onChangeText={(v) => atualizar({ accountabilityName: v })}
-              placeholder="Nome (ex.: João — irmão)"
+              placeholder={t('contact.namePlaceholder')}
               placeholderTextColor={Colors.textTertiary}
               editable={dados.isPro}
               style={styles.input}
@@ -270,7 +278,7 @@ export default function PerfilScreen() {
             <TextInput
               value={dados.accountabilityPhone}
               onChangeText={(v) => atualizar({ accountabilityPhone: v })}
-              placeholder="Telefone (com DDD)"
+              placeholder={t('contact.phonePlaceholder')}
               placeholderTextColor={Colors.textTertiary}
               keyboardType="phone-pad"
               editable={dados.isPro}
@@ -279,16 +287,15 @@ export default function PerfilScreen() {
           </View>
 
           {/* Economia estimada */}
-          <SecaoHeader titulo="ECONOMIA" />
+          <SecaoHeader titulo={t('sections.savings')} />
           <View style={[styles.card, styles.cardPad]}>
             <Text style={styles.ajuda}>
-              Opcional. Usado só para calcular quanto tempo e dinheiro você economiza durante a
-              streak atual — nenhum dos dois campos é obrigatório.
+              {t('savings.help')}
             </Text>
             <TextInput
               value={custoTexto}
               onChangeText={onMudarCusto}
-              placeholder="Custo médio do hábito (opcional)"
+              placeholder={t('savings.costPlaceholder')}
               placeholderTextColor={Colors.textTertiary}
               keyboardType="decimal-pad"
               style={styles.input}
@@ -298,21 +305,21 @@ export default function PerfilScreen() {
                 onPress={() => atualizar({ habitoCustoPeriodo: 'dia' })}
                 style={[styles.periodoChip, dados.habitoCustoPeriodo === 'dia' && styles.periodoChipSel]}>
                 <Text style={[styles.periodoTexto, dados.habitoCustoPeriodo === 'dia' && styles.periodoTextoSel]}>
-                  por dia
+                  {t('savings.perDay')}
                 </Text>
               </Pressable>
               <Pressable
                 onPress={() => atualizar({ habitoCustoPeriodo: 'semana' })}
                 style={[styles.periodoChip, dados.habitoCustoPeriodo === 'semana' && styles.periodoChipSel]}>
                 <Text style={[styles.periodoTexto, dados.habitoCustoPeriodo === 'semana' && styles.periodoTextoSel]}>
-                  por semana
+                  {t('savings.perWeek')}
                 </Text>
               </Pressable>
             </View>
             <TextInput
               value={tempoTexto}
               onChangeText={onMudarTempo}
-              placeholder="Tempo médio por dia, em minutos (opcional)"
+              placeholder={t('savings.timePlaceholder')}
               placeholderTextColor={Colors.textTertiary}
               keyboardType="number-pad"
               style={styles.input}
@@ -320,49 +327,67 @@ export default function PerfilScreen() {
           </View>
 
           {/* Relatório e conteúdo PRO */}
-          <SecaoHeader titulo="RELATÓRIO E CONTEÚDO" pro />
+          <SecaoHeader titulo={t('sections.reportContent')} pro />
           <View style={styles.card}>
             <Pressable onPress={abrirRelatorio} style={styles.linha}>
-              <Text style={styles.linhaLabel}>Relatório de progresso</Text>
+              <Text style={styles.linhaLabel}>{t('reportContent.report')}</Text>
               <Ionicons name="chevron-forward" size={16} color={Accent.tabInativa} />
             </Pressable>
             <View style={styles.divisor} />
             <Pressable onPress={abrirFrases} style={styles.linha}>
-              <Text style={styles.linhaLabel}>Biblioteca de frases</Text>
+              <Text style={styles.linhaLabel}>{t('reportContent.library')}</Text>
               <Ionicons name="chevron-forward" size={16} color={Accent.tabInativa} />
             </Pressable>
           </View>
 
-          {/* Dados */}
-          <SecaoHeader titulo="DADOS" />
+          {/* Idioma */}
+          <SecaoHeader titulo={t('sections.language')} />
           <View style={styles.card}>
-            <Pressable style={styles.linha} onPress={() => Alert.alert('Exportar', 'Em breve: exportação dos seus dados em JSON.')}>
-              <Text style={styles.linhaLabel}>Exportar meus dados</Text>
+            <View style={styles.aurasRow}>
+              {SUPPORTED_LANGUAGES.map((idioma) => {
+                const sel = i18n.language === idioma;
+                return (
+                  <Pressable
+                    key={idioma}
+                    onPress={() => selecionarIdioma(idioma)}
+                    style={[styles.aura, sel && styles.auraSel]}>
+                    <Text style={[styles.auraLabel, sel && styles.auraLabelSel]}>{t(`language.${idioma}`)}</Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </View>
+
+          {/* Dados */}
+          <SecaoHeader titulo={t('sections.data')} />
+          <View style={styles.card}>
+            <Pressable style={styles.linha} onPress={() => Alert.alert(t('data.exportAlertTitle'), t('data.exportAlertMessage'))}>
+              <Text style={styles.linhaLabel}>{t('data.export')}</Text>
               <Ionicons name="download-outline" size={16} color={Accent.tabInativa} />
             </Pressable>
             <View style={styles.divisor} />
             <Pressable style={styles.linha} onPress={confirmarReset}>
-              <Text style={[styles.linhaLabel, styles.destrutivo]}>Apagar todos os dados</Text>
+              <Text style={[styles.linhaLabel, styles.destrutivo]}>{t('data.deleteAll')}</Text>
             </Pressable>
           </View>
 
           {/* Sobre */}
-          <SecaoHeader titulo="SOBRE" />
+          <SecaoHeader titulo={t('sections.about')} />
           <View style={styles.card}>
             <Pressable onPress={() => router.push('/termos-de-servico' as Href)} style={styles.linha}>
-              <Text style={styles.linhaLabel}>Termos de Serviço</Text>
+              <Text style={styles.linhaLabel}>{t('about.terms')}</Text>
               <Ionicons name="chevron-forward" size={16} color={Accent.tabInativa} />
             </Pressable>
           </View>
 
           {/* Modo de teste */}
-          <SecaoHeader titulo="MODO DE TESTE" />
+          <SecaoHeader titulo={t('sections.testMode')} />
           <View style={[styles.card, styles.cardPad]}>
             <View style={styles.linhaCompacta}>
               <View style={styles.testeTextos}>
-                <Text style={styles.linhaLabel}>Simular assinatura PRO</Text>
+                <Text style={styles.linhaLabel}>{t('testMode.simulatePro')}</Text>
                 <Text style={styles.ajuda}>
-                  Sem cobrança real — a loja de pagamento ainda não está integrada. Use para testar as features PRO.
+                  {t('testMode.help')}
                 </Text>
               </View>
               <GradientSwitch value={dados.isPro} onValueChange={(v) => atualizar({ isPro: v })} />
@@ -370,7 +395,7 @@ export default function PerfilScreen() {
           </View>
 
           <Text style={styles.rodape}>
-            O Forja é um apoio de hábito — não substitui acompanhamento terapêutico profissional.
+            {t('footer')}
           </Text>
         </ScrollView>
       </SafeAreaView>

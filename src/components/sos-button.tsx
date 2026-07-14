@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, {
   Easing,
@@ -16,6 +17,7 @@ import { Accent, Fonts } from '@/constants/theme';
  * exclusivamente a este componente.
  */
 export function SosButton({ onPress, style }: { onPress?: () => void; style?: StyleProp<ViewStyle> }) {
+  const { t } = useTranslation('panicButton');
   const breathe = useSharedValue(0);
   const dot = useSharedValue(0.5);
 
@@ -37,7 +39,7 @@ export function SosButton({ onPress, style }: { onPress?: () => void; style?: St
     <Pressable onPress={onPress} style={style}>
       <Animated.View style={[styles.pill, glowStyle]}>
         <Animated.View style={[styles.dot, dotStyle]} />
-        <Text style={styles.label}>PRECISO DE AJUDA</Text>
+        <Text style={styles.label}>{t('sosLabel')}</Text>
       </Animated.View>
     </Pressable>
   );
