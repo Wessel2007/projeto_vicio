@@ -4,6 +4,8 @@ import { useEffect, useMemo } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
+  FadeIn,
+  FadeInDown,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
@@ -52,6 +54,25 @@ export default function PatentesScreen() {
     transform: [{ scale: 0.96 + ember.value * 0.08 }],
   }));
 
+  // Respiração sutil do badge de patente atual.
+  const breathe = useSharedValue(0);
+  useEffect(() => {
+    breathe.value = withRepeat(withTiming(1, { duration: 2600, easing: Easing.inOut(Easing.ease) }), -1, true);
+  }, [breathe]);
+  const breatheStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: 1 + breathe.value * 0.025 }],
+  }));
+
+  // Barra de progresso enche do zero até o valor atual ao entrar na tela.
+  const progressoAlvo = useSharedValue(0);
+  useEffect(() => {
+    progressoAlvo.value = withTiming(derivado?.patente.progressoPercent ?? 0, {
+      duration: 800,
+      easing: Easing.out(Easing.cubic),
+    });
+  }, [derivado?.patente.progressoPercent, progressoAlvo]);
+  const heroFillStyle = useAnimatedStyle(() => ({ width: `${progressoAlvo.value}%` }));
+
   const secretasDesbloqueadas = useMemo(() => {
     if (!dados || !derivado) return new Set<string>();
     const ctx = { dados, streakDias: derivado.streakDias, totalXP: derivado.totalXP };
@@ -87,21 +108,23 @@ export default function PatentesScreen() {
           <ThemedText type="title" style={styles.titulo}>Patentes</ThemedText>
 
           {/* Hero: patente atual */}
-          <View style={styles.hero}>
-            <View style={[styles.heroGlow, { backgroundColor: auraCor }]} />
-            <View style={styles.heroBadgeWrap}>
+          <Animated.View entering={FadeIn.duration(450)} style={styles.hero}>
+            <Animated.View style={[styles.heroGlow, { backgroundColor: auraCor }, emberStyle]} />
+            <Animated.View style={[styles.heroBadgeWrap, breatheStyle]}>
               <View style={[styles.heroRing, { borderColor: auraCor + '5A' }]} />
               <Image source={getPatenteBadge(nomeAtual, sublevelAtual)} style={styles.heroBadge} resizeMode="contain" />
-            </View>
+            </Animated.View>
             <ThemedText type="subtitle" style={styles.heroNome}>{nomeAtual}{sublevelLabelAtual}</ThemedText>
             <Text style={styles.heroStats}>{totalXP} XP · {streakDias} dias de streak</Text>
             <View style={styles.heroTrack}>
-              <LinearGradient
-                colors={[Accent.brasa, Accent.brasaClara]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={[styles.heroFill, { width: `${patente.progressoPercent}%` }]}
-              />
+              <Animated.View style={[styles.heroFill, heroFillStyle]}>
+                <LinearGradient
+                  colors={[Accent.brasa, Accent.brasaClara]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={StyleSheet.absoluteFillObject}
+                />
+              </Animated.View>
             </View>
             <Text style={styles.heroProx}>
               {proxLabel
@@ -110,7 +133,7 @@ export default function PatentesScreen() {
                   ? 'Teto do Free — assine o PRO para continuar'
                   : 'Nível máximo atingido'}
             </Text>
-          </View>
+          </Animated.View>
 
           {/* Trilha vertical */}
           <View style={styles.trilha}>
@@ -190,7 +213,7 @@ export default function PatentesScreen() {
               );
 
               return (
-                <View key={grupo.nome}>
+                <Animated.View key={grupo.nome} entering={FadeInDown.delay(gi * 55).duration(380)}>
                   {isAtual ? (
                     <View style={styles.rowAtual}>{linha}</View>
                   ) : (
@@ -215,7 +238,7 @@ export default function PatentesScreen() {
                       </View>
                     </LinearGradient>
                   )}
-                </View>
+                </Animated.View>
               );
             })}
           </View>
@@ -228,10 +251,13 @@ export default function PatentesScreen() {
             </Text>
           </View>
           <View style={styles.secretasGrid}>
-            {CONQUISTAS_SECRETAS.map((c) => {
+            {CONQUISTAS_SECRETAS.map((c, ci) => {
               const desbloqueada = secretasDesbloqueadas.has(c.id);
               return (
-                <View key={c.id} style={[styles.secretaCard, !desbloqueada && styles.secretaCardBloqueada]}>
+                <Animated.View
+                  key={c.id}
+                  entering={FadeInDown.delay(Math.min(ci, 10) * 45).duration(340)}
+                  style={[styles.secretaCard, !desbloqueada && styles.secretaCardBloqueada]}>
                   <View style={[styles.secretaIconeWrap, desbloqueada && styles.secretaIconeWrapAceso]}>
                     <Ionicons
                       name={(desbloqueada ? c.icone : 'lock-closed') as keyof typeof Ionicons.glyphMap}
@@ -245,7 +271,7 @@ export default function PatentesScreen() {
                   <Text style={styles.secretaDescricao} numberOfLines={3}>
                     {desbloqueada ? c.descricao : 'Conquista secreta — continue para descobrir.'}
                   </Text>
-                </View>
+                </Animated.View>
               );
             })}
           </View>
@@ -293,7 +319,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop: 14,
   },
-  heroFill: { height: '100%', borderRadius: 3 },
+  heroFill: { height: '100%', borderRadius: 3, overflow: 'hidden' },
   heroProx: { fontFamily: Fonts.body.semibold, fontSize: 11.5, color: 'rgba(232,180,88,0.75)', marginTop: 8 },
 
   trilha: { marginTop: Spacing.two },
