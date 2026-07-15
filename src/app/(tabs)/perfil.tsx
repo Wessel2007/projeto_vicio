@@ -40,6 +40,7 @@ export default function PerfilScreen() {
   const { t, i18n } = useTranslation('profile');
   const { dados, atualizar, resetarApp, derivado, carregando } = useAppData();
   const [mostrarSeletorHora, setMostrarSeletorHora] = useState(false);
+  const [seletorIdiomaAberto, setSeletorIdiomaAberto] = useState(false);
   const [custoTexto, setCustoTexto] = useState('');
   const [tempoTexto, setTempoTexto] = useState('');
   const bufferEconomiaSincronizado = useRef(false);
@@ -346,19 +347,31 @@ export default function PerfilScreen() {
           {/* Idioma */}
           <SecaoHeader titulo={t('sections.language')} />
           <View style={styles.card}>
-            <View style={styles.aurasRow}>
-              {SUPPORTED_LANGUAGES.map((idioma) => {
-                const sel = i18n.language === idioma;
-                return (
-                  <Pressable
-                    key={idioma}
-                    onPress={() => selecionarIdioma(idioma)}
-                    style={[styles.aura, sel && styles.auraSel]}>
-                    <Text style={[styles.auraLabel, sel && styles.auraLabelSel]}>{t(`language.${idioma}`)}</Text>
-                  </Pressable>
-                );
-              })}
-            </View>
+            <Pressable onPress={() => setSeletorIdiomaAberto((v) => !v)} style={styles.linha}>
+              <Text style={styles.linhaLabel}>{t(`language.${i18n.language}`)}</Text>
+              <Ionicons name={seletorIdiomaAberto ? 'chevron-up' : 'chevron-down'} size={16} color={Accent.tabInativa} />
+            </Pressable>
+            {seletorIdiomaAberto && (
+              <>
+                <View style={styles.divisor} />
+                <View style={styles.aurasRow}>
+                  {SUPPORTED_LANGUAGES.map((idioma) => {
+                    const sel = i18n.language === idioma;
+                    return (
+                      <Pressable
+                        key={idioma}
+                        onPress={() => {
+                          selecionarIdioma(idioma);
+                          setSeletorIdiomaAberto(false);
+                        }}
+                        style={[styles.aura, sel && styles.auraSel]}>
+                        <Text style={[styles.auraLabel, sel && styles.auraLabelSel]}>{t(`language.${idioma}`)}</Text>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              </>
+            )}
           </View>
 
           {/* Dados */}
@@ -484,7 +497,7 @@ const styles = StyleSheet.create({
   divisor: { height: 1, backgroundColor: 'rgba(255,255,255,0.06)', marginHorizontal: 17 },
   destrutivo: { color: Accent.vermelhoSuave },
 
-  aurasRow: { flexDirection: 'row', gap: 12, padding: 16 },
+  aurasRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, padding: 16 },
   aura: {
     flex: 1,
     alignItems: 'center',

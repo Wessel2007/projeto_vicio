@@ -225,5 +225,5 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
 
-  sosWrap: { paddingHorizontal: 20, paddingBottom: Spacing.two, paddingTop: Spacing.two },
+  sosWrap: { paddingHorizontal: 20, paddingBottom: Spacing.two, paddingTop: Spacing.four, marginTop: Spacing.two },
 });

@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   },
   hero: { marginBottom: Spacing.three },
   heroIconWrap: { alignItems: 'center', justifyContent: 'center' },
-  heroIcon: { width: 48, height: 48 },
+  heroIcon: { width: 68, height: 68 },
   marca: {
     fontFamily: Fonts.display.bold,
     fontSize: 12,

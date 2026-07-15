@@ -28,7 +28,7 @@ export function SosButton({ onPress, style }: { onPress?: () => void; style?: St
 
   const glowStyle = useAnimatedStyle(() => ({
     shadowOpacity: breathe.value * 0.9,
-    shadowRadius: 8 + breathe.value * 18,
+    shadowRadius: 6 + breathe.value * 8,
   }));
   const dotStyle = useAnimatedStyle(() => ({
     opacity: 0.5 + dot.value * 0.5,

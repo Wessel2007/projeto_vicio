@@ -49,6 +49,12 @@ function buildMonthGrid(mesAtual: Date): (Date | null)[] {
   return celulas;
 }
 
+function buildWeekRows(celulas: (Date | null)[]): (Date | null)[][] {
+  const semanas: (Date | null)[][] = [];
+  for (let i = 0; i < celulas.length; i += 7) semanas.push(celulas.slice(i, i + 7));
+  return semanas;
+}
+
 type DiaStatus = 'futuro' | 'naoRastreado' | 'recaida' | 'limpo';
 
 function DayCell({ date, status }: { date: Date; status: DiaStatus }) {
@@ -77,6 +83,7 @@ export function StreakCalendar({ trackingStartDate, relapseDates }: StreakCalend
   );
   const inicioEfetivo = trackingStartDate ? new Date(trackingStartDate) : null;
   const celulas = useMemo(() => buildMonthGrid(mesAtual), [mesAtual]);
+  const semanas = useMemo(() => buildWeekRows(celulas), [celulas]);
   const hoje = new Date();
   const isMesAtualCorrente = sameMonth(mesAtual, hoje);
 
@@ -115,9 +122,13 @@ export function StreakCalendar({ trackingStartDate, relapseDates }: StreakCalend
       </View>
 
       <View style={styles.grid}>
-        {celulas.map((data, i) =>
-          data ? <DayCell key={i} date={data} status={statusDoDia(data)} /> : <View key={i} style={styles.dayCell} />,
-        )}
+        {semanas.map((semana, si) => (
+          <View key={si} style={styles.weekRow}>
+            {semana.map((data, i) =>
+              data ? <DayCell key={i} date={data} status={statusDoDia(data)} /> : <View key={i} style={styles.dayCell} />,
+            )}
+          </View>
+        ))}
       </View>
 
       <View style={styles.legenda}>
@@ -153,8 +164,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   grid: {
+    flexDirection: 'column',
+  },
+  weekRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
   },
   dayCell: {
     width: `${100 / 7}%`,
