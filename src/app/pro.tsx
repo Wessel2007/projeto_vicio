@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams, type Href } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AmbientGlow } from '@/components/ambient-glow';
@@ -14,6 +14,8 @@ import { ThemedView } from '@/components/themed-view';
 import { Accent, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
 import { comprarPlano, PLANOS, restaurarCompras, type PlanoId } from '@/services/assinatura';
+
+const ICONE_PRO = require('@/assets/images/icone_plano_pro.png');
 
 const BENEFICIOS: { key: string; icone: keyof typeof Ionicons.glyphMap }[] = [
   { key: 'ranks', icone: 'ribbon-outline' },
@@ -65,7 +67,7 @@ export default function ProScreen() {
 
           <BadgeHalo size={96} rings={2} style={styles.hero}>
             <View style={styles.heroIconWrap}>
-              <Ionicons name="star" size={34} color={Accent.bronze} />
+              <Image source={ICONE_PRO} style={styles.heroIcon} resizeMode="contain" />
             </View>
           </BadgeHalo>
 
@@ -197,6 +199,7 @@ const styles = StyleSheet.create({
   },
   hero: { marginBottom: Spacing.three },
   heroIconWrap: { alignItems: 'center', justifyContent: 'center' },
+  heroIcon: { width: 48, height: 48 },
   marca: {
     fontFamily: Fonts.display.bold,
     fontSize: 12,
