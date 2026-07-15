@@ -44,6 +44,38 @@ export function contarPorHorario(entries: TriggerEntry[]): ContagemHorario[] {
   return contagem.map((c) => ({ ...c, percent: Math.round((c.total / max) * 100) }));
 }
 
+const MIN_ENTRADAS_PADRAO_HORARIO = 5;
+
+export interface RiscoHorario {
+  inicioHora: number;
+  fimHora: number;
+  total: number;
+}
+
+/**
+ * Bloco de 2h (0-2, 2-4, ..., 22-24) com maior concentração de registros do
+ * Diário. Retorna null com menos de MIN_ENTRADAS_PADRAO_HORARIO entradas —
+ * ainda não há dado suficiente pra um padrão confiável (ver card "Horário de
+ * Risco" na Home).
+ */
+export function calcRiscoHorario(entries: TriggerEntry[]): RiscoHorario | null {
+  if (entries.length < MIN_ENTRADAS_PADRAO_HORARIO) return null;
+
+  const blocos = new Array(12).fill(0);
+  entries.forEach((e) => {
+    const hora = new Date(e.date).getHours();
+    blocos[Math.floor(hora / 2)] += 1;
+  });
+
+  let maxIdx = 0;
+  for (let i = 1; i < blocos.length; i++) {
+    if (blocos[i] > blocos[maxIdx]) maxIdx = i;
+  }
+  if (blocos[maxIdx] === 0) return null;
+
+  return { inicioHora: maxIdx * 2, fimHora: maxIdx * 2 + 2, total: blocos[maxIdx] };
+}
+
 export interface TaxaResistencia {
   resistidas: number;
   recaidas: number;

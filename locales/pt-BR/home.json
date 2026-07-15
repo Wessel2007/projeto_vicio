@@ -21,6 +21,12 @@
     "money": "economizados",
     "time": "de tempo livre"
   },
+  "riscoCard": {
+    "label": "HORÁRIO DE RISCO",
+    "prefix": "Seus momentos mais difíceis costumam ser entre",
+    "range": "{{inicio}}h–{{fim}}h",
+    "empty": "Continue registrando no Diário para desbloquear seus insights."
+  },
   "quotes": {
     "0": { "texto": "Você não tem controle sobre o que acontece com você, mas tem controle sobre como responde.", "autor": "Epicteto" },
     "1": { "texto": "O homem que conquista a si mesmo é maior do que aquele que conquista mil batalhas.", "autor": "Buda" },

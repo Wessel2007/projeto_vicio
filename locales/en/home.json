@@ -21,6 +21,12 @@
     "money": "saved",
     "time": "of free time"
   },
+  "riscoCard": {
+    "label": "RISK WINDOW",
+    "prefix": "Your toughest moments tend to happen between",
+    "range": "{{inicio}}h–{{fim}}h",
+    "empty": "Keep logging in the Journal to unlock your insights."
+  },
   "quotes": {
     "0": { "texto": "You have no control over what happens to you, but you do have control over how you respond.", "autor": "Epictetus" },
     "1": { "texto": "The man who conquers himself is greater than the one who conquers a thousand battles.", "autor": "Buddha" },

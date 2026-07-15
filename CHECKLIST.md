@@ -14,6 +14,11 @@
       no dispositivo)
 - [x] Tempo e dinheiro economizado na streak atual (opcional, configurável em
       Perfil; reseta junto com o streak na recaída)
+- [x] Card "Horário de Risco" na Home (`src/components/horario-risco-card.tsx`):
+      identifica o bloco de 2h com mais registros no Diário de Gatilhos
+      (`calcRiscoHorario` em `src/utils/insights.ts`); exige mínimo de 5
+      registros para exibir o padrão, senão mostra nudge "continue
+      registrando"
 - [ ] Widget de tela inicial (streak visível sem abrir o app)
 
 ## PRO (assinatura)

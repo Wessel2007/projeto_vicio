@@ -1,10 +1,12 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { router, type Href } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AmbientGlow } from '@/components/ambient-glow';
 import { EconomiaCard } from '@/components/economia-card';
+import { HorarioRiscoCard } from '@/components/horario-risco-card';
 import { ProgressRing } from '@/components/progress-ring';
 import { SosButton } from '@/components/sos-button';
 import { ThemedText } from '@/components/themed-text';
@@ -64,7 +66,7 @@ export default function HomeScreen() {
     <ThemedView style={styles.container}>
       <AmbientGlow blobs={HOME_GLOW} />
       <SafeAreaView style={styles.safe} edges={['top']}>
-        <View style={styles.content}>
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.headerData}>{t('header.eyebrow', { data: formatarCabecalhoData() })}</Text>
@@ -102,6 +104,9 @@ export default function HomeScreen() {
           {/* Economia na streak atual */}
           <EconomiaCard dinheiro={economia.dinheiro} minutos={economia.minutos} moedaCodigo={dados.moedaCodigo} />
 
+          {/* Horário de risco: bloco de 2h com mais gatilhos/recaídas registrados */}
+          <HorarioRiscoCard entries={dados.entries} />
+
           {/* Régua da semana */}
           <WeekRuler cumpridos={semana} hoje={hojeIdx} />
 
@@ -124,12 +129,16 @@ export default function HomeScreen() {
               <Text style={styles.fraseAutor}>{fraseAutor}</Text>
             </View>
           </View>
-        </View>
+        </ScrollView>
 
-        {/* SOS fixo acima da tab bar */}
-        <View style={styles.sosWrap}>
+        {/* SOS fixo acima da tab bar, sobreposto ao scroll com fade */}
+        <LinearGradient
+          colors={['rgba(13,11,9,0)', Colors.background]}
+          locations={[0, 0.55]}
+          style={styles.sosWrap}
+          pointerEvents="box-none">
           <SosButton onPress={() => router.push('/panico' as Href)} />
-        </View>
+        </LinearGradient>
       </SafeAreaView>
     </ThemedView>
   );
@@ -140,9 +149,9 @@ const styles = StyleSheet.create({
   loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   safe: { flex: 1 },
   content: {
-    flex: 1,
     paddingHorizontal: 22,
     paddingTop: Spacing.three,
+    paddingBottom: 130,
     gap: Spacing.three,
   },
 
@@ -225,5 +234,13 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
 
-  sosWrap: { paddingHorizontal: 20, paddingBottom: Spacing.two, paddingTop: Spacing.four, marginTop: Spacing.two },
+  sosWrap: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: 20,
+    paddingBottom: Spacing.two,
+    paddingTop: Spacing.four,
+  },
 });
