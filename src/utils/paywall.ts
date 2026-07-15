@@ -1,8 +1,6 @@
-import { Alert } from 'react-native';
+import { router, type Href } from 'expo-router';
 
-import i18n from '@/i18n';
-
-/** Alerta padrão exibido quando um usuário Free tenta usar um recurso PRO. */
+/** Abre a tela de upgrade PRO quando um usuário Free tenta usar um recurso PRO. */
 export function mostrarPaywall(recurso: string): void {
-  Alert.alert(i18n.t('common:paywall.title'), i18n.t('common:paywall.message', { recurso }));
+  router.push({ pathname: '/pro', params: { motivo: recurso } } as unknown as Href);
 }

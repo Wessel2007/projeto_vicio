@@ -7,6 +7,7 @@ import commonEn from '@/locales/en/common.json';
 import homeEn from '@/locales/en/home.json';
 import onboardingEn from '@/locales/en/onboarding.json';
 import panicButtonEn from '@/locales/en/panicButton.json';
+import paywallEn from '@/locales/en/paywall.json';
 import profileEn from '@/locales/en/profile.json';
 import triggerJournalEn from '@/locales/en/triggerJournal.json';
 
@@ -15,6 +16,7 @@ import commonEs from '@/locales/es/common.json';
 import homeEs from '@/locales/es/home.json';
 import onboardingEs from '@/locales/es/onboarding.json';
 import panicButtonEs from '@/locales/es/panicButton.json';
+import paywallEs from '@/locales/es/paywall.json';
 import profileEs from '@/locales/es/profile.json';
 import triggerJournalEs from '@/locales/es/triggerJournal.json';
 
@@ -23,6 +25,7 @@ import commonPtBR from '@/locales/pt-BR/common.json';
 import homePtBR from '@/locales/pt-BR/home.json';
 import onboardingPtBR from '@/locales/pt-BR/onboarding.json';
 import panicButtonPtBR from '@/locales/pt-BR/panicButton.json';
+import paywallPtBR from '@/locales/pt-BR/paywall.json';
 import profilePtBR from '@/locales/pt-BR/profile.json';
 import triggerJournalPtBR from '@/locales/pt-BR/triggerJournal.json';
 
@@ -43,6 +46,7 @@ export const NAMESPACES = [
   'triggerJournal',
   'achievements',
   'profile',
+  'paywall',
 ] as const;
 
 const resources = {
@@ -54,6 +58,7 @@ const resources = {
     triggerJournal: triggerJournalPtBR,
     achievements: achievementsPtBR,
     profile: profilePtBR,
+    paywall: paywallPtBR,
   },
   en: {
     common: commonEn,
@@ -63,6 +68,7 @@ const resources = {
     triggerJournal: triggerJournalEn,
     achievements: achievementsEn,
     profile: profileEn,
+    paywall: paywallEn,
   },
   es: {
     common: commonEs,
@@ -72,6 +78,7 @@ const resources = {
     triggerJournal: triggerJournalEs,
     achievements: achievementsEs,
     profile: profileEs,
+    paywall: paywallEs,
   },
 };
 

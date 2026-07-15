@@ -1,0 +1,35 @@
+{
+  "brand": "FORJA PRO",
+  "headline": "Leve sua disciplina além",
+  "subheadline": "Desbloqueie todo o caminho até Imortal — e as ferramentas que fazem a diferença nos momentos mais difíceis.",
+  "contextualReason": "Para desbloquear: {{motivo}}",
+  "benefits": {
+    "ranks": "Patentes completas de Guerreiro até Imortal, com conquistas extras e secretas",
+    "quotes": "Histórico completo de frases, biblioteca pesquisável e áudio narrado",
+    "insights": "Insights do diário de gatilhos (horários e padrões recorrentes)",
+    "panicTools": "Botão de pânico expandido: meditação guiada, playlist de foco e contato de confiança",
+    "themes": "Temas visuais alternativos para o badge da sua patente",
+    "report": "Relatório semanal e mensal do seu progresso",
+    "reminder": "Notificação diária com horário totalmente customizável"
+  },
+  "plans": {
+    "monthly": "Mensal",
+    "annual": "Anual",
+    "annualSavings": "Economize 37%"
+  },
+  "cta": {
+    "subscribe": "Assinar",
+    "processing": "Processando...",
+    "restorePurchases": "Restaurar compras"
+  },
+  "restore": {
+    "title": "Restaurar compras",
+    "success": "Sua assinatura foi restaurada.",
+    "notFound": "Nenhuma compra anterior foi encontrada nesta conta."
+  },
+  "legal": {
+    "autoRenew": "A assinatura renova automaticamente ao fim de cada período e pode ser cancelada a qualquer momento nas configurações da loja do seu aparelho.",
+    "terms": "Termos de Serviço"
+  },
+  "footer": "O Forja é um apoio de hábito — não substitui acompanhamento terapêutico profissional."
+}

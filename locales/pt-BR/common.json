@@ -36,10 +36,6 @@
     "Excesso de tempo livre": "Excesso de tempo livre",
     "Notificações / celular": "Notificações / celular"
   },
-  "paywall": {
-    "title": "Recurso PRO",
-    "message": "{{recurso}} é exclusivo do plano PRO. Assine para desbloquear."
-  },
   "notifications": {
     "dailyReminderTitle": "🔥 Sua disciplina de hoje",
     "dailyReminderBody": "Sua frase do dia e sua patente estão te esperando. Abra o FORJA.",

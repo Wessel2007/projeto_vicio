@@ -1,0 +1,35 @@
+{
+  "brand": "FORJA PRO",
+  "headline": "Take your discipline further",
+  "subheadline": "Unlock the whole path to Immortal — and the tools that make the difference in the hardest moments.",
+  "contextualReason": "To unlock: {{motivo}}",
+  "benefits": {
+    "ranks": "Full ranks from Warrior to Immortal, with extra and secret achievements",
+    "quotes": "Full quote history, searchable library and narrated audio",
+    "insights": "Trigger journal insights (recurring times and patterns)",
+    "panicTools": "Expanded panic button: guided meditation, focus playlist and accountability contact",
+    "themes": "Alternative visual themes for your rank badge",
+    "report": "Weekly and monthly progress report",
+    "reminder": "Daily reminder with a fully customizable time"
+  },
+  "plans": {
+    "monthly": "Monthly",
+    "annual": "Annual",
+    "annualSavings": "Save 37%"
+  },
+  "cta": {
+    "subscribe": "Subscribe",
+    "processing": "Processing...",
+    "restorePurchases": "Restore purchases"
+  },
+  "restore": {
+    "title": "Restore purchases",
+    "success": "Your subscription was restored.",
+    "notFound": "No previous purchase was found on this account."
+  },
+  "legal": {
+    "autoRenew": "The subscription renews automatically at the end of each period and can be cancelled anytime in your device store settings.",
+    "terms": "Terms of Service"
+  },
+  "footer": "Forja is a habit-support tool — it does not replace professional therapeutic care."
+}

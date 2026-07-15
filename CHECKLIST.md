@@ -34,7 +34,7 @@
 - [ ] Modo "SOS gatilho específico" (pergunta contexto situacional: casa/trabalho/cama)
 - [ ] Guia de configuração de bloqueadores de conteúdo (Screen Time, apps terceiros)
 - [ ] Modo "recaída controlada" (fluxo de reflexão pós-recaída, não só reset)
-- [ ] Tela de upgrade Free → Pro (copy definida, ver seção abaixo)
+- [x] Tela de upgrade Free → Pro (ver seção Monetização / Loja abaixo)
 
 ## Internacionalização (i18n)
 
@@ -52,10 +52,11 @@
       `locales/en/triggerJournal.json` (e os respectivos `locales/es/...`)
       antes de ir para produção — inclui script de respiração, meditação
       guiada e sugestões de ação por gatilho
-- [ ] i18n das telas adicionadas depois do MVP original: `celebracao.tsx`,
-      `frases.tsx`, `patente-revelada.tsx`, `plano-gerado.tsx`,
-      `reflexao-recaida.tsx`, `relatorio.tsx`, `streak-detalhe.tsx`,
-      `termos-de-servico.tsx` — hoje ainda hardcoded em pt-BR
+- [ ] i18n das telas adicionadas depois do MVP original — `plano-gerado.tsx`
+      já usa `t()` amplamente; `celebracao.tsx`, `patente-revelada.tsx` e
+      `reflexao-recaida.tsx` têm uso parcial/residual; `frases.tsx`,
+      `relatorio.tsx`, `streak-detalhe.tsx` e `termos-de-servico.tsx` estão
+      100% hardcoded em pt-BR ainda
 - [ ] Localização de metadata da App Store/Play Store (nome, descrição,
       screenshots, palavras-chave) para en/es
 - [ ] Testar o app em dispositivo real (iOS/Android) com o idioma do sistema
@@ -75,13 +76,33 @@
 
 ## Monetização / Loja
 
-- [ ] Definir preço mensal e anual (referência: R$14,90-29,90/mês ou R$99-149/ano)
-- [ ] Copy da tela de upgrade: "Leve sua disciplina além" / "Desbloqueie todo o caminho até Imortal — e as ferramentas que fazem a diferença nos momentos mais difíceis"
+- [x] Definir preço mensal e anual (R$19,90/mês ou R$149,90/ano, ~37% de desconto)
+- [x] Copy da tela de upgrade: "Leve sua disciplina além" / "Desbloqueie todo o caminho até Imortal — e as ferramentas que fazem a diferença nos momentos mais difíceis"
+- [x] Tela de upgrade Free → Pro implementada visualmente (`src/app/pro.tsx`,
+      substitui o antigo `Alert` genérico de `mostrarPaywall()`; a compra é
+      simulada localmente via `src/services/assinatura.ts`, isolado para
+      trocar pela integração real depois)
 - [ ] Integração de pagamento in-app (RevenueCat ou nativo Apple/Google)
 
-## Pendências de planejamento (fora do código, mas bloqueiam decisões)
+## Build e submissão nas lojas
 
-- [ ] Nome/marca do app
-- [ ] Identidade visual (cores, ícone — lembrar das restrições da App Store: nada de referência visual/textual explícita a pornografia)
+- [x] Nome/marca do app — FORJA (`app.json`)
+- [x] Paleta e redesign visual (dark-fogo, animações, Reanimated — ver `design/`)
+- [ ] `bundleIdentifier` (iOS) e `package` (Android) — ainda não definidos em
+      `app.json`, bloqueiam rodar `eas build`
+- [ ] `eas.json` — nenhum perfil de build configurado ainda
+- [ ] Assets de ícone/splash finais — `icon.png`, `favicon.png`,
+      `android-icon-foreground.png` e `splash-icon.png` são hoje o mesmo
+      arquivo placeholder reaproveitado (idênticos em bytes); o ícone
+      adaptativo do Android precisa de imagem própria respeitando a safe-zone
 - [ ] Categoria de submissão nas lojas (Saúde e Fitness / Estilo de vida)
-- [ ] Termos de uso e política de privacidade
+- [x] Termos de Serviço (tela `termos-de-servico.tsx`, conteúdo em
+      `src/constants/termos.ts`)
+- [ ] Política de Privacidade dedicada — hoje só é *referenciada* dentro dos
+      Termos, sem documento/tela ou URL própria; App Store Connect e Play
+      Console exigem uma URL pública de política de privacidade no
+      formulário de submissão
+- [ ] Screenshots e descrição de loja (copy de marketing — lembrar das
+      restrições da App Store: nada de referência visual/textual explícita
+      a pornografia)
+- [ ] Testes em dispositivo real (iOS/Android)

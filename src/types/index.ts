@@ -45,6 +45,9 @@ export interface AppData {
   // teste, existe para já gatear as features PRO na UI (patente acima de
   // Guerreiro, horário customizável, biblioteca de frases, insights, etc).
   isPro: boolean;
+  // Plano assinado (mensal/anual) quando isPro é true; null se nunca assinou
+  // ou se isPro foi ligado pelo toggle de simulação em Perfil > modo de teste.
+  proPlano: 'mensal' | 'anual' | null;
   // Personalização visual do badge de patente (feature PRO).
   patenteTheme: PatenteTheme;
   // Contato de confiança para o "contato rápido" do botão de pânico (PRO).
@@ -74,6 +77,7 @@ export const DEFAULT_DATA: AppData = {
   dailyQuoteHour: 8,
   dailyQuoteMinute: 0,
   isPro: false,
+  proPlano: null,
   patenteTheme: 'ouro' as PatenteTheme,
   accountabilityName: '',
   accountabilityPhone: '',

@@ -1,0 +1,35 @@
+{
+  "brand": "FORJA PRO",
+  "headline": "Lleva tu disciplina más allá",
+  "subheadline": "Desbloquea todo el camino hasta Inmortal — y las herramientas que marcan la diferencia en los momentos más difíciles.",
+  "contextualReason": "Para desbloquear: {{motivo}}",
+  "benefits": {
+    "ranks": "Rangos completos de Guerrero hasta Inmortal, con logros extra y secretos",
+    "quotes": "Historial completo de frases, biblioteca con búsqueda y audio narrado",
+    "insights": "Insights del diario de gatillos (horarios y patrones recurrentes)",
+    "panicTools": "Botón de pánico ampliado: meditación guiada, playlist de enfoque y contacto de confianza",
+    "themes": "Temas visuales alternativos para la insignia de tu rango",
+    "report": "Informe semanal y mensual de tu progreso",
+    "reminder": "Notificación diaria con horario totalmente personalizable"
+  },
+  "plans": {
+    "monthly": "Mensual",
+    "annual": "Anual",
+    "annualSavings": "Ahorra 37%"
+  },
+  "cta": {
+    "subscribe": "Suscribirme",
+    "processing": "Procesando...",
+    "restorePurchases": "Restaurar compras"
+  },
+  "restore": {
+    "title": "Restaurar compras",
+    "success": "Tu suscripción fue restaurada.",
+    "notFound": "No se encontró ninguna compra anterior en esta cuenta."
+  },
+  "legal": {
+    "autoRenew": "La suscripción se renueva automáticamente al final de cada período y puede cancelarse en cualquier momento en la configuración de la tienda de tu dispositivo.",
+    "terms": "Términos de Servicio"
+  },
+  "footer": "Forja es un apoyo de hábito — no sustituye el acompañamiento terapéutico profesional."
+}

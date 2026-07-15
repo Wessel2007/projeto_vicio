@@ -174,7 +174,10 @@ export default function PerfilScreen() {
             <View style={styles.proAtivoCard}>
               <Ionicons name="star" size={15} color={Accent.bronze} />
               <View style={styles.proAtivoTextos}>
-                <Text style={styles.proAtivoTitulo}>{t('pro.activeTitle')}</Text>
+                <Text style={styles.proAtivoTitulo}>
+                  {t('pro.activeTitle')}
+                  {dados.proPlano ? ` · ${t(`pro.activePlan${dados.proPlano === 'anual' ? 'Anual' : 'Mensal'}`)}` : ''}
+                </Text>
                 <Text style={styles.proBenef}>{t('pro.activeBenef')}</Text>
               </View>
             </View>

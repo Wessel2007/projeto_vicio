@@ -6,10 +6,12 @@
   "pro": {
     "activeTitle": "FORJA PRO ativo",
     "activeBenef": "Você tem acesso a todas as patentes e ferramentas.",
+    "activePlanMensal": "Plano mensal",
+    "activePlanAnual": "Plano anual",
     "brand": "FORJA PRO",
     "title": "Forje até o Imortal",
     "benef": "Patentes além do Guerreiro · insights do diário · ferramentas de crise expandidas",
-    "price": "R$ 9,90/mês",
+    "price": "R$ 19,90/mês",
     "subscribe": "Assinar",
     "paywallReason": "O plano FORJA PRO"
   },

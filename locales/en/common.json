@@ -36,10 +36,6 @@
     "Excesso de tempo livre": "Too much free time",
     "Notificações / celular": "Notifications / phone"
   },
-  "paywall": {
-    "title": "PRO Feature",
-    "message": "{{recurso}} is exclusive to the PRO plan. Subscribe to unlock it."
-  },
   "notifications": {
     "dailyReminderTitle": "🔥 Your discipline today",
     "dailyReminderBody": "Your quote of the day and your rank are waiting for you. Open FORJA.",

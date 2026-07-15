@@ -6,10 +6,12 @@
   "pro": {
     "activeTitle": "FORJA PRO activo",
     "activeBenef": "Tienes acceso a todos los rangos y herramientas.",
+    "activePlanMensal": "Plan mensual",
+    "activePlanAnual": "Plan anual",
     "brand": "FORJA PRO",
     "title": "Forja tu camino hasta Inmortal",
     "benef": "Rangos más allá de Guerrero · insights del diario · herramientas de crisis ampliadas",
-    "price": "R$9.90/mes",
+    "price": "R$19.90/mes",
     "subscribe": "Suscribirme",
     "paywallReason": "El plan FORJA PRO"
   },

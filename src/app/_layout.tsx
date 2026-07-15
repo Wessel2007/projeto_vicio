@@ -99,6 +99,13 @@ export default function RootLayout() {
             }}
           />
           <Stack.Screen
+            name="pro"
+            options={{
+              presentation: 'fullScreenModal',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
             name="celebracao"
             options={{
               presentation: 'fullScreenModal',

@@ -6,10 +6,12 @@
   "pro": {
     "activeTitle": "FORJA PRO active",
     "activeBenef": "You have access to all ranks and tools.",
+    "activePlanMensal": "Monthly plan",
+    "activePlanAnual": "Annual plan",
     "brand": "FORJA PRO",
     "title": "Forge your way to Immortal",
     "benef": "Ranks beyond Warrior · journal insights · expanded crisis tools",
-    "price": "R$9.90/month",
+    "price": "R$19.90/month",
     "subscribe": "Subscribe",
     "paywallReason": "The FORJA PRO plan"
   },
