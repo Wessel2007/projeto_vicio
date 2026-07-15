@@ -89,14 +89,138 @@ export function calcTaxaResistencia(entries: TriggerEntry[]): TaxaResistencia {
   return { resistidas, recaidas, percentResistencia };
 }
 
-/** Nº de entradas nos últimos 7 dias vs. nos 7 dias anteriores a esses. */
-export function calcTendenciaSemanal(entries: TriggerEntry[]): { semanaAtual: number; semanaAnterior: number } {
+/** Nº de entradas nos últimos `dias` dias vs. nos `dias` dias anteriores a esses. */
+export function calcTendenciaPeriodo(entries: TriggerEntry[], dias: number): { atual: number; anterior: number } {
   const agora = Date.now();
   const DIA = 24 * 60 * 60 * 1000;
-  const semanaAtual = entries.filter((e) => agora - new Date(e.date).getTime() <= 7 * DIA).length;
-  const semanaAnterior = entries.filter((e) => {
+  const atual = entries.filter((e) => agora - new Date(e.date).getTime() <= dias * DIA).length;
+  const anterior = entries.filter((e) => {
     const diff = agora - new Date(e.date).getTime();
-    return diff > 7 * DIA && diff <= 14 * DIA;
+    return diff > dias * DIA && diff <= dias * 2 * DIA;
   }).length;
-  return { semanaAtual, semanaAnterior };
+  return { atual, anterior };
+}
+
+export interface ComparativoResistencia {
+  atual: TaxaResistencia;
+  anterior: TaxaResistencia;
+}
+
+/** Taxa de resistência na janela atual de `dias` dias vs. na janela de `dias` dias imediatamente anterior. */
+export function calcComparativoResistencia(entries: TriggerEntry[], dias: number): ComparativoResistencia {
+  const agora = Date.now();
+  const DIA = 24 * 60 * 60 * 1000;
+  const atual = entries.filter((e) => agora - new Date(e.date).getTime() <= dias * DIA);
+  const anterior = entries.filter((e) => {
+    const diff = agora - new Date(e.date).getTime();
+    return diff > dias * DIA && diff <= dias * 2 * DIA;
+  });
+  return { atual: calcTaxaResistencia(atual), anterior: calcTaxaResistencia(anterior) };
+}
+
+export interface TaxaResistenciaPorGatilho {
+  gatilho: string;
+  total: number;
+  percentResistencia: number;
+}
+
+const MIN_ENTRADAS_POR_GATILHO = 2;
+
+/**
+ * Taxa de resistência isolada por gatilho, do pior pro melhor desempenho.
+ * Gatilhos com menos de MIN_ENTRADAS_POR_GATILHO registros ficam de fora —
+ * evita sugerir um padrão baseado numa única ocorrência.
+ */
+export function calcTaxaResistenciaPorGatilho(entries: TriggerEntry[]): TaxaResistenciaPorGatilho[] {
+  const porGatilho = new Map<string, TriggerEntry[]>();
+  entries.forEach((e) => {
+    const lista = porGatilho.get(e.trigger) ?? [];
+    lista.push(e);
+    porGatilho.set(e.trigger, lista);
+  });
+  return [...porGatilho.entries()]
+    .filter(([, lista]) => lista.length >= MIN_ENTRADAS_POR_GATILHO)
+    .map(([gatilho, lista]) => ({
+      gatilho,
+      total: lista.length,
+      percentResistencia: calcTaxaResistencia(lista).percentResistencia,
+    }))
+    .sort((a, b) => a.percentResistencia - b.percentResistencia);
+}
+
+export interface PadraoGatilhoHorario {
+  gatilho: string;
+  inicioHora: number;
+  fimHora: number;
+  total: number;
+}
+
+const MIN_OCORRENCIAS_PADRAO = 2;
+
+/**
+ * Combinações gatilho + bloco de 2h que se repetem, da mais pra menos
+ * frequente — cruza os dois eixos que hoje aparecem separados (ver
+ * `contarGatilhos` e `calcRiscoHorario`). Só entram combinações com pelo
+ * menos MIN_OCORRENCIAS_PADRAO registros.
+ */
+export function calcPadroesGatilhoHorario(entries: TriggerEntry[]): PadraoGatilhoHorario[] {
+  const contagem = new Map<string, { gatilho: string; bloco: number; total: number }>();
+  entries.forEach((e) => {
+    const bloco = Math.floor(new Date(e.date).getHours() / 2);
+    const chave = `${e.trigger}#${bloco}`;
+    const atual = contagem.get(chave);
+    if (atual) atual.total += 1;
+    else contagem.set(chave, { gatilho: e.trigger, bloco, total: 1 });
+  });
+  return [...contagem.values()]
+    .filter((p) => p.total >= MIN_OCORRENCIAS_PADRAO)
+    .map((p) => ({ gatilho: p.gatilho, inicioHora: p.bloco * 2, fimHora: p.bloco * 2 + 2, total: p.total }))
+    .sort((a, b) => b.total - a.total);
+}
+
+export interface TaxaPorDiaSemana {
+  diaSemana: number;
+  total: number;
+  percentResistencia: number;
+}
+
+const MIN_ENTRADAS_DIA_SEMANA = 2;
+
+/**
+ * Taxa de resistência agrupada por dia da semana (0 = domingo, ver
+ * `Date.getDay()`). Só entram dias com pelo menos MIN_ENTRADAS_DIA_SEMANA
+ * registros — o `StreakCalendar` (free) já mostra as datas cruas, aqui o
+ * valor é a agregação por dia da semana.
+ */
+export function calcTaxaPorDiaSemana(entries: TriggerEntry[]): TaxaPorDiaSemana[] {
+  const porDia: TriggerEntry[][] = Array.from({ length: 7 }, () => []);
+  entries.forEach((e) => porDia[new Date(e.date).getDay()].push(e));
+  return porDia
+    .map((lista, diaSemana) => ({
+      diaSemana,
+      total: lista.length,
+      percentResistencia: calcTaxaResistencia(lista).percentResistencia,
+    }))
+    .filter((d) => d.total >= MIN_ENTRADAS_DIA_SEMANA);
+}
+
+export interface Recomendacao {
+  gatilho: string;
+  janela: { inicioHora: number; fimHora: number } | null;
+}
+
+/** Combina o gatilho mais frequente com o padrão de horário mais forte dele, se houver, numa recomendação acionável. */
+export function gerarRecomendacao(
+  gatilhos: ContagemGatilho[],
+  padroes: PadraoGatilhoHorario[],
+): Recomendacao | null {
+  const topGatilho = gatilhos[0];
+  if (!topGatilho) return null;
+  const padraoDoTopGatilho = padroes.find((p) => p.gatilho === topGatilho.gatilho);
+  return {
+    gatilho: topGatilho.gatilho,
+    janela: padraoDoTopGatilho
+      ? { inicioHora: padraoDoTopGatilho.inicioHora, fimHora: padraoDoTopGatilho.fimHora }
+      : null,
+  };
 }

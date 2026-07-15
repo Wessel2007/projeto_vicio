@@ -9,7 +9,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Accent, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
-import { calcTaxaResistencia } from '@/utils/insights';
+import { calcComparativoResistencia, calcTaxaResistencia } from '@/utils/insights';
 import { TriggerEntry } from '@/types';
 
 function entradasNosUltimosDias(entries: TriggerEntry[], dias: number): TriggerEntry[] {
@@ -58,6 +58,9 @@ export default function RelatorioScreen() {
   const entradasMes = entradasNosUltimosDias(dados.entries, 30);
   const taxaSemana = calcTaxaResistencia(entradasSemana);
   const taxaMes = calcTaxaResistencia(entradasMes);
+  const comparativo = calcComparativoResistencia(dados.entries, 30);
+  const anteriorTotal = comparativo.anterior.resistidas + comparativo.anterior.recaidas;
+  const variacao = comparativo.atual.percentResistencia - comparativo.anterior.percentResistencia;
 
   return (
     <ThemedView style={styles.container}>
@@ -87,6 +90,25 @@ export default function RelatorioScreen() {
             <ThemedText type="small" themeColor="textSecondary">
               Taxa de resistência: {taxaMes.percentResistencia}%
             </ThemedText>
+          </GlassCard>
+
+          <GlassCard style={styles.card}>
+            <ThemedText type="eyebrow" themeColor="textSecondary">Comparativo com os 30 dias anteriores</ThemedText>
+            {anteriorTotal > 0 ? (
+              <View style={styles.metricasRow}>
+                <Metrica label="essa janela" valor={`${comparativo.atual.percentResistencia}%`} />
+                <Metrica label="janela anterior" valor={`${comparativo.anterior.percentResistencia}%`} />
+                <Metrica
+                  label="variação"
+                  valor={`${variacao >= 0 ? '+' : ''}${variacao}%`}
+                  cor={variacao >= 0 ? Accent.success : Accent.dangerText}
+                />
+              </View>
+            ) : (
+              <ThemedText type="small" themeColor="textSecondary">
+                Ainda não há registros de antes dos últimos 30 dias para comparar.
+              </ThemedText>
+            )}
           </GlassCard>
 
           <GlassCard style={styles.card}>

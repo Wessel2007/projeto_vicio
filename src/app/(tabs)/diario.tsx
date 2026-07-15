@@ -15,10 +15,14 @@ import { useAppData } from '@/hooks/useAppData';
 import { TriggerEntry } from '@/types';
 import { chaveDia, horaCurta, rotuloDiaTimeline } from '@/utils/datas';
 import {
+  calcPadroesGatilhoHorario,
   calcTaxaResistencia,
-  calcTendenciaSemanal,
+  calcTaxaResistenciaPorGatilho,
+  calcTaxaPorDiaSemana,
+  calcTendenciaPeriodo,
   contarGatilhos,
   contarPorHorario,
+  gerarRecomendacao,
 } from '@/utils/insights';
 import { mostrarPaywall } from '@/utils/paywall';
 
@@ -40,12 +44,22 @@ function EntradaItem({ entry }: { entry: TriggerEntry }) {
   );
 }
 
-function BarraInsight({ label, total, percent }: { label: string; total: number; percent: number }) {
+function BarraInsight({
+  label,
+  total,
+  percent,
+  sufixo = '',
+}: {
+  label: string;
+  total: number;
+  percent: number;
+  sufixo?: string;
+}) {
   return (
     <View style={styles.insightLinha}>
       <View style={styles.insightLinhaTopo}>
         <ThemedText type="small">{label}</ThemedText>
-        <ThemedText type="small" themeColor="textSecondary">{total}</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">{total}{sufixo}</ThemedText>
       </View>
       <View style={styles.insightTrack}>
         <View style={[styles.insightFill, { width: `${Math.max(4, percent)}%` }]} />
@@ -266,24 +280,40 @@ export default function DiarioScreen() {
               </ThemedText>
             ) : (
               (() => {
-                const tendencia = calcTendenciaSemanal(dados.entries);
+                const tendencia = calcTendenciaPeriodo(dados.entries, 7);
                 const gatilhos = contarGatilhos(dados.entries);
+                const taxaPorGatilho = calcTaxaResistenciaPorGatilho(dados.entries);
+                const padroes = calcPadroesGatilhoHorario(dados.entries);
+                const porDiaSemana = calcTaxaPorDiaSemana(dados.entries);
+                const melhorDia = [...porDiaSemana].sort((a, b) => b.percentResistencia - a.percentResistencia)[0];
+                const piorDia = [...porDiaSemana].sort((a, b) => a.percentResistencia - b.percentResistencia)[0];
+                const recomendacao = gerarRecomendacao(gatilhos, padroes);
+
                 return (
                   <>
                     <View style={styles.insightCard}>
-                      <Text style={styles.cardLabel}>{t('insights.resistanceRate')}</Text>
-                      <Text style={styles.insightBig}>{taxa.percentResistencia}%</Text>
-                      <ThemedText type="small" themeColor="textSecondary">
-                        {t('insights.resistedRecaidas', { resistidas: taxa.resistidas, recaidas: taxa.recaidas })}
-                      </ThemedText>
+                      <Text style={[styles.cardLabel, styles.cardLabelMb]}>{t('insights.byTriggerRate')}</Text>
+                      {taxaPorGatilho.length > 0 ? (
+                        taxaPorGatilho.map((g) => (
+                          <BarraInsight
+                            key={g.gatilho}
+                            label={t(`common:gatilhos.${g.gatilho}`, { defaultValue: g.gatilho })}
+                            total={g.percentResistencia}
+                            percent={g.percentResistencia}
+                            sufixo="%"
+                          />
+                        ))
+                      ) : (
+                        <ThemedText type="small" themeColor="textSecondary">{t('insights.byTriggerRateEmpty')}</ThemedText>
+                      )}
                     </View>
 
                     <View style={styles.insightCard}>
                       <Text style={styles.cardLabel}>{t('insights.weeklyTrend')}</Text>
                       <ThemedText type="default">
-                        {t('insights.weeklyTrendText', { atual: tendencia.semanaAtual })}
-                        {tendencia.semanaAnterior > 0 || tendencia.semanaAtual > 0
-                          ? t('insights.weeklyTrendPrev', { anterior: tendencia.semanaAnterior })
+                        {t('insights.weeklyTrendText', { atual: tendencia.atual })}
+                        {tendencia.anterior > 0 || tendencia.atual > 0
+                          ? t('insights.weeklyTrendPrev', { anterior: tendencia.anterior })
                           : ''}
                       </ThemedText>
                     </View>
@@ -296,11 +326,59 @@ export default function DiarioScreen() {
                     </View>
 
                     <View style={styles.insightCard}>
-                      <Text style={[styles.cardLabel, styles.cardLabelMb]}>{t('insights.commonTime')}</Text>
-                      {horarios.map((h) => (
-                        <BarraInsight key={h.key} label={t(`horarios.${h.key}`)} total={h.total} percent={h.percent} />
-                      ))}
+                      <Text style={[styles.cardLabel, styles.cardLabelMb]}>{t('insights.timePattern')}</Text>
+                      {padroes.length > 0 ? (
+                        padroes.map((p) => (
+                          <ThemedText key={`${p.gatilho}-${p.inicioHora}`} type="small" style={styles.padraoLinha}>
+                            {t('insights.timePatternItem', {
+                              gatilho: t(`common:gatilhos.${p.gatilho}`, { defaultValue: p.gatilho }),
+                              inicio: p.inicioHora,
+                              fim: p.fimHora,
+                              total: p.total,
+                            })}
+                          </ThemedText>
+                        ))
+                      ) : (
+                        <ThemedText type="small" themeColor="textSecondary">{t('insights.timePatternEmpty')}</ThemedText>
+                      )}
                     </View>
+
+                    <View style={styles.insightCard}>
+                      <Text style={[styles.cardLabel, styles.cardLabelMb]}>{t('insights.weekdayPattern')}</Text>
+                      {porDiaSemana.length === 0 ? (
+                        <ThemedText type="small" themeColor="textSecondary">{t('insights.weekdayEmpty')}</ThemedText>
+                      ) : porDiaSemana.length === 1 || melhorDia.diaSemana === piorDia.diaSemana ? (
+                        <ThemedText type="small" themeColor="textSecondary">
+                          {t('insights.weekdaySingle', { dia: t(`diasSemana.${melhorDia.diaSemana}`), percent: melhorDia.percentResistencia })}
+                        </ThemedText>
+                      ) : (
+                        <>
+                          <ThemedText type="small">
+                            {t('insights.weekdayBest', { dia: t(`diasSemana.${melhorDia.diaSemana}`), percent: melhorDia.percentResistencia })}
+                          </ThemedText>
+                          <ThemedText type="small" style={styles.padraoLinha}>
+                            {t('insights.weekdayWorst', { dia: t(`diasSemana.${piorDia.diaSemana}`), percent: piorDia.percentResistencia })}
+                          </ThemedText>
+                        </>
+                      )}
+                    </View>
+
+                    {recomendacao && (
+                      <View style={styles.insightCard}>
+                        <Text style={styles.cardLabel}>{t('insights.recommendation')}</Text>
+                        <ThemedText type="default">
+                          {recomendacao.janela
+                            ? t('insights.recommendationWithTime', {
+                                gatilho: t(`common:gatilhos.${recomendacao.gatilho}`, { defaultValue: recomendacao.gatilho }),
+                                inicio: recomendacao.janela.inicioHora,
+                                fim: recomendacao.janela.fimHora,
+                              })
+                            : t('insights.recommendationTriggerOnly', {
+                                gatilho: t(`common:gatilhos.${recomendacao.gatilho}`, { defaultValue: recomendacao.gatilho }),
+                              })}
+                        </ThemedText>
+                      </View>
+                    )}
                   </>
                 );
               })()
@@ -466,7 +544,7 @@ const styles = StyleSheet.create({
   },
   cardLabel: { fontFamily: Fonts.data.semibold, fontSize: 10, letterSpacing: 2, color: 'rgba(232,180,88,0.7)' },
   cardLabelMb: { marginBottom: Spacing.one },
-  insightBig: { fontFamily: Fonts.data.bold, fontSize: 30, color: Accent.verde },
+  padraoLinha: { marginTop: Spacing.one },
   insightLinha: { marginTop: Spacing.one, gap: 4 },
   insightLinhaTopo: { flexDirection: 'row', justifyContent: 'space-between' },
   insightTrack: { height: 8, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.08)', overflow: 'hidden' },
