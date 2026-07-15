@@ -160,8 +160,12 @@ secundária:
       `src/hooks/useAppData.ts`)
 - [x] Storage local (AsyncStorage, `src/storage/index.ts`)
 - [x] Notificações push locais (lembrete diário agendável, `src/notifications/`)
-- [ ] Criptografia/proteção de dados sensíveis (diário de gatilhos hoje é
-      salvo em texto puro no AsyncStorage — pendente, ver seção Privacidade)
+- [x] Criptografia/proteção de dados sensíveis (`src/storage/crypto.ts`:
+      AES-256-GCM via `@noble/ciphers`, chave mestra de 256 bits gerada com
+      `expo-crypto` e guardada no Keychain/Keystore via `expo-secure-store`;
+      `src/storage/index.ts` e `src/storage/perfil.ts` cifram antes de
+      `AsyncStorage.setItem` e decifram depois de `getItem`, com fallback
+      automático para dado legado em texto puro)
 - [ ] Testes em dispositivo real
 - [ ] Monetização (paywall/IAP) — modelo definido, não implementado
 - [ ] Preparação para submissão nas lojas (política de privacidade,
