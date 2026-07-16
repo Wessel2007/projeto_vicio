@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import { AppData, DEFAULT_DATA, RelapseReflection, TriggerEntry } from '@/types';
 import { DEFAULT_USER_PROFILE, UserProfile } from '@/types/perfil';
 import { carregarDados, salvarDados } from '@/storage';
@@ -48,6 +48,22 @@ function useAppDataState(): AppDataContextValue {
   const [perfil, setPerfil] = useState<UserProfile | null>(null);
   const [carregando, setCarregando] = useState(true);
 
+  // Fila que serializa as escritas no AsyncStorage: sem isso, chamadas
+  // próximas (ex.: digitar rápido em Perfil, ou trocar de tela logo após uma
+  // ação) disparam salvarDados() em paralelo, e a promise mais antiga pode
+  // resolver DEPOIS da mais nova — sobrescrevendo o storage com um snapshot
+  // desatualizado (o app mostra o estado certo em memória, mas o que fica
+  // gravado em disco é o antigo, e reaparece ao reabrir o app).
+  const filaEscrita = useRef<Promise<void>>(Promise.resolve());
+  const persistir = useCallback((next: AppData, origem: string): Promise<void> => {
+    const tarefa = filaEscrita.current
+      .catch(() => {})
+      .then(() => salvarDados(next))
+      .catch(logFalhaStorage(origem));
+    filaEscrita.current = tarefa;
+    return tarefa;
+  }, []);
+
   useEffect(() => {
     Promise.all([carregarDados(), carregarPerfil()]).then(([d, p]) => {
       setDados(d);
@@ -65,10 +81,10 @@ function useAppDataState(): AppDataContextValue {
     setDados((prev) => {
       if (!prev) return prev;
       const next = { ...prev, ...patch };
-      salvarDados(next).catch(logFalhaStorage('atualizar'));
+      persistir(next, 'atualizar');
       return next;
     });
-  }, []);
+  }, [persistir]);
 
   // Único caminho de registro de recaída do app: streak reseta, uma fração
   // do XP da streak é retida em savedXP (RECAIDA_PENALIDADE_PERCENT), e um
@@ -115,11 +131,11 @@ function useAppDataState(): AppDataContextValue {
           entries: [novaEntrada, ...prev.entries],
           relapseReflections: [reflexao, ...prev.relapseReflections],
         };
-        salvarDados(next).catch(logFalhaStorage('registrarReflexaoRecaida'));
+        persistir(next, 'registrarReflexaoRecaida');
         return next;
       });
     },
-    [],
+    [persistir],
   );
 
   const adicionarEntrada = useCallback((entry: Omit<TriggerEntry, 'id' | 'date'>) => {
@@ -131,20 +147,22 @@ function useAppDataState(): AppDataContextValue {
         date: new Date().toISOString(),
       };
       const next = { ...prev, entries: [nova, ...prev.entries] };
-      salvarDados(next).catch(logFalhaStorage('adicionarEntrada'));
+      persistir(next, 'adicionarEntrada');
       return next;
     });
-  }, []);
+  }, [persistir]);
 
   const resetarApp = useCallback(async () => {
     const inicial = { ...DEFAULT_DATA };
     await desativarNotificacoes();
-    await salvarDados(inicial);
+    // Aguarda a fila (não só o próprio salvarDados): garante que nenhuma
+    // escrita anterior ainda pendente sobrescreva o reset depois.
+    await persistir(inicial, 'resetarApp');
     await apagarPerfil();
     await limparRankVisto();
     setDados(inicial);
     setPerfil({ ...DEFAULT_USER_PROFILE });
-  }, []);
+  }, [persistir]);
 
   const derivado = dados
     ? {

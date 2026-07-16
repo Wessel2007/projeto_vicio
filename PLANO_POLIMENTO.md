@@ -77,16 +77,25 @@ na próxima troca de horário ou reabertura do app.
 `agendarLembreteDiario(dados.dailyQuoteHour, dados.dailyQuoteMinute)`
 de novo logo após `mudarIdioma()` em `selecionarIdioma`.
 
-### ✅ 1.6 Escritas no storage sem tratamento de erro
+### ✅ 1.6 Escritas no storage sem tratamento de erro (+ correção de race condition em 2026-07-16)
 `src/hooks/useAppData.ts` — `salvarDados(next)` é chamado sem `await`/
 `.catch()` em `atualizar`, `registrarReflexaoRecaida` e `adicionarEntrada`.
 Falhas de criptografia/AsyncStorage são engolidas silenciosamente, e
 escritas concorrentes podem persistir fora de ordem.
 
-**Correção:** no mínimo, adicionar `.catch()` com log (não precisa de UI
-de erro para isso — é um app 100% local, mas silenciar completamente uma
-falha de persistência de dado sensível é arriscado). Avaliar se vale
-serializar as escritas (fila simples) ao mexer no Context da Fase 1.1.
+**Correção inicial:** `.catch()` com log em cada chamada.
+
+**Bug real encontrado depois, em produção:** o `.catch()` sozinho não
+resolvia a reordenação — duas chamadas de `salvarDados()` próximas no tempo
+podiam ter suas promises do `AsyncStorage.setItem` resolvidas fora de ordem,
+e a escrita mais antiga (com dado desatualizado) podia terminar por último e
+sobrescrever o storage com um snapshot antigo. Sintoma relatado: streak
+mostrando corretamente "0 dias" em memória durante o uso, mas ao fechar e
+reabrir o app reaparecia um snapshot de dias atrás (dado antigo que venceu a
+corrida de escrita). **Correção final:** fila de escrita (`filaEscrita`,
+`useRef<Promise<void>>`) em `src/hooks/useAppData.tsx` — todas as chamadas
+de `salvarDados` passam por `persistir()`, que as encadeia em sequência
+estrita; `resetarApp()` também aguarda a fila antes de prosseguir.
 
 ---
 
