@@ -1,5 +1,6 @@
 import { router, useLocalSearchParams, type Href } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -24,6 +25,7 @@ function EscolhaComOutro({
   customTexto,
   onMudarCustom,
   placeholder,
+  outroLabel,
 }: {
   sugestoes: string[];
   selecionado: string | null;
@@ -31,6 +33,7 @@ function EscolhaComOutro({
   customTexto: string;
   onMudarCustom: (t: string) => void;
   placeholder: string;
+  outroLabel: string;
 }) {
   return (
     <View style={styles.escolhaGrid}>
@@ -42,7 +45,7 @@ function EscolhaComOutro({
             onPress={() => onSelecionar(s)}
             style={[styles.gatilhoChip, sel && styles.gatilhoChipSel]}>
             <Text style={[styles.gatilhoChipTxt, sel && styles.gatilhoChipTxtSel]}>
-              {s === OUTRO ? 'Outro' : s}
+              {s === OUTRO ? outroLabel : s}
             </Text>
           </Pressable>
         );
@@ -62,6 +65,7 @@ function EscolhaComOutro({
 }
 
 export default function ReflexaoRecaidaScreen() {
+  const { t } = useTranslation('reflexaoRecaida');
   const { derivado, registrarReflexaoRecaida } = useAppData();
   const params = useLocalSearchParams<{ gatilho?: string }>();
 
@@ -107,24 +111,23 @@ export default function ReflexaoRecaidaScreen() {
       <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
         {step === 'acolhimento' && (
           <View style={styles.cerimonial}>
-            <Text style={styles.eyebrowBronze}>UM PASSO DE VOLTA</Text>
+            <Text style={styles.eyebrowBronze}>{t('eyebrowBack')}</Text>
             <ThemedText type="titleBig" style={styles.centro}>
-              A recaída não apaga o que você construiu
+              {t('acolhimento.title')}
             </ThemedText>
             <ThemedText type="body" themeColor="textSecondary" style={styles.cerimonialTexto}>
-              Sua patente e seu XP total continuam com você. Só o streak reinicia. Antes disso, vamos
-              entender o que aconteceu — leva menos de um minuto.
+              {t('acolhimento.text')}
             </ThemedText>
-            <GradientButton label="Continuar" onPress={() => setStep('gatilho')} style={styles.cerimonialBtn} />
+            <GradientButton label={t('common:buttons.continue')} onPress={() => setStep('gatilho')} style={styles.cerimonialBtn} />
           </View>
         )}
 
         {step === 'gatilho' && (
           <ScrollView contentContainerStyle={styles.content}>
-            <Text style={styles.eyebrow}>CONTEXTO</Text>
-            <ThemedText type="titleBig">O que estava em jogo?</ThemedText>
+            <Text style={styles.eyebrow}>{t('gatilho.eyebrow')}</Text>
+            <ThemedText type="titleBig">{t('gatilho.title')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              Selecione o que se aplica. Pode marcar mais de um, ou nenhum.
+              {t('gatilho.subtitle')}
             </ThemedText>
 
             <View style={styles.gatilhosGrid}>
@@ -135,46 +138,48 @@ export default function ReflexaoRecaidaScreen() {
                     key={g}
                     onPress={() => alternarGatilho(g)}
                     style={[styles.gatilhoChip, sel && styles.gatilhoChipSel]}>
-                    <Text style={[styles.gatilhoChipTxt, sel && styles.gatilhoChipTxtSel]}>{g}</Text>
+                    <Text style={[styles.gatilhoChipTxt, sel && styles.gatilhoChipTxtSel]}>
+                      {t(`common:gatilhos.${g}`)}
+                    </Text>
                   </Pressable>
                 );
               })}
             </View>
 
-            <GradientButton label="Continuar" onPress={() => setStep('sentia')} style={styles.btnMargin} />
+            <GradientButton label={t('common:buttons.continue')} onPress={() => setStep('sentia')} style={styles.btnMargin} />
           </ScrollView>
         )}
 
         {step === 'sentia' && (
           <ScrollView contentContainerStyle={styles.content}>
-            <Text style={styles.eyebrow}>OPCIONAL</Text>
-            <ThemedText type="titleBig">O que você sentia antes?</ThemedText>
+            <Text style={styles.eyebrow}>{t('sentia.eyebrow')}</Text>
+            <ThemedText type="titleBig">{t('sentia.title')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              Sem julgamento. Só um registro pra você mesmo entender o padrão.
+              {t('sentia.subtitle')}
             </ThemedText>
 
             <TextInput
               value={emotionBefore}
               onChangeText={setEmotionBefore}
-              placeholder="Ex: estava exausto e sozinho depois do trabalho"
+              placeholder={t('sentia.placeholder')}
               placeholderTextColor={Colors.textTertiary}
               multiline
               style={styles.textInput}
             />
 
-            <GradientButton label="Continuar" onPress={() => setStep('virada')} style={styles.btnMargin} />
+            <GradientButton label={t('common:buttons.continue')} onPress={() => setStep('virada')} style={styles.btnMargin} />
             <Pressable onPress={() => setStep('virada')} style={styles.pularBtn}>
-              <Text style={styles.pularTexto}>Pular</Text>
+              <Text style={styles.pularTexto}>{t('sentia.skip')}</Text>
             </Pressable>
           </ScrollView>
         )}
 
         {step === 'virada' && (
           <ScrollView contentContainerStyle={styles.content}>
-            <Text style={styles.eyebrow}>A VIRADA</Text>
-            <ThemedText type="titleBig">O que você faria diferente?</ThemedText>
+            <Text style={styles.eyebrow}>{t('virada.eyebrow')}</Text>
+            <ThemedText type="titleBig">{t('virada.title')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              É essa resposta que muda o próximo momento difícil.
+              {t('virada.subtitle')}
             </ThemedText>
 
             <EscolhaComOutro
@@ -183,11 +188,12 @@ export default function ReflexaoRecaidaScreen() {
               onSelecionar={setViradaSelecionada}
               customTexto={viradaCustom}
               onMudarCustom={setViradaCustom}
-              placeholder="Escreva com suas palavras"
+              placeholder={t('escolhaPlaceholder')}
+              outroLabel={t('escolhaOutro')}
             />
 
             <GradientButton
-              label="Continuar"
+              label={t('common:buttons.continue')}
               disabled={!whatWouldChange}
               onPress={() => whatWouldChange && setStep('compromisso')}
               style={styles.btnMargin}
@@ -197,10 +203,10 @@ export default function ReflexaoRecaidaScreen() {
 
         {step === 'compromisso' && (
           <ScrollView contentContainerStyle={styles.content}>
-            <Text style={styles.eyebrow}>PRÓXIMAS 24H</Text>
-            <ThemedText type="titleBig">Escolha um compromisso concreto</ThemedText>
+            <Text style={styles.eyebrow}>{t('compromisso.eyebrow')}</Text>
+            <ThemedText type="titleBig">{t('compromisso.title')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
-              Uma ação só, pequena e possível — não o plano perfeito.
+              {t('compromisso.subtitle')}
             </ThemedText>
 
             <EscolhaComOutro
@@ -209,11 +215,12 @@ export default function ReflexaoRecaidaScreen() {
               onSelecionar={setCompromissoSelecionado}
               customTexto={compromissoCustom}
               onMudarCustom={setCompromissoCustom}
-              placeholder="Escreva com suas palavras"
+              placeholder={t('escolhaPlaceholder')}
+              outroLabel={t('escolhaOutro')}
             />
 
             <GradientButton
-              label="Registrar reflexão"
+              label={t('compromisso.button')}
               disabled={!commitment}
               onPress={() => commitment && concluirReflexao()}
               style={styles.btnMargin}
@@ -230,6 +237,7 @@ export default function ReflexaoRecaidaScreen() {
 }
 
 function Fechamento({ streakFinal, onVoltar }: { streakFinal: number; onVoltar: () => void }) {
+  const { t } = useTranslation('reflexaoRecaida');
   const { derivado } = useAppData();
   const [entrou, setEntrou] = useState(false);
   useEffect(() => {
@@ -239,6 +247,7 @@ function Fechamento({ streakFinal, onVoltar }: { streakFinal: number; onVoltar: 
   const sublevelLabel = derivado?.patente.nivel.sublevel
     ? ` ${['I', 'II', 'III'][derivado.patente.nivel.sublevel - 1]}`
     : '';
+  const patenteNome = derivado ? t(`common:ranks.${derivado.patente.nivel.nome}`) : '';
 
   return (
     <View style={styles.cerimonial}>
@@ -248,24 +257,24 @@ function Fechamento({ streakFinal, onVoltar }: { streakFinal: number; onVoltar: 
         </View>
       </BadgeHalo>
 
-      <Text style={styles.eyebrowBronze}>REFLEXÃO REGISTRADA</Text>
-      <ThemedText type="titleBig" style={styles.centro}>Isso fica com você</ThemedText>
+      <Text style={styles.eyebrowBronze}>{t('fechamento.eyebrow')}</Text>
+      <ThemedText type="titleBig" style={styles.centro}>{t('fechamento.title')}</ThemedText>
 
       {entrou && (
         <Animated.View entering={FadeIn.duration(500)} style={styles.fechamentoCard}>
           <View style={styles.fechamentoLinha}>
-            <Text style={styles.fechamentoLabel}>STREAK</Text>
-            <Text style={styles.fechamentoValor}>{streakFinal} dias → 0</Text>
+            <Text style={styles.fechamentoLabel}>{t('fechamento.streakLabel')}</Text>
+            <Text style={styles.fechamentoValor}>{t('fechamento.streakValue', { streak: streakFinal })}</Text>
           </View>
           <View style={styles.fechamentoDivisor} />
           <View style={styles.fechamentoLinha}>
-            <Text style={styles.fechamentoLabel}>XP TOTAL</Text>
-            <Text style={styles.fechamentoValorBronze}>{derivado?.totalXP ?? 0} XP</Text>
+            <Text style={styles.fechamentoLabel}>{t('fechamento.xpLabel')}</Text>
+            <Text style={styles.fechamentoValorBronze}>{t('fechamento.xpValue', { xp: derivado?.totalXP ?? 0 })}</Text>
           </View>
           <View style={styles.fechamentoLinha}>
-            <Text style={styles.fechamentoLabel}>PATENTE</Text>
+            <Text style={styles.fechamentoLabel}>{t('fechamento.rankLabel')}</Text>
             <Text style={styles.fechamentoValorBronze}>
-              {derivado?.patente.nivel.nome}
+              {patenteNome}
               {sublevelLabel}
             </Text>
           </View>
@@ -273,11 +282,10 @@ function Fechamento({ streakFinal, onVoltar }: { streakFinal: number; onVoltar: 
       )}
 
       <ThemedText type="body" themeColor="textSecondary" style={styles.cerimonialTexto}>
-        +15 XP por ter sido honesto com você mesmo. Seu compromisso está anotado — a próxima escolha é
-        outra oportunidade.
+        {t('fechamento.text')}
       </ThemedText>
 
-      <GradientButton label="Voltar à forja" onPress={onVoltar} style={styles.cerimonialBtn} />
+      <GradientButton label={t('fechamento.backButton')} onPress={onVoltar} style={styles.cerimonialBtn} />
     </View>
   );
 }

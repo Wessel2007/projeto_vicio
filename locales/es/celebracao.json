@@ -1,0 +1,22 @@
+{
+  "eyebrow": "PATENTE FORJADA",
+  "daysDiscipline_one": "{{count}} día de disciplina continua",
+  "daysDiscipline_other": "{{count}} días de disciplina continua",
+  "nextTemperingPrefix": "Próximo temple:",
+  "inDays_one": ", en {{count}} día.",
+  "inDays_other": ", en {{count}} días.",
+  "period": ".",
+  "continueButton": "Seguir forjando",
+  "shareButton": "Compartir logro",
+  "metaforas": {
+    "Recruta": "El hierro bruto entró en el fuego. Toda hoja empieza como materia sin forma.",
+    "Aprendiz": "El metal ya acepta la forma. Los primeros martillazos fijaron el rumbo.",
+    "Guerreiro": "El metal solo se convierte en hoja después de semanas en el fuego. Resististe la parte más caliente.",
+    "Guardião": "La hoja ganó filo. Ahora protege a quien la forjó.",
+    "Espartano": "Templada en disciplina, la hoja ya no se astilla bajo presión.",
+    "Monge": "El acero aprendió el silencio. Fuerza que ya no necesita demostrarse.",
+    "Mestre": "Dejaste de ser forjado para empezar a forjar.",
+    "Lenda": "Pocos metales llegan a este punto de temple. El tuyo llegó.",
+    "Imortal": "Acero que el tiempo no oxida. La forja ahora es parte de quien eres."
+  }
+}

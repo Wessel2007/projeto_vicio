@@ -147,16 +147,58 @@ rico, fora deste escopo.
 
 ---
 
-## Fase 3 — Internacionalização (itens já mapeados no CHECKLIST.md)
+## Fase 3 — Internacionalização (itens já mapeados no CHECKLIST.md) — parcialmente concluída em 2026-07-16
 
-- [ ] Revisão humana das traduções automáticas sensíveis em
-      `locales/en/panicButton.json`, `locales/en/triggerJournal.json` (e
-      `locales/es/...` equivalentes) antes de produção.
-- [ ] i18n de `frases.tsx`, `relatorio.tsx`, `streak-detalhe.tsx`,
-      `termos-de-servico.tsx` — confirmado 100% hardcoded em pt-BR (0
-      chamadas a `t()`).
-- [ ] Completar i18n parcial de `celebracao.tsx`, `patente-revelada.tsx`,
-      `reflexao-recaida.tsx` (usam `t()` só residualmente).
+### ✅ 3.1 Revisão de tradução das strings sensíveis
+`locales/en/panicButton.json` e `locales/en/triggerJournal.json` (e os
+equivalentes `es/`) foram lidos e comparados linha a linha com o pt-BR:
+tom natural, sem artefato de tradução literal, terminologia sensível
+(gatilho, recaída, ajuda) tratada com cuidado em ambos os idiomas.
+**Ainda vale uma revisão humana final por um falante nativo antes de
+produção** — o que foi feito aqui é uma revisão de qualidade/precisão via
+IA, não substitui esse passo.
+
+### ✅ 3.2 i18n completo de `frases.tsx`, `relatorio.tsx`, `streak-detalhe.tsx`, `termos-de-servico.tsx`
+Todas confirmadas 100% hardcoded em pt-BR, agora usando `t()`:
+- `frases.tsx`: reaproveita as 30 traduções já existentes em
+  `home.json > quotes` (mesma ordem de índice de `constants/frases.ts`,
+  validado por script) em vez de duplicar conteúdo; temas (Estoicismo,
+  Disciplina, etc.) e UI movidos para novo namespace `frases`.
+- `relatorio.tsx` e `streak-detalhe.tsx`: novos namespaces `relatorio` e
+  `streakDetalhe`.
+- `termos-de-servico.tsx`: Termos de Serviço completos traduzidos para
+  en/es (novo namespace `termos`), substituindo
+  `constants/termos.ts` (removido — conteúdo passou a viver 100% nos
+  locales, consistente com os demais textos de UI).
+- **Bug relacionado corrigido:** `utils/audio-frases.ts` narrava toda
+  frase com voz fixa em `pt-BR` (`expo-speech`), mesmo com o app em
+  inglês/espanhol — corrigido para usar o idioma ativo do i18next.
+
+### ✅ 3.3 Completar i18n parcial de `celebracao.tsx`, `patente-revelada.tsx`, `reflexao-recaida.tsx`
+- `celebracao.tsx`: metáforas de patente e textos traduzidos (novo
+  namespace `celebracao`); `useRankUpCelebration.ts` ajustado para passar
+  o nome da próxima patente separado do sublevel (`proxNome`/
+  `proxSublevel`) em vez de uma string pt-BR pré-formatada, permitindo
+  tradução no destino.
+- `patente-revelada.tsx`: usa novo bloco `onboarding.json > revelada`.
+- `reflexao-recaida.tsx`: fluxo completo traduzido (novo namespace
+  `reflexaoRecaida`), incluindo as sugestões contextuais por gatilho que
+  antes viviam fixas em pt-BR em `constants/reflexao.ts`
+  (`getSugestoesPorGatilho` agora busca via `i18n.t`, mesmo padrão já
+  usado em `getAcaoPorGatilho` do botão de pânico).
+- **Bônus (fora da lista original, mas no mesmo grupo "telas pós-MVP" do
+  `CLAUDE.md`):** `plano-gerado.tsx` também estava 100% hardcoded e foi
+  traduzido junto (novo bloco `onboarding.json > plano`) — a tela
+  antecede `patente-revelada.tsx` no mesmo fluxo, fazia pouco sentido
+  traduzir uma e não a outra.
+
+`tsc --noEmit` e `expo lint` limpos após as mudanças (só os 2 warnings
+pré-existentes de `i18next` default-export em `src/i18n/index.ts`,
+não relacionados).
+
+### ⏳ Pendente (fora do alcance de mudança de código)
+- [ ] Revisão humana final (falante nativo) das strings sensíveis antes
+      de produção — ver 3.1.
 - [ ] Testar em dispositivo real com idioma do sistema em en/es,
       validando quebras de layout com textos ~20% mais longos.
 - [ ] Localizar metadata de loja (nome, descrição, screenshots, palavras-

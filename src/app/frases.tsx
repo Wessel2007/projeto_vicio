@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -8,10 +9,17 @@ import { GlassCard } from '@/components/glass-card';
 import { GradientButton } from '@/components/gradient-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { FRASES, Frase, TEMAS_FRASES, TemaFrase } from '@/constants/frases';
+import { FRASES, TEMAS_FRASES, TemaFrase } from '@/constants/frases';
 import { Accent, Colors, Fonts, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
 import { falarFrase } from '@/utils/audio-frases';
+
+interface FraseTraduzida {
+  index: number;
+  texto: string;
+  autor: string;
+  tema: TemaFrase;
+}
 
 function TemaChip({ label, selected, onPress }: { label: string; selected: boolean; onPress: () => void }) {
   return (
@@ -23,7 +31,7 @@ function TemaChip({ label, selected, onPress }: { label: string; selected: boole
   );
 }
 
-function FraseItem({ frase }: { frase: Frase }) {
+function FraseItem({ frase }: { frase: FraseTraduzida }) {
   return (
     <GlassCard style={styles.fraseCard}>
       <View style={styles.fraseCardTopo}>
@@ -41,23 +49,35 @@ function FraseItem({ frase }: { frase: Frase }) {
 }
 
 export default function FrasesScreen() {
+  const { t } = useTranslation('frases');
   const { dados, carregando } = useAppData();
   const [busca, setBusca] = useState('');
   const [temaFiltro, setTemaFiltro] = useState<TemaFrase | null>(null);
 
+  const frasesTraduzidas = useMemo<FraseTraduzida[]>(
+    () =>
+      FRASES.map((f, index) => ({
+        index,
+        texto: t(`home:quotes.${index}.texto`),
+        autor: t(`home:quotes.${index}.autor`),
+        tema: f.tema,
+      })),
+    [t],
+  );
+
   const frasesFiltradas = useMemo(() => {
     const termo = busca.trim().toLowerCase();
-    return FRASES.filter((f) => {
+    return frasesTraduzidas.filter((f) => {
       const bateTema = !temaFiltro || f.tema === temaFiltro;
       const bateBusca = !termo || f.texto.toLowerCase().includes(termo) || f.autor.toLowerCase().includes(termo);
       return bateTema && bateBusca;
     });
-  }, [busca, temaFiltro]);
+  }, [frasesTraduzidas, busca, temaFiltro]);
 
   if (carregando || !dados) {
     return (
       <ThemedView style={styles.loading}>
-        <ThemedText>Carregando...</ThemedText>
+        <ThemedText>{t('common:loading')}</ThemedText>
       </ThemedView>
     );
   }
@@ -68,11 +88,11 @@ export default function FrasesScreen() {
         <SafeAreaView style={styles.safe}>
           <View style={styles.bloqueado}>
             <Ionicons name="lock-closed" size={32} color={Accent.gold} />
-            <ThemedText type="subtitle" style={styles.bloqueadoTitulo}>Biblioteca PRO</ThemedText>
+            <ThemedText type="subtitle" style={styles.bloqueadoTitulo}>{t('locked.title')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary" style={styles.bloqueadoTexto}>
-              O histórico completo de frases, busca por tema e narração em áudio são exclusivos do plano PRO.
+              {t('locked.text')}
             </ThemedText>
-            <GradientButton label="Voltar" onPress={() => router.back()} style={styles.bloqueadoBtn} />
+            <GradientButton label={t('common:buttons.back')} onPress={() => router.back()} style={styles.bloqueadoBtn} />
           </View>
         </SafeAreaView>
       </ThemedView>
@@ -86,7 +106,7 @@ export default function FrasesScreen() {
           <TextInput
             value={busca}
             onChangeText={setBusca}
-            placeholder="Buscar por frase ou autor..."
+            placeholder={t('searchPlaceholder')}
             placeholderTextColor={Colors.textTertiary}
             style={styles.busca}
           />
@@ -94,22 +114,26 @@ export default function FrasesScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
             data={TEMAS_FRASES}
-            keyExtractor={(t) => t}
+            keyExtractor={(tema) => tema}
             contentContainerStyle={styles.temasLista}
             renderItem={({ item }) => (
-              <TemaChip label={item} selected={temaFiltro === item} onPress={() => setTemaFiltro(temaFiltro === item ? null : item)} />
+              <TemaChip
+                label={t(`temas.${item}`)}
+                selected={temaFiltro === item}
+                onPress={() => setTemaFiltro(temaFiltro === item ? null : item)}
+              />
             )}
           />
         </View>
 
         <FlatList
           data={frasesFiltradas}
-          keyExtractor={(_, i) => String(i)}
+          keyExtractor={(item) => String(item.index)}
           renderItem={({ item }) => <FraseItem frase={item} />}
           contentContainerStyle={styles.lista}
           ListEmptyComponent={
             <ThemedText type="small" themeColor="textSecondary" style={styles.vazio}>
-              Nenhuma frase encontrada.
+              {t('empty')}
             </ThemedText>
           }
         />

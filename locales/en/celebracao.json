@@ -1,0 +1,22 @@
+{
+  "eyebrow": "RANK FORGED",
+  "daysDiscipline_one": "{{count}} day of continuous discipline",
+  "daysDiscipline_other": "{{count}} days of continuous discipline",
+  "nextTemperingPrefix": "Next tempering:",
+  "inDays_one": ", in {{count}} day.",
+  "inDays_other": ", in {{count}} days.",
+  "period": ".",
+  "continueButton": "Keep forging",
+  "shareButton": "Share achievement",
+  "metaforas": {
+    "Recruta": "Raw iron just entered the fire. Every blade starts as shapeless matter.",
+    "Aprendiz": "The metal already takes shape. The first hammer strikes set the direction.",
+    "Guerreiro": "Metal only becomes a blade after weeks in the fire. You withstood the hottest part.",
+    "Guardião": "The blade gained its edge. Now it protects the one who forged it.",
+    "Espartano": "Tempered in discipline, the blade no longer chips under pressure.",
+    "Monge": "The steel learned silence. Strength that no longer needs to prove itself.",
+    "Mestre": "You stopped being forged to start forging.",
+    "Lenda": "Few metals reach this point of temper. Yours has.",
+    "Imortal": "Steel that time doesn't rust. The forge is now part of who you are."
+  }
+}

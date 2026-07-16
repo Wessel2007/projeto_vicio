@@ -1,5 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
@@ -22,25 +23,14 @@ const CELEBRACAO_GLOW = [
   { color: '#FF963C', top: '40%' as const, left: '50%' as const, size: 640, opacity: 0.2 },
 ];
 
-// Metáfora de forja por patente — conecta o marco à narrativa "o metal vira lâmina".
-const METAFORAS: Record<string, string> = {
-  Recruta: 'O ferro bruto entrou no fogo. Toda lâmina começa como matéria disforme.',
-  Aprendiz: 'O metal já aceita a forma. As primeiras marteladas fixaram o rumo.',
-  Guerreiro: 'O metal só vira lâmina depois de semanas no fogo. Você resistiu à parte mais quente.',
-  Guardião: 'A lâmina ganhou fio. Agora ela protege quem a forjou.',
-  Espartano: 'Temperada em disciplina, a lâmina não lasca mais sob pressão.',
-  Monge: 'O aço aprendeu silêncio. Força que não precisa mais se provar.',
-  Mestre: 'Você deixou de ser forjado para começar a forjar.',
-  Lenda: 'Poucos metais chegam a este ponto de têmpera. O seu chegou.',
-  Imortal: 'Aço que o tempo não enferruja. A forja agora é parte de quem você é.',
-};
-
 export default function CelebracaoScreen() {
+  const { t } = useTranslation('celebracao');
   const params = useLocalSearchParams<{
     nome?: string;
     sublevel?: string;
     dias?: string;
-    prox?: string;
+    proxNome?: string;
+    proxSublevel?: string;
     proxDias?: string;
   }>();
 
@@ -52,7 +42,15 @@ export default function CelebracaoScreen() {
     | 3
     | null;
   const sublevelLabel = sublevel ? ` ${['I', 'II', 'III'][sublevel - 1]}` : '';
-  const dias = params.dias ?? '0';
+  const dias = Number(params.dias ?? '0');
+
+  const proxSublevelNum = params.proxSublevel ? Number(params.proxSublevel) : null;
+  const proxSublevelLabel =
+    proxSublevelNum === 1 || proxSublevelNum === 2 || proxSublevelNum === 3
+      ? ` ${['I', 'II', 'III'][proxSublevelNum - 1]}`
+      : '';
+  const proxNomeTraduzido = params.proxNome ? t(`common:ranks.${params.proxNome}`) : '';
+  const proxDiasNum = params.proxDias ? Number(params.proxDias) : null;
 
   const pulse = useSharedValue(0);
   useEffect(() => {
@@ -68,7 +66,7 @@ export default function CelebracaoScreen() {
       <AmbientGlow blobs={CELEBRACAO_GLOW} />
       <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
         <View style={styles.centro}>
-          <Text style={styles.eyebrow}>PATENTE FORJADA</Text>
+          <Text style={styles.eyebrow}>{t('eyebrow')}</Text>
 
           <BadgeHalo size={230} rings={3} style={styles.halo}>
             <Animated.View style={badgeStyle}>
@@ -76,23 +74,24 @@ export default function CelebracaoScreen() {
             </Animated.View>
           </BadgeHalo>
 
-          <ThemedText type="titleHuge" style={styles.nome}>{nome}{sublevelLabel}</ThemedText>
-          <Text style={styles.dias}>{dias} dias de disciplina contínua</Text>
+          <ThemedText type="titleHuge" style={styles.nome}>{t(`common:ranks.${nome}`)}{sublevelLabel}</ThemedText>
+          <Text style={styles.dias}>{t('daysDiscipline', { count: dias })}</Text>
           <Text style={styles.copy}>
-            {METAFORAS[nome] ?? METAFORAS.Recruta}
-            {params.prox ? (
+            {t(`metaforas.${nome}`, { defaultValue: t('metaforas.Recruta') })}
+            {params.proxNome ? (
               <Text>
-                {' '}Próxima têmpera: <Text style={styles.copyDestaque}>{params.prox}</Text>
-                {params.proxDias ? `, em ${params.proxDias} ${Number(params.proxDias) === 1 ? 'dia' : 'dias'}.` : '.'}
+                {' '}{t('nextTemperingPrefix')}{' '}
+                <Text style={styles.copyDestaque}>{proxNomeTraduzido}{proxSublevelLabel}</Text>
+                {proxDiasNum != null ? t('inDays', { count: proxDiasNum }) : t('period')}
               </Text>
             ) : null}
           </Text>
         </View>
 
         <View style={styles.rodape}>
-          <GradientButton label="Continuar forjando" onPress={() => router.back()} />
+          <GradientButton label={t('continueButton')} onPress={() => router.back()} />
           <Pressable onPress={() => router.back()} style={styles.compartilhar}>
-            <Text style={styles.compartilharTxt}>Compartilhar conquista</Text>
+            <Text style={styles.compartilharTxt}>{t('shareButton')}</Text>
           </Pressable>
         </View>
       </SafeAreaView>

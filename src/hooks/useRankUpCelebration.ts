@@ -6,7 +6,6 @@ import { NIVEIS } from '@/constants/gamification';
 import type { InfoPatente } from '@/utils/gamification';
 
 const RANK_VISTO_KEY = 'forja:rankVisto';
-const SUBLEVEL_LABEL = ['I', 'II', 'III'];
 
 function rankIndex(nome: string, sublevel: 1 | 2 | 3 | null): number {
   return NIVEIS.findIndex((n) => n.nome === nome && n.sublevel === sublevel);
@@ -48,9 +47,8 @@ export function useRankUpCelebration(patente: InfoPatente | null | undefined, st
                 nome: patente.nivel.nome,
                 sublevel: patente.nivel.sublevel != null ? String(patente.nivel.sublevel) : '',
                 dias: String(streakDias),
-                prox: prox
-                  ? `${prox.nome}${prox.sublevel ? ` ${SUBLEVEL_LABEL[prox.sublevel - 1]}` : ''}`
-                  : '',
+                proxNome: prox ? prox.nome : '',
+                proxSublevel: prox?.sublevel != null ? String(prox.sublevel) : '',
                 proxDias: prox ? String(Math.max(0, prox.minDias - patente.diasEfetivos)) : '',
               },
             } as unknown as Href);

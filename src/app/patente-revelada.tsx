@@ -1,5 +1,6 @@
 import { router, type Href } from 'expo-router';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BackHandler, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -19,6 +20,8 @@ const REVEAL_GLOW = [
  * /plano-gerado e segue automaticamente para as abas após um respiro.
  */
 export default function PatenteReveladaScreen() {
+  const { t } = useTranslation('onboarding');
+
   useEffect(() => {
     const sub = BackHandler.addEventListener('hardwareBackPress', () => true);
     return () => sub.remove();
@@ -34,18 +37,18 @@ export default function PatenteReveladaScreen() {
       <AmbientGlow blobs={REVEAL_GLOW} />
       <SafeAreaView style={styles.safe}>
         <View style={styles.finalStep}>
-          <ThemedText type="eyebrow" style={styles.primeiraPatente}>Sua primeira patente</ThemedText>
+          <ThemedText type="eyebrow" style={styles.primeiraPatente}>{t('revelada.eyebrow')}</ThemedText>
           <ForgeReveal />
           <ThemedText type="titleBig" style={[styles.titulo, styles.centerText]}>
-            Forja concluída
+            {t('revelada.title')}
           </ThemedText>
           <ThemedText
             type="default"
             themeColor="textSecondary"
             style={[styles.descricao, styles.centerText]}>
-            Sua jornada foi moldada. Você começa como{' '}
-            <ThemedText type="smallBold" style={styles.recrutaDestaque}>Recruta I</ThemedText>
-            {' '}— a partir de agora, cada dia conta.
+            {t('revelada.descriptionPrefix')}{' '}
+            <ThemedText type="smallBold" style={styles.recrutaDestaque}>{t('common:ranks.Recruta')} I</ThemedText>
+            {' '}{t('revelada.descriptionSuffix')}
           </ThemedText>
         </View>
       </SafeAreaView>

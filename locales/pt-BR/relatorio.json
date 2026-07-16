@@ -1,0 +1,24 @@
+{
+  "title": "Relatório",
+  "locked": {
+    "title": "Relatório PRO",
+    "text": "O relatório semanal e mensal de progresso é exclusivo do plano PRO."
+  },
+  "last7Days": "Últimos 7 dias",
+  "last30Days": "Últimos 30 dias",
+  "comparison": "Comparativo com os 30 dias anteriores",
+  "comparisonEmpty": "Ainda não há registros de antes dos últimos 30 dias para comparar.",
+  "overallProgress": "Progresso geral",
+  "metrics": {
+    "entries": "registros",
+    "resisted": "resistidas",
+    "relapsed": "recaídas",
+    "thisWindow": "essa janela",
+    "previousWindow": "janela anterior",
+    "variation": "variação",
+    "streakDays": "dias de streak",
+    "totalXp": "XP total"
+  },
+  "resistanceRate": "Taxa de resistência: {{percent}}%",
+  "currentRank": "Patente atual: {{patente}}"
+}

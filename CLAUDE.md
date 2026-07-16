@@ -137,12 +137,14 @@ secundária:
   hardcoded. Ao adicionar uma tela nova, criar um namespace próprio (ou
   reaproveitar `common` se for elemento compartilhado) e extrair as 3
   traduções (pt-BR/en/es) antes de considerar a feature pronta.
-- **Pendente:** revisão humana das strings sensíveis (Botão de Pânico e
-  Diário de Gatilhos, tradução automática ainda não revisada — ver
-  CHECKLIST.md) e i18n das telas adicionadas depois do MVP original
-  (`celebracao`, `frases`, `patente-revelada`, `plano-gerado`,
-  `reflexao-recaida`, `relatorio`, `streak-detalhe`, `termos-de-servico`),
-  que hoje seguem hardcoded em pt-BR.
+- **Pendente:** revisão humana final por falante nativo das strings
+  sensíveis (Botão de Pânico e Diário de Gatilhos) antes de produção — a
+  tradução automática já recebeu uma revisão de qualidade em 2026-07-16
+  (ver Fase 3 do `PLANO_POLIMENTO.md`). As telas adicionadas depois do MVP
+  original (`celebracao`, `frases`, `patente-revelada`, `plano-gerado`,
+  `reflexao-recaida`, `relatorio`, `streak-detalhe`, `termos-de-servico`)
+  foram todas traduzidas nessa mesma rodada e não seguem mais hardcoded em
+  pt-BR.
 
 ## Status Atual do Projeto
 

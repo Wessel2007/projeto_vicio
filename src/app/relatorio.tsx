@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -27,12 +28,13 @@ function Metrica({ label, valor, cor }: { label: string; valor: string; cor?: st
 }
 
 export default function RelatorioScreen() {
+  const { t } = useTranslation('relatorio');
   const { dados, derivado, carregando } = useAppData();
 
   if (carregando || !dados || !derivado) {
     return (
       <ThemedView style={styles.loading}>
-        <ThemedText>Carregando...</ThemedText>
+        <ThemedText>{t('common:loading')}</ThemedText>
       </ThemedView>
     );
   }
@@ -43,11 +45,11 @@ export default function RelatorioScreen() {
         <SafeAreaView style={styles.safe}>
           <View style={styles.bloqueado}>
             <Ionicons name="lock-closed" size={32} color={Accent.gold} />
-            <ThemedText type="subtitle" style={{ marginTop: Spacing.one }}>Relatório PRO</ThemedText>
+            <ThemedText type="subtitle" style={{ marginTop: Spacing.one }}>{t('locked.title')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary" style={styles.bloqueadoTexto}>
-              O relatório semanal e mensal de progresso é exclusivo do plano PRO.
+              {t('locked.text')}
             </ThemedText>
-            <GradientButton label="Voltar" onPress={() => router.back()} style={styles.bloqueadoBtn} />
+            <GradientButton label={t('common:buttons.back')} onPress={() => router.back()} style={styles.bloqueadoBtn} />
           </View>
         </SafeAreaView>
       </ThemedView>
@@ -61,65 +63,68 @@ export default function RelatorioScreen() {
   const comparativo = calcComparativoResistencia(dados.entries, 30);
   const anteriorTotal = comparativo.anterior.resistidas + comparativo.anterior.recaidas;
   const variacao = comparativo.atual.percentResistencia - comparativo.anterior.percentResistencia;
+  const patenteNome = t(`common:ranks.${derivado.patente.nivel.nome}`);
+  const patenteSublevel = derivado.patente.nivel.sublevel
+    ? ` ${['I', 'II', 'III'][derivado.patente.nivel.sublevel - 1]}`
+    : '';
 
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safe}>
         <ScrollView contentContainerStyle={styles.content}>
-          <ThemedText type="title">Relatório</ThemedText>
+          <ThemedText type="title">{t('title')}</ThemedText>
 
           <GlassCard style={styles.card}>
-            <ThemedText type="eyebrow" themeColor="textSecondary">Últimos 7 dias</ThemedText>
+            <ThemedText type="eyebrow" themeColor="textSecondary">{t('last7Days')}</ThemedText>
             <View style={styles.metricasRow}>
-              <Metrica label="registros" valor={String(entradasSemana.length)} />
-              <Metrica label="resistidas" valor={String(taxaSemana.resistidas)} cor={Accent.success} />
-              <Metrica label="recaídas" valor={String(taxaSemana.recaidas)} cor={Accent.dangerText} />
+              <Metrica label={t('metrics.entries')} valor={String(entradasSemana.length)} />
+              <Metrica label={t('metrics.resisted')} valor={String(taxaSemana.resistidas)} cor={Accent.success} />
+              <Metrica label={t('metrics.relapsed')} valor={String(taxaSemana.recaidas)} cor={Accent.dangerText} />
             </View>
             <ThemedText type="small" themeColor="textSecondary">
-              Taxa de resistência: {taxaSemana.percentResistencia}%
+              {t('resistanceRate', { percent: taxaSemana.percentResistencia })}
             </ThemedText>
           </GlassCard>
 
           <GlassCard style={styles.card}>
-            <ThemedText type="eyebrow" themeColor="textSecondary">Últimos 30 dias</ThemedText>
+            <ThemedText type="eyebrow" themeColor="textSecondary">{t('last30Days')}</ThemedText>
             <View style={styles.metricasRow}>
-              <Metrica label="registros" valor={String(entradasMes.length)} />
-              <Metrica label="resistidas" valor={String(taxaMes.resistidas)} cor={Accent.success} />
-              <Metrica label="recaídas" valor={String(taxaMes.recaidas)} cor={Accent.dangerText} />
+              <Metrica label={t('metrics.entries')} valor={String(entradasMes.length)} />
+              <Metrica label={t('metrics.resisted')} valor={String(taxaMes.resistidas)} cor={Accent.success} />
+              <Metrica label={t('metrics.relapsed')} valor={String(taxaMes.recaidas)} cor={Accent.dangerText} />
             </View>
             <ThemedText type="small" themeColor="textSecondary">
-              Taxa de resistência: {taxaMes.percentResistencia}%
+              {t('resistanceRate', { percent: taxaMes.percentResistencia })}
             </ThemedText>
           </GlassCard>
 
           <GlassCard style={styles.card}>
-            <ThemedText type="eyebrow" themeColor="textSecondary">Comparativo com os 30 dias anteriores</ThemedText>
+            <ThemedText type="eyebrow" themeColor="textSecondary">{t('comparison')}</ThemedText>
             {anteriorTotal > 0 ? (
               <View style={styles.metricasRow}>
-                <Metrica label="essa janela" valor={`${comparativo.atual.percentResistencia}%`} />
-                <Metrica label="janela anterior" valor={`${comparativo.anterior.percentResistencia}%`} />
+                <Metrica label={t('metrics.thisWindow')} valor={`${comparativo.atual.percentResistencia}%`} />
+                <Metrica label={t('metrics.previousWindow')} valor={`${comparativo.anterior.percentResistencia}%`} />
                 <Metrica
-                  label="variação"
+                  label={t('metrics.variation')}
                   valor={`${variacao >= 0 ? '+' : ''}${variacao}%`}
                   cor={variacao >= 0 ? Accent.success : Accent.dangerText}
                 />
               </View>
             ) : (
               <ThemedText type="small" themeColor="textSecondary">
-                Ainda não há registros de antes dos últimos 30 dias para comparar.
+                {t('comparisonEmpty')}
               </ThemedText>
             )}
           </GlassCard>
 
           <GlassCard style={styles.card}>
-            <ThemedText type="eyebrow" themeColor="textSecondary">Progresso geral</ThemedText>
+            <ThemedText type="eyebrow" themeColor="textSecondary">{t('overallProgress')}</ThemedText>
             <View style={styles.metricasRow}>
-              <Metrica label="dias de streak" valor={String(derivado.streakDias)} cor={Accent.orange} />
-              <Metrica label="XP total" valor={String(derivado.totalXP)} />
+              <Metrica label={t('metrics.streakDays')} valor={String(derivado.streakDias)} cor={Accent.orange} />
+              <Metrica label={t('metrics.totalXp')} valor={String(derivado.totalXP)} />
             </View>
             <ThemedText type="default">
-              Patente atual: {derivado.patente.nivel.nome}
-              {derivado.patente.nivel.sublevel ? ` ${['I', 'II', 'III'][derivado.patente.nivel.sublevel - 1]}` : ''}
+              {t('currentRank', { patente: `${patenteNome}${patenteSublevel}` })}
             </ThemedText>
           </GlassCard>
         </ScrollView>

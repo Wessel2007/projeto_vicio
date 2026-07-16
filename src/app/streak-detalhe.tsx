@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CountdownBloco } from '@/components/countdown-bloco';
@@ -20,13 +21,14 @@ function Metrica({ label, valor, cor }: { label: string; valor: string; cor?: st
 }
 
 export default function StreakDetalheScreen() {
+  const { t } = useTranslation('streakDetalhe');
   const { dados, derivado, carregando } = useAppData();
   const elapsed = useElapsedTime(dados?.streakStartDate ?? null);
 
   if (carregando || !dados || !derivado) {
     return (
       <ThemedView style={styles.loading}>
-        <ThemedText>Carregando...</ThemedText>
+        <ThemedText>{t('common:loading')}</ThemedText>
       </ThemedView>
     );
   }
@@ -36,20 +38,20 @@ export default function StreakDetalheScreen() {
       <SafeAreaView style={styles.safe}>
         <ScrollView contentContainerStyle={styles.content}>
           <GlassCard style={styles.countdownCard}>
-            <ThemedText type="eyebrow" themeColor="textSecondary">Tempo sem recair</ThemedText>
+            <ThemedText type="eyebrow" themeColor="textSecondary">{t('countdown.eyebrow')}</ThemedText>
             <View style={styles.blocosRow}>
-              <CountdownBloco valor={elapsed.dias} label="dias" size="large" />
-              <CountdownBloco valor={elapsed.horas} label="horas" size="large" />
-              <CountdownBloco valor={elapsed.minutos} label="min" size="large" />
-              <CountdownBloco valor={elapsed.segundos} label="seg" size="large" />
+              <CountdownBloco valor={elapsed.dias} label={t('countdown.days')} size="large" />
+              <CountdownBloco valor={elapsed.horas} label={t('countdown.hours')} size="large" />
+              <CountdownBloco valor={elapsed.minutos} label={t('countdown.minutes')} size="large" />
+              <CountdownBloco valor={elapsed.segundos} label={t('countdown.seconds')} size="large" />
             </View>
           </GlassCard>
 
           <GlassCard style={styles.card}>
             <View style={styles.metricasRow}>
-              <Metrica label="sequência atual" valor={String(derivado.streakDias)} cor={Accent.success} />
-              <Metrica label="maior sequência" valor={String(derivado.maiorStreak)} cor={Accent.orange} />
-              <Metrica label="recaídas" valor={String(dados.relapseDates.length)} cor={Accent.dangerText} />
+              <Metrica label={t('metrics.currentStreak')} valor={String(derivado.streakDias)} cor={Accent.success} />
+              <Metrica label={t('metrics.longestStreak')} valor={String(derivado.maiorStreak)} cor={Accent.orange} />
+              <Metrica label={t('metrics.relapses')} valor={String(dados.relapseDates.length)} cor={Accent.dangerText} />
             </View>
           </GlassCard>
 

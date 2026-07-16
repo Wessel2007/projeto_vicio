@@ -1,0 +1,22 @@
+{
+  "eyebrow": "PATENTE FORJADA",
+  "daysDiscipline_one": "{{count}} dia de disciplina contínua",
+  "daysDiscipline_other": "{{count}} dias de disciplina contínua",
+  "nextTemperingPrefix": "Próxima têmpera:",
+  "inDays_one": ", em {{count}} dia.",
+  "inDays_other": ", em {{count}} dias.",
+  "period": ".",
+  "continueButton": "Continuar forjando",
+  "shareButton": "Compartilhar conquista",
+  "metaforas": {
+    "Recruta": "O ferro bruto entrou no fogo. Toda lâmina começa como matéria disforme.",
+    "Aprendiz": "O metal já aceita a forma. As primeiras marteladas fixaram o rumo.",
+    "Guerreiro": "O metal só vira lâmina depois de semanas no fogo. Você resistiu à parte mais quente.",
+    "Guardião": "A lâmina ganhou fio. Agora ela protege quem a forjou.",
+    "Espartano": "Temperada em disciplina, a lâmina não lasca mais sob pressão.",
+    "Monge": "O aço aprendeu silêncio. Força que não precisa mais se provar.",
+    "Mestre": "Você deixou de ser forjado para começar a forjar.",
+    "Lenda": "Poucos metais chegam a este ponto de têmpera. O seu chegou.",
+    "Imortal": "Aço que o tempo não enferruja. A forja agora é parte de quem você é."
+  }
+}

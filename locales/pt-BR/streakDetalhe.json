@@ -1,0 +1,14 @@
+{
+  "countdown": {
+    "eyebrow": "Tempo sem recair",
+    "days": "dias",
+    "hours": "horas",
+    "minutes": "min",
+    "seconds": "seg"
+  },
+  "metrics": {
+    "currentStreak": "sequência atual",
+    "longestStreak": "maior sequência",
+    "relapses": "recaídas"
+  }
+}

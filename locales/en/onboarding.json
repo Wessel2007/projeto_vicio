@@ -94,5 +94,24 @@
     "superar_recorde": "Beating my current record",
     "acordar_em_paz": "Waking up at peace for the first time",
     "outro": "Other"
+  },
+  "plano": {
+    "eyebrow": "FORJA",
+    "headline": "Forging your plan",
+    "headlineDone": "Plan forged",
+    "phraseDone": "Your journey has been shaped. Let's reveal your first rank.",
+    "stages": {
+      "0": "Lighting the forge...",
+      "1": "Heating the metal...",
+      "2": "Shaping your plan...",
+      "3": "Tempering your journey...",
+      "4": "Forging your armor..."
+    }
+  },
+  "revelada": {
+    "eyebrow": "Your first rank",
+    "title": "Forge complete",
+    "descriptionPrefix": "Your journey has been shaped. You start as",
+    "descriptionSuffix": "— from now on, every day counts."
   }
 }

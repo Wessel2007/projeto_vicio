@@ -1,0 +1,14 @@
+{
+  "countdown": {
+    "eyebrow": "Tiempo sin recaer",
+    "days": "días",
+    "hours": "horas",
+    "minutes": "min",
+    "seconds": "seg"
+  },
+  "metrics": {
+    "currentStreak": "racha actual",
+    "longestStreak": "racha más larga",
+    "relapses": "recaídas"
+  }
+}

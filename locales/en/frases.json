@@ -1,0 +1,15 @@
+{
+  "searchPlaceholder": "Search by quote or author...",
+  "empty": "No quotes found.",
+  "locked": {
+    "title": "PRO Library",
+    "text": "The full quote history, search by theme, and audio narration are exclusive to the PRO plan."
+  },
+  "temas": {
+    "Estoicismo": "Stoicism",
+    "Disciplina": "Discipline",
+    "Superação": "Resilience",
+    "Autoconhecimento": "Self-knowledge",
+    "Motivação": "Motivation"
+  }
+}

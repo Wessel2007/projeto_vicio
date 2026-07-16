@@ -1,0 +1,24 @@
+{
+  "title": "Report",
+  "locked": {
+    "title": "PRO Report",
+    "text": "The weekly and monthly progress report is exclusive to the PRO plan."
+  },
+  "last7Days": "Last 7 days",
+  "last30Days": "Last 30 days",
+  "comparison": "Comparison with the previous 30 days",
+  "comparisonEmpty": "There aren't any entries from before the last 30 days to compare yet.",
+  "overallProgress": "Overall progress",
+  "metrics": {
+    "entries": "entries",
+    "resisted": "resisted",
+    "relapsed": "relapsed",
+    "thisWindow": "this window",
+    "previousWindow": "previous window",
+    "variation": "variation",
+    "streakDays": "streak days",
+    "totalXp": "total XP"
+  },
+  "resistanceRate": "Resistance rate: {{percent}}%",
+  "currentRank": "Current rank: {{patente}}"
+}

@@ -1,0 +1,15 @@
+{
+  "searchPlaceholder": "Buscar por frase ou autor...",
+  "empty": "Nenhuma frase encontrada.",
+  "locked": {
+    "title": "Biblioteca PRO",
+    "text": "O histórico completo de frases, busca por tema e narração em áudio são exclusivos do plano PRO."
+  },
+  "temas": {
+    "Estoicismo": "Estoicismo",
+    "Disciplina": "Disciplina",
+    "Superação": "Superação",
+    "Autoconhecimento": "Autoconhecimento",
+    "Motivação": "Motivação"
+  }
+}

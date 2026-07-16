@@ -1,0 +1,100 @@
+{
+  "eyebrowBack": "ONE STEP BACK",
+  "acolhimento": {
+    "title": "A relapse doesn't erase what you've built",
+    "text": "Your rank and total XP stay with you. Only the streak resets. Before that, let's understand what happened — it takes less than a minute."
+  },
+  "gatilho": {
+    "eyebrow": "CONTEXT",
+    "title": "What was going on?",
+    "subtitle": "Select what applies. You can pick more than one, or none."
+  },
+  "sentia": {
+    "eyebrow": "OPTIONAL",
+    "title": "What were you feeling before?",
+    "subtitle": "No judgment. Just a note to help you spot the pattern yourself.",
+    "placeholder": "E.g.: I was exhausted and alone after work",
+    "skip": "Skip"
+  },
+  "virada": {
+    "eyebrow": "THE TURNING POINT",
+    "title": "What would you do differently?",
+    "subtitle": "This answer is what changes the next tough moment."
+  },
+  "compromisso": {
+    "eyebrow": "NEXT 24H",
+    "title": "Choose a concrete commitment",
+    "subtitle": "Just one small, achievable action — not the perfect plan.",
+    "button": "Log reflection"
+  },
+  "escolhaOutro": "Other",
+  "escolhaPlaceholder": "Write it in your own words",
+  "fechamento": {
+    "eyebrow": "REFLECTION LOGGED",
+    "title": "This stays with you",
+    "streakLabel": "STREAK",
+    "streakValue": "{{streak}} days → 0",
+    "xpLabel": "TOTAL XP",
+    "xpValue": "{{xp}} XP",
+    "rankLabel": "RANK",
+    "text": "+15 XP for being honest with yourself. Your commitment is noted — the next choice is another opportunity.",
+    "backButton": "Back to the forge"
+  },
+  "sugestoesPadrao": [
+    "Pause and observe what I felt before acting",
+    "Tell someone I trust when I notice the trigger",
+    "Have a concrete plan ready for the next tough moment"
+  ],
+  "sugestoes": {
+    "Tédio": [
+      "Have something ready to do during empty moments",
+      "Leave the house as soon as boredom starts",
+      "Write down 3 quick activities to turn to when it hits"
+    ],
+    "Solidão": [
+      "Plan to talk to someone before being alone too long",
+      "Call someone I trust as soon as loneliness shows up",
+      "Go somewhere with people, even without interacting much"
+    ],
+    "Estresse": [
+      "Release stress through movement before getting home",
+      "Have a 10-minute decompression ritual at the end of the day",
+      "Write about what's causing the stress"
+    ],
+    "Ansiedade": [
+      "Practice breathing before the anxiety turns into an urge",
+      "Tell someone when I notice anxiety rising",
+      "Take a physical break before any screen"
+    ],
+    "Conflito / Briga": [
+      "Step away from the situation for a few minutes before reacting",
+      "Write down what I feel instead of acting in the heat of the moment",
+      "Talk to someone neutral before deciding anything"
+    ],
+    "Cansaço": [
+      "Sleep earlier over the next few days",
+      "Avoid important decisions when exhausted",
+      "Actually rest instead of turning to a screen"
+    ],
+    "Redes sociais": [
+      "Set a screen time limit at night",
+      "Turn off notifications from the apps that trigger it most",
+      "Swap endless scrolling for another activity at that time"
+    ],
+    "Álcool ou outras substâncias": [
+      "Avoid being alone right after drinking",
+      "Have an agreed plan ready ahead of these situations",
+      "Call someone I trust before the effect wears off"
+    ],
+    "Excesso de tempo livre": [
+      "Plan the next hour around something concrete",
+      "Fill the emptiest slots of the week with commitments",
+      "Keep a list of small tasks for these moments"
+    ],
+    "Notificações / celular": [
+      "Turn on do-not-disturb during risk hours",
+      "Leave the phone out of the bedroom at night",
+      "Block or uninstall the app that triggers it most"
+    ]
+  }
+}

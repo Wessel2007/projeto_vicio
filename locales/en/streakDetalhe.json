@@ -1,0 +1,14 @@
+{
+  "countdown": {
+    "eyebrow": "Time relapse-free",
+    "days": "days",
+    "hours": "hours",
+    "minutes": "min",
+    "seconds": "sec"
+  },
+  "metrics": {
+    "currentStreak": "current streak",
+    "longestStreak": "longest streak",
+    "relapses": "relapses"
+  }
+}

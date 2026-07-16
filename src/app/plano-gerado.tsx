@@ -3,6 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router, type Href } from 'expo-router';
 import { AnimatePresence, MotiView } from 'moti';
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BackHandler, StyleSheet, View } from 'react-native';
 import Animated, {
   Easing,
@@ -35,11 +36,11 @@ const PLANO_GLOW = [
 ];
 
 const STAGES = [
-  { at: 0, phrase: 'Acendendo a forja...', sparkCount: 6 },
-  { at: 0.12, phrase: 'Aquecendo o metal...', sparkCount: 8 },
-  { at: 0.35, phrase: 'Moldando seu plano...', sparkCount: 10 },
-  { at: 0.58, phrase: 'Temperando sua jornada...', sparkCount: 13 },
-  { at: 0.83, phrase: 'Forjando sua armadura...', sparkCount: 16 },
+  { at: 0, sparkCount: 6 },
+  { at: 0.12, sparkCount: 8 },
+  { at: 0.35, sparkCount: 10 },
+  { at: 0.58, sparkCount: 13 },
+  { at: 0.83, sparkCount: 16 },
 ] as const;
 
 function stageIndexFor(value: number): number {
@@ -60,6 +61,7 @@ function stageIndexFor(value: number): number {
  * usuário. Sem botão de voltar/skip — só avança sozinha.
  */
 export default function PlanoGeradoScreen() {
+  const { t } = useTranslation('onboarding');
   const barProgress = useSharedValue(0);
   const flash = useSharedValue(0);
   const [percent, setPercent] = useState(0);
@@ -121,9 +123,9 @@ export default function PlanoGeradoScreen() {
         <View style={styles.centro}>
           <ForgeCore stageIndex={stageIndex} completed={completed} />
 
-          <ThemedText type="eyebrow" style={styles.eyebrow}>FORJA</ThemedText>
+          <ThemedText type="eyebrow" style={styles.eyebrow}>{t('plano.eyebrow')}</ThemedText>
           <ThemedText type="titleBig" style={styles.headline}>
-            {completed ? 'Plano forjado' : 'Forjando seu plano'}
+            {completed ? t('plano.headlineDone') : t('plano.headline')}
           </ThemedText>
 
           <AnimatePresence exitBeforeEnter>
@@ -134,9 +136,7 @@ export default function PlanoGeradoScreen() {
               exit={{ opacity: 0, translateY: -8 }}
               transition={{ type: 'timing', duration: 240 }}>
               <ThemedText type="default" themeColor="textSecondary" style={styles.frase}>
-                {completed
-                  ? 'Sua jornada foi moldada. Vamos revelar sua primeira patente.'
-                  : STAGES[stageIndex].phrase}
+                {completed ? t('plano.phraseDone') : t(`plano.stages.${stageIndex}`)}
               </ThemedText>
             </MotiView>
           </AnimatePresence>

@@ -94,5 +94,24 @@
     "superar_recorde": "Superar mi récord actual",
     "acordar_em_paz": "Despertar en paz por primera vez",
     "outro": "Otro"
+  },
+  "plano": {
+    "eyebrow": "FORJA",
+    "headline": "Forjando tu plan",
+    "headlineDone": "Plan forjado",
+    "phraseDone": "Tu camino fue moldeado. Vamos a revelar tu primera patente.",
+    "stages": {
+      "0": "Encendiendo la forja...",
+      "1": "Calentando el metal...",
+      "2": "Moldeando tu plan...",
+      "3": "Templando tu camino...",
+      "4": "Forjando tu armadura..."
+    }
+  },
+  "revelada": {
+    "eyebrow": "Tu primera patente",
+    "title": "Forja completada",
+    "descriptionPrefix": "Tu camino fue moldeado. Empiezas como",
+    "descriptionSuffix": "— a partir de ahora, cada día cuenta."
   }
 }

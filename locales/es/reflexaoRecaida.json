@@ -1,0 +1,100 @@
+{
+  "eyebrowBack": "UN PASO ATRÁS",
+  "acolhimento": {
+    "title": "La recaída no borra lo que has construido",
+    "text": "Tu patente y tu XP total siguen contigo. Solo la racha se reinicia. Antes de eso, vamos a entender qué pasó — toma menos de un minuto."
+  },
+  "gatilho": {
+    "eyebrow": "CONTEXTO",
+    "title": "¿Qué estaba en juego?",
+    "subtitle": "Selecciona lo que aplique. Puedes marcar más de uno, o ninguno."
+  },
+  "sentia": {
+    "eyebrow": "OPCIONAL",
+    "title": "¿Qué sentías antes?",
+    "subtitle": "Sin juicios. Solo un registro para que entiendas tu propio patrón.",
+    "placeholder": "Ej: estaba agotado y solo después del trabajo",
+    "skip": "Saltar"
+  },
+  "virada": {
+    "eyebrow": "EL GIRO",
+    "title": "¿Qué harías diferente?",
+    "subtitle": "Esa respuesta es la que cambia el próximo momento difícil."
+  },
+  "compromisso": {
+    "eyebrow": "PRÓXIMAS 24H",
+    "title": "Elige un compromiso concreto",
+    "subtitle": "Una sola acción, pequeña y posible — no el plan perfecto.",
+    "button": "Registrar reflexión"
+  },
+  "escolhaOutro": "Otro",
+  "escolhaPlaceholder": "Escríbelo con tus propias palabras",
+  "fechamento": {
+    "eyebrow": "REFLEXIÓN REGISTRADA",
+    "title": "Esto se queda contigo",
+    "streakLabel": "RACHA",
+    "streakValue": "{{streak}} días → 0",
+    "xpLabel": "XP TOTAL",
+    "xpValue": "{{xp}} XP",
+    "rankLabel": "PATENTE",
+    "text": "+15 XP por haber sido honesto contigo mismo. Tu compromiso quedó anotado — la próxima elección es otra oportunidad.",
+    "backButton": "Volver a la forja"
+  },
+  "sugestoesPadrao": [
+    "Pausar y observar lo que sentí antes de actuar",
+    "Avisar a alguien de confianza cuando note el detonante",
+    "Tener un plan concreto listo para el próximo momento difícil"
+  ],
+  "sugestoes": {
+    "Tédio": [
+      "Tener algo listo para hacer en los momentos vacíos",
+      "Salir de casa apenas empiece el aburrimiento",
+      "Anotar 3 actividades rápidas para recurrir cuando llegue el vacío"
+    ],
+    "Solidão": [
+      "Planear hablar con alguien antes de estar mucho tiempo solo",
+      "Llamar a una persona de confianza apenas aparezca la soledad",
+      "Ir a un lugar con gente, aunque no interactúes mucho"
+    ],
+    "Estresse": [
+      "Descargar el estrés en movimiento antes de llegar a casa",
+      "Tener un ritual de descompresión de 10 minutos al final del día",
+      "Escribir sobre lo que está causando el estrés"
+    ],
+    "Ansiedade": [
+      "Practicar la respiración antes de que la ansiedad se vuelva impulso",
+      "Avisar a alguien cuando note que la ansiedad sube",
+      "Hacer una pausa física antes de cualquier pantalla"
+    ],
+    "Conflito / Briga": [
+      "Alejarme de la situación por unos minutos antes de reaccionar",
+      "Escribir lo que siento en vez de actuar en caliente",
+      "Hablar con alguien neutral antes de decidir algo"
+    ],
+    "Cansaço": [
+      "Dormir más temprano los próximos días",
+      "Evitar decisiones importantes cuando esté agotado",
+      "Descansar de verdad en vez de recurrir a la pantalla"
+    ],
+    "Redes sociais": [
+      "Definir un límite de tiempo de pantalla por la noche",
+      "Quitar notificaciones de las apps que más disparan el detonante",
+      "Cambiar el scroll sin fin por otra actividad en ese horario"
+    ],
+    "Álcool ou outras substâncias": [
+      "Evitar quedarme solo justo después de beber",
+      "Tener un plan acordado con anticipación para esas situaciones",
+      "Llamar a alguien de confianza antes de que pase el efecto"
+    ],
+    "Excesso de tempo livre": [
+      "Planear la próxima hora con algo concreto",
+      "Llenar los horarios más vacíos de la semana con compromisos",
+      "Tener una lista de tareas pequeñas para esos momentos"
+    ],
+    "Notificações / celular": [
+      "Activar el modo no molestar en los horarios de riesgo",
+      "Dejar el celular fuera del cuarto por la noche",
+      "Bloquear o desinstalar la app que más genera el detonante"
+    ]
+  }
+}
