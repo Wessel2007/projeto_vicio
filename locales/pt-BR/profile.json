@@ -71,7 +71,8 @@
     "deleteAllConfirm": "Apagar tudo"
   },
   "about": {
-    "terms": "Termos de Serviço"
+    "terms": "Termos de Serviço",
+    "privacy": "Política de Privacidade"
   },
   "testMode": {
     "simulatePro": "Simular assinatura PRO",

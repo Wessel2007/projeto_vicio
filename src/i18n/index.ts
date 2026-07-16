@@ -10,6 +10,7 @@ import homeEn from '@/locales/en/home.json';
 import onboardingEn from '@/locales/en/onboarding.json';
 import panicButtonEn from '@/locales/en/panicButton.json';
 import paywallEn from '@/locales/en/paywall.json';
+import politicaEn from '@/locales/en/politica.json';
 import profileEn from '@/locales/en/profile.json';
 import reflexaoRecaidaEn from '@/locales/en/reflexaoRecaida.json';
 import relatorioEn from '@/locales/en/relatorio.json';
@@ -25,6 +26,7 @@ import homeEs from '@/locales/es/home.json';
 import onboardingEs from '@/locales/es/onboarding.json';
 import panicButtonEs from '@/locales/es/panicButton.json';
 import paywallEs from '@/locales/es/paywall.json';
+import politicaEs from '@/locales/es/politica.json';
 import profileEs from '@/locales/es/profile.json';
 import reflexaoRecaidaEs from '@/locales/es/reflexaoRecaida.json';
 import relatorioEs from '@/locales/es/relatorio.json';
@@ -40,6 +42,7 @@ import homePtBR from '@/locales/pt-BR/home.json';
 import onboardingPtBR from '@/locales/pt-BR/onboarding.json';
 import panicButtonPtBR from '@/locales/pt-BR/panicButton.json';
 import paywallPtBR from '@/locales/pt-BR/paywall.json';
+import politicaPtBR from '@/locales/pt-BR/politica.json';
 import profilePtBR from '@/locales/pt-BR/profile.json';
 import reflexaoRecaidaPtBR from '@/locales/pt-BR/reflexaoRecaida.json';
 import relatorioPtBR from '@/locales/pt-BR/relatorio.json';
@@ -69,6 +72,7 @@ export const NAMESPACES = [
   'relatorio',
   'streakDetalhe',
   'termos',
+  'politica',
   'celebracao',
   'reflexaoRecaida',
 ] as const;
@@ -87,6 +91,7 @@ const resources = {
     relatorio: relatorioPtBR,
     streakDetalhe: streakDetalhePtBR,
     termos: termosPtBR,
+    politica: politicaPtBR,
     celebracao: celebracaoPtBR,
     reflexaoRecaida: reflexaoRecaidaPtBR,
   },
@@ -103,6 +108,7 @@ const resources = {
     relatorio: relatorioEn,
     streakDetalhe: streakDetalheEn,
     termos: termosEn,
+    politica: politicaEn,
     celebracao: celebracaoEn,
     reflexaoRecaida: reflexaoRecaidaEn,
   },
@@ -119,6 +125,7 @@ const resources = {
     relatorio: relatorioEs,
     streakDetalhe: streakDetalheEs,
     termos: termosEs,
+    politica: politicaEs,
     celebracao: celebracaoEs,
     reflexaoRecaida: reflexaoRecaidaEs,
   },

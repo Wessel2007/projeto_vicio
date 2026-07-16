@@ -71,7 +71,8 @@
     "deleteAllConfirm": "Delete everything"
   },
   "about": {
-    "terms": "Terms of Service"
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy"
   },
   "testMode": {
     "simulatePro": "Simulate PRO subscription",

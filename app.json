@@ -7,7 +7,11 @@
     "icon": "./assets/images/icon.png",
     "scheme": "projetovicio",
     "userInterfaceStyle": "dark",
+    "ios": {
+      "bundleIdentifier": "com.forjaapp.forja"
+    },
     "android": {
+      "package": "com.forjaapp.forja",
       "adaptiveIcon": {
         "backgroundColor": "#0D0F12",
         "foregroundImage": "./assets/images/android-icon-foreground.png"

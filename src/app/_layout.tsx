@@ -7,6 +7,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { IntroScreen } from '@/components/intro-screen';
 import { Colors } from '@/constants/theme';
@@ -30,6 +31,7 @@ const NavigationDarkTheme = {
 };
 
 export default function RootLayout() {
+  const { t } = useTranslation();
   const [fontsLoaded] = useFonts({
     Manrope_400Regular,
     Manrope_500Medium,
@@ -127,7 +129,7 @@ export default function RootLayout() {
               options={{
                 presentation: 'modal',
                 headerShown: true,
-                headerTitle: 'Biblioteca de frases',
+                headerTitle: t('frases:headerTitle'),
                 headerShadowVisible: false,
                 headerTintColor: Colors.text,
                 headerStyle: { backgroundColor: Colors.background },
@@ -138,7 +140,7 @@ export default function RootLayout() {
               options={{
                 presentation: 'modal',
                 headerShown: true,
-                headerTitle: 'Relatório de progresso',
+                headerTitle: t('relatorio:headerTitle'),
                 headerShadowVisible: false,
                 headerTintColor: Colors.text,
                 headerStyle: { backgroundColor: Colors.background },
@@ -149,7 +151,7 @@ export default function RootLayout() {
               options={{
                 presentation: 'modal',
                 headerShown: true,
-                headerTitle: 'Sua jornada',
+                headerTitle: t('streakDetalhe:headerTitle'),
                 headerShadowVisible: false,
                 headerTintColor: Colors.text,
                 headerStyle: { backgroundColor: Colors.background },
@@ -160,7 +162,18 @@ export default function RootLayout() {
               options={{
                 presentation: 'modal',
                 headerShown: true,
-                headerTitle: 'Termos de Serviço',
+                headerTitle: t('termos:headerTitle'),
+                headerShadowVisible: false,
+                headerTintColor: Colors.text,
+                headerStyle: { backgroundColor: Colors.background },
+              }}
+            />
+            <Stack.Screen
+              name="politica-de-privacidade"
+              options={{
+                presentation: 'modal',
+                headerShown: true,
+                headerTitle: t('politica:headerTitle'),
                 headerShadowVisible: false,
                 headerTintColor: Colors.text,
                 headerStyle: { backgroundColor: Colors.background },

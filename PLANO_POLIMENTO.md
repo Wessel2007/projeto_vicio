@@ -206,24 +206,77 @@ não relacionados).
 
 ---
 
-## Fase 4 — Preparação de build e submissão
+## Fase 4 — Preparação de build e submissão — parcialmente concluída em 2026-07-16
 
-- [ ] `app.json`: adicionar `ios.bundleIdentifier` e
-      `android.package` = `com.forjaapp.forja` (placeholder — trocar
-      quando tiver conta de desenvolvedor/domínio definitivo).
-- [ ] Criar `eas.json` com perfis `development`/`preview`/`production`.
-- [ ] Assets de ícone/splash finais: confirmado por hash que
-      `icon.png`, `favicon.png`, `android-icon-foreground.png` e
-      `splash-icon.png` são hoje bytes idênticos ao logo oficial — falta
-      gerar variantes próprias (ícone adaptativo Android precisa respeitar
-      a safe-zone; splash tem proporção diferente de um ícone quadrado).
-- [ ] Definir categoria de submissão (Saúde e Fitness / Estilo de vida).
-- [ ] Documento/tela de Política de Privacidade dedicada — hoje só
-      referenciada dentro dos Termos; App Store Connect e Play Console
-      exigem URL pública própria no formulário de submissão.
-- [ ] Screenshots e descrição de loja — lembrar da restrição da Apple:
-      nada de referência visual/textual explícita a pornografia (usar
-      "autocontrole", "disciplina", "hábitos saudáveis").
+### ✅ 4.1 `app.json` e `eas.json`
+`ios.bundleIdentifier` e `android.package` = `com.forjaapp.forja`
+(placeholder — trocar quando tiver conta de desenvolvedor/domínio
+definitivo). `eas.json` criado com perfis `development`/`preview`/
+`production` + `submit.production`.
+**Pendente (ação externa, exige login):** rodar `eas init` com uma conta
+Expo para gerar o `extra.eas.projectId` em `app.json` — não é algo que dá
+pra fazer sem a conta do Luiz.
+
+### ✅ 4.2 Ícone adaptativo e splash
+`android-icon-foreground.png` e `splash-icon.png` eram bytes idênticos ao
+logo oficial (fundo de pedra quadrado embutido) — não respeitavam a
+safe-zone do ícone adaptativo Android nem funcionavam como um recorte
+transparente para o splash. Gerados via `scripts/gerar-assets-icone.js`
+(script Node com `sharp`, não faz parte do app em runtime): recorte do
+emblema com fundo transparente (máscara por luminância com
+median+blur+threshold para eliminar tanto o ruído da textura da pedra
+quanto os buracos causados pelo sombreado interno do metal, preservando os
+vãos reais do desenho — fenda da gravata, guarda da chama), reamostrado
+para ~60% do canvas de 1024×1024 no ícone adaptativo (dentro do círculo de
+segurança de 66% do Android) e ~86% num canvas de 800×800 para o splash.
+`icon.png`/`favicon.png` mantidos como o logo quadrado completo (com fundo)
+— uso normal e correto para ícone de loja/favicon.
+
+### ✅ 4.3 Categoria de submissão
+Decidido: **Saúde e Fitness** como categoria primária nas duas lojas
+(Estilo de Vida como alternativa na Apple, caso a revisão avalie diferente).
+Documentado em `STORE_LISTING.md`, junto com a expectativa de classificação
+etária no questionário IARC do Google Play (livre/12+, a confirmar na
+submissão).
+
+### ✅ 4.4 Tela de Política de Privacidade
+Nova tela `/politica-de-privacidade` (`src/app/politica-de-privacidade.tsx`),
+mesmo padrão de `termos-de-servico.tsx`, com conteúdo próprio em
+pt-BR/en/es (`locales/*/politica.json`, namespace `politica`) cobrindo: que
+dados são coletados, que **tudo fica só no aparelho** (sem backend, sem
+analytics, sem chamada de rede), criptografia AES-256-GCM via
+`expo-secure-store`, direitos LGPD (acesso/exportação/exclusão já
+disponíveis em Perfil > Dados) e aviso de que não substitui tratamento
+clínico. Link adicionado em Perfil > Sobre, ao lado de Termos de Serviço.
+**Bônus relacionado (gap da Fase 3):** os títulos de header das telas
+modais (`frases`, `relatorio`, `streak-detalhe`, `termos-de-servico`,
+`politica-de-privacidade`) estavam hardcoded em pt-BR direto em
+`src/app/_layout.tsx` — não usavam `t()` apesar do conteúdo dessas telas já
+estar traduzido. Corrigido: `_layout.tsx` agora usa `useTranslation()` e
+chaves `headerTitle` novas em cada namespace (`frases`, `relatorio`,
+`streakDetalhe`, `termos`, `politica`).
+**Pendente (ação externa):** App Store Connect e Play Console exigem uma
+URL pública própria no formulário de submissão, não uma tela dentro do
+app — precisa hospedar o conteúdo em algum lugar (ex.: GitHub Pages,
+Notion público) antes da submissão. Anotado em `STORE_LISTING.md`.
+
+### ✅ 4.5 Descrição de loja
+Rascunho completo em `STORE_LISTING.md`: nome, subtítulo (App Store),
+descrição curta (Google Play), descrição completa, palavras-chave — todos
+dentro dos limites de caracteres de cada loja, respeitando a restrição de
+não mencionar "pornografia" (usa "autocontrole", "disciplina", "hábitos").
+Conteúdo em pt-BR (idioma de lançamento); en/es ficam para depois do MVP
+validado, junto com o restante da localização de metadata de loja (item já
+listado como pendente na Fase 3).
+
+### ⏳ Pendente (fora do alcance de mudança de código)
+- [ ] `eas init` com conta Expo do Luiz para gerar `extra.eas.projectId`.
+- [ ] Hospedar a Política de Privacidade em uma URL pública (fora do app).
+- [ ] Screenshots reais de loja — precisa rodar o app em simulador/
+      dispositivo (iOS e Android); sequência recomendada já está em
+      `STORE_LISTING.md`. Só faz sentido depois da Fase 5.
+- [ ] Revisão humana final da Política de Privacidade e dos Termos, junto
+      com a revisão de tradução já pendente da Fase 3.
 
 ---
 

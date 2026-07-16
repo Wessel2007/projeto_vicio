@@ -1,4 +1,5 @@
 {
+  "headerTitle": "Quote library",
   "searchPlaceholder": "Search by quote or author...",
   "empty": "No quotes found.",
   "locked": {

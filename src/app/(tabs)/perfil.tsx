@@ -411,6 +411,11 @@ export default function PerfilScreen() {
               <Text style={styles.linhaLabel}>{t('about.terms')}</Text>
               <Ionicons name="chevron-forward" size={16} color={Accent.tabInativa} />
             </Pressable>
+            <View style={styles.divisor} />
+            <Pressable onPress={() => router.push('/politica-de-privacidade' as Href)} style={styles.linha}>
+              <Text style={styles.linhaLabel}>{t('about.privacy')}</Text>
+              <Ionicons name="chevron-forward" size={16} color={Accent.tabInativa} />
+            </Pressable>
           </View>
 
           {/* Modo de teste */}
