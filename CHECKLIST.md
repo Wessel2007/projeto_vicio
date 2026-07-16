@@ -19,7 +19,9 @@
       (`calcRiscoHorario` em `src/utils/insights.ts`); exige mínimo de 5
       registros para exibir o padrão, senão mostra nudge "continue
       registrando"
-- [ ] Widget de tela inicial (streak visível sem abrir o app)
+- [~] Widget de tela inicial (streak visível sem abrir o app) — **fora do
+      escopo deste MVP** (decisão de 2026-07-16, período de polimento
+      pré-submissão)
 
 ## PRO (assinatura)
 
@@ -28,17 +30,26 @@
 - [x] Frases em áudio narrado (TTS do sistema via `expo-speech`; sem voz humana gravada)
 - [x] Insights do diário de gatilhos (gráficos de horário/gatilho recorrente, tendências)
 - [x] Botão de pânico expandido (meditação guiada, playlist de foco, contato rápido accountability partner)
-- [ ] Backup em nuvem (sync entre dispositivos) — adiado: depende da decisão de backend (Firebase vs FastAPI, ver CLAUDE.md)
+- [~] Backup em nuvem (sync entre dispositivos) — **fora do escopo deste
+      MVP** (decisão de 2026-07-16); depende da decisão de backend (Firebase
+      vs FastAPI, ver CLAUDE.md)
 - [x] Temas visuais alternativos de patente (personalização)
 - [x] Relatório semanal/mensal de progresso
 - [x] Notificação diária com horário customizável
 
 ## Diferenciais / Pós-MVP
 
-- [ ] Accountability partner (convite + notificação discreta de recaída/marco)
-- [ ] Modo "SOS gatilho específico" (pergunta contexto situacional: casa/trabalho/cama)
-- [ ] Guia de configuração de bloqueadores de conteúdo (Screen Time, apps terceiros)
-- [ ] Modo "recaída controlada" (fluxo de reflexão pós-recaída, não só reset)
+- [~] Accountability partner completo (convite + notificação discreta de
+      recaída/marco) — **fora do escopo deste MVP** (decisão de 2026-07-16);
+      permanece só a versão simples já implementada (contato de confiança
+      manual no botão de pânico/Perfil, sem convite/conta vinculada)
+- [~] Modo "SOS gatilho específico" (pergunta contexto situacional:
+      casa/trabalho/cama) — **fora do escopo deste MVP** (decisão de
+      2026-07-16)
+- [~] Guia de configuração de bloqueadores de conteúdo (Screen Time, apps
+      terceiros) — **fora do escopo deste MVP** (decisão de 2026-07-16)
+- [x] Modo "recaída controlada" (fluxo de reflexão pós-recaída) — já
+      implementado (`reflexao-recaida.tsx`), mantido no MVP
 - [x] Tela de upgrade Free → Pro (ver seção Monetização / Loja abaixo)
 
 ## Internacionalização (i18n)

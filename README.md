@@ -163,12 +163,20 @@ emulador Android, simulador iOS, ou no [Expo Go](https://expo.dev/go).
   gatilhos, reflexões, perfil de onboarding)
 - Termos de Serviço (`termos-de-servico.tsx`, acessível pelo Perfil)
 
-**Pendente:**
+**Fora do escopo deste MVP** (decisão de 2026-07-16, período de polimento
+pré-submissão):
 
 - Widget de tela inicial (streak visível sem abrir o app)
-- Backup em nuvem / sync entre dispositivos (depende de decisão de backend)
+- Backup em nuvem / sync entre dispositivos
 - Feature completa de accountability partner (convite + notificação
-  discreta de recaída/marco)
+  discreta de recaída/marco) — permanece só a versão simples já
+  implementada (contato de confiança manual)
+- Modo "SOS gatilho específico" (contexto situacional casa/trabalho/cama)
+- Guia de configuração de bloqueadores de conteúdo (Screen Time, apps
+  terceiros)
+
+**Pendente:**
+
 - Integração real de pagamento in-app (RevenueCat ou nativo Apple/Google) —
   hoje `pro.tsx` só simula a compra, sem cobrança
 - Revisão humana das traduções automáticas de strings sensíveis (Botão de
