@@ -1,13 +1,44 @@
-import { useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import { AppData, DEFAULT_DATA, RelapseReflection, TriggerEntry } from '@/types';
 import { carregarDados, salvarDados } from '@/storage';
 import { apagarPerfil } from '@/storage/perfil';
 import { RECAIDA_PENALIDADE_PERCENT, REFLEXAO_XP_BONUS, XP_POR_DIA } from '@/constants/gamification';
 import { calcMaiorStreak, calcPatente, calcStreakDias, calcTotalXP } from '@/utils/gamification';
-import { agendarLembreteDiario } from '@/notifications';
+import { agendarLembreteDiario, desativarNotificacoes } from '@/notifications';
 import { limparRankVisto } from '@/hooks/useRankUpCelebration';
 
-export function useAppData() {
+function logFalhaStorage(origem: string) {
+  return (erro: unknown) => console.error(`[FORJA] Falha ao salvar dados (${origem})`, erro);
+}
+
+interface AppDataContextValue {
+  dados: AppData | null;
+  carregando: boolean;
+  atualizar: (patch: Partial<AppData>) => void;
+  registrarReflexaoRecaida: (input: {
+    triggerTags: string[];
+    emotionBefore: string | null;
+    whatWouldChange: string;
+    commitment: string;
+  }) => void;
+  adicionarEntrada: (entry: Omit<TriggerEntry, 'id' | 'date'>) => void;
+  resetarApp: () => Promise<void>;
+  derivado: {
+    streakDias: number;
+    totalXP: number;
+    patente: ReturnType<typeof calcPatente>;
+    maiorStreak: number;
+  } | null;
+}
+
+const AppDataContext = createContext<AppDataContextValue | null>(null);
+
+// Estado montado uma única vez em AppDataProvider (ver src/app/_layout.tsx) e
+// compartilhado por todas as telas via useAppData(). Antes cada tela chamava
+// este hook de forma independente, então registrar uma recaída/"resisti" no
+// botão de pânico não atualizava a Home por baixo (ela fica só coberta pelo
+// modal, não desmontada) até o app ser fechado e reaberto.
+function useAppDataState(): AppDataContextValue {
   const [dados, setDados] = useState<AppData | null>(null);
   const [carregando, setCarregando] = useState(true);
 
@@ -27,7 +58,7 @@ export function useAppData() {
     setDados((prev) => {
       if (!prev) return prev;
       const next = { ...prev, ...patch };
-      salvarDados(next);
+      salvarDados(next).catch(logFalhaStorage('atualizar'));
       return next;
     });
   }, []);
@@ -77,7 +108,7 @@ export function useAppData() {
           entries: [novaEntrada, ...prev.entries],
           relapseReflections: [reflexao, ...prev.relapseReflections],
         };
-        salvarDados(next);
+        salvarDados(next).catch(logFalhaStorage('registrarReflexaoRecaida'));
         return next;
       });
     },
@@ -93,13 +124,14 @@ export function useAppData() {
         date: new Date().toISOString(),
       };
       const next = { ...prev, entries: [nova, ...prev.entries] };
-      salvarDados(next);
+      salvarDados(next).catch(logFalhaStorage('adicionarEntrada'));
       return next;
     });
   }, []);
 
   const resetarApp = useCallback(async () => {
     const inicial = { ...DEFAULT_DATA };
+    await desativarNotificacoes();
     await salvarDados(inicial);
     await apagarPerfil();
     await limparRankVisto();
@@ -124,4 +156,17 @@ export function useAppData() {
     resetarApp,
     derivado,
   };
+}
+
+export function AppDataProvider({ children }: { children: ReactNode }) {
+  const value = useAppDataState();
+  return <AppDataContext.Provider value={value}>{children}</AppDataContext.Provider>;
+}
+
+export function useAppData(): AppDataContextValue {
+  const ctx = useContext(AppDataContext);
+  if (!ctx) {
+    throw new Error('useAppData deve ser usado dentro de um AppDataProvider');
+  }
+  return ctx;
 }

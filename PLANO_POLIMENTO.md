@@ -16,13 +16,13 @@ Decisões já tomadas nesta rodada (confirmadas com o Luiz em 2026-07-16):
 
 ---
 
-## Fase 1 — Bugs funcionais críticos (P0)
+## Fase 1 — Bugs funcionais críticos (P0) — ✅ concluída em 2026-07-16
 
 Encontrados numa auditoria de fluxo ponta a ponta (onboarding → home →
 pânico/recaída → paywall → notificações → storage). Nenhum aparece em
 `tsc`/lint porque são bugs de lógica, não de tipo.
 
-### 1.1 Estado do app não é compartilhado entre telas
+### ✅ 1.1 Estado do app não é compartilhado entre telas
 `src/hooks/useAppData.ts` é chamado de forma independente em cada tela —
 não existe um Context compartilhado. `panico.tsx` e `reflexao-recaida.tsx`
 são modais empilhados sobre as tabs (a Home não é desmontada, só fica
@@ -36,7 +36,7 @@ local pelo hook de contexto (`useAppDataContext()` ou similar). Isso garante
 uma única fonte de verdade em memória, atualizada de forma síncrona para
 todas as telas monstadas simultaneamente.
 
-### 1.2 `progressoPercent` negativo no dia 0
+### ✅ 1.2 `progressoPercent` negativo no dia 0
 `src/utils/gamification.ts:43-48` (`calcPatente`) — com `diasEfetivos = 0`
 (logo após onboarding ou logo após uma recaída), a conta gera
 `progressoPercent = -100`. Em `src/app/(tabs)/conquistas.tsx:71-76` esse
@@ -46,7 +46,7 @@ visualmente a tela de Conquistas no primeiro dia de cada streak.
 **Correção:** clampar `progressoPercent` em `Math.max(0, ...)` dentro de
 `calcPatente`.
 
-### 1.3 `resetarApp()` não cancela notificações agendadas
+### ✅ 1.3 `resetarApp()` não cancela notificações agendadas
 `src/hooks/useAppData.ts:101-107` — "Apagar todos os dados" reseta o
 AsyncStorage mas nunca chama `cancelarLembreteDiario()`/
 `desativarNotificacoes()` (ambas já existem em `src/notifications/`).
@@ -56,7 +56,7 @@ app (que mostra o toggle como desligado).
 **Correção:** chamar `desativarNotificacoes()` dentro de `resetarApp()`
 antes de gravar `DEFAULT_DATA`.
 
-### 1.4 Campos de economia não resetam na tela de Perfil
+### ✅ 1.4 Campos de economia não resetam na tela de Perfil
 `src/app/(tabs)/perfil.tsx:44-54` — `custoTexto`/`tempoTexto` sincronizam
 com os dados só uma vez, via `useRef` que nunca é resetado
 (`bufferEconomiaSincronizado`). Depois de um reset total dos dados, os
@@ -67,7 +67,7 @@ remover a trava) sempre que `resetarApp()` for chamado — na prática, mais
 simples: reagir a uma mudança de identidade dos dados (ex: comparar
 referência do objeto `dados` pós-reset) em vez de sincronizar só uma vez.
 
-### 1.5 Troca de idioma não reagenda a notificação
+### ✅ 1.5 Troca de idioma não reagenda a notificação
 `src/app/(tabs)/perfil.tsx:118-120` (`selecionarIdioma`) — troca o idioma
 da UI via `mudarIdioma`, mas o texto da notificação diária já agendada
 (montado com `i18n.t` no momento do `agendarLembreteDiario`) só atualiza
@@ -77,7 +77,7 @@ na próxima troca de horário ou reabertura do app.
 `agendarLembreteDiario(dados.dailyQuoteHour, dados.dailyQuoteMinute)`
 de novo logo após `mudarIdioma()` em `selecionarIdioma`.
 
-### 1.6 Escritas no storage sem tratamento de erro
+### ✅ 1.6 Escritas no storage sem tratamento de erro
 `src/hooks/useAppData.ts` — `salvarDados(next)` é chamado sem `await`/
 `.catch()` em `atualizar`, `registrarReflexaoRecaida` e `adicionarEntrada`.
 Falhas de criptografia/AsyncStorage são engolidas silenciosamente, e

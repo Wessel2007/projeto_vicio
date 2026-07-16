@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 
 import { IntroScreen } from '@/components/intro-screen';
 import { Colors } from '@/constants/theme';
+import { AppDataProvider } from '@/hooks/useAppData';
 import { initI18n } from '@/i18n';
 import '@/notifications';
 
@@ -70,101 +71,103 @@ export default function RootLayout() {
       {showIntro ? (
         <IntroScreen />
       ) : (
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="onboarding" />
-          <Stack.Screen
-            name="plano-gerado"
-            options={{
-              presentation: 'fullScreenModal',
-              headerShown: false,
-              gestureEnabled: false,
-              animation: 'fade',
-            }}
-          />
-          <Stack.Screen
-            name="patente-revelada"
-            options={{
-              presentation: 'fullScreenModal',
-              headerShown: false,
-              gestureEnabled: false,
-              animation: 'fade',
-            }}
-          />
-          <Stack.Screen
-            name="panico"
-            options={{
-              presentation: 'fullScreenModal',
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="pro"
-            options={{
-              presentation: 'fullScreenModal',
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="celebracao"
-            options={{
-              presentation: 'fullScreenModal',
-              headerShown: false,
-              animation: 'fade',
-            }}
-          />
-          <Stack.Screen
-            name="reflexao-recaida"
-            options={{
-              presentation: 'fullScreenModal',
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="frases"
-            options={{
-              presentation: 'modal',
-              headerShown: true,
-              headerTitle: 'Biblioteca de frases',
-              headerShadowVisible: false,
-              headerTintColor: Colors.text,
-              headerStyle: { backgroundColor: Colors.background },
-            }}
-          />
-          <Stack.Screen
-            name="relatorio"
-            options={{
-              presentation: 'modal',
-              headerShown: true,
-              headerTitle: 'Relatório de progresso',
-              headerShadowVisible: false,
-              headerTintColor: Colors.text,
-              headerStyle: { backgroundColor: Colors.background },
-            }}
-          />
-          <Stack.Screen
-            name="streak-detalhe"
-            options={{
-              presentation: 'modal',
-              headerShown: true,
-              headerTitle: 'Sua jornada',
-              headerShadowVisible: false,
-              headerTintColor: Colors.text,
-              headerStyle: { backgroundColor: Colors.background },
-            }}
-          />
-          <Stack.Screen
-            name="termos-de-servico"
-            options={{
-              presentation: 'modal',
-              headerShown: true,
-              headerTitle: 'Termos de Serviço',
-              headerShadowVisible: false,
-              headerTintColor: Colors.text,
-              headerStyle: { backgroundColor: Colors.background },
-            }}
-          />
-        </Stack>
+        <AppDataProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="onboarding" />
+            <Stack.Screen
+              name="plano-gerado"
+              options={{
+                presentation: 'fullScreenModal',
+                headerShown: false,
+                gestureEnabled: false,
+                animation: 'fade',
+              }}
+            />
+            <Stack.Screen
+              name="patente-revelada"
+              options={{
+                presentation: 'fullScreenModal',
+                headerShown: false,
+                gestureEnabled: false,
+                animation: 'fade',
+              }}
+            />
+            <Stack.Screen
+              name="panico"
+              options={{
+                presentation: 'fullScreenModal',
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="pro"
+              options={{
+                presentation: 'fullScreenModal',
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="celebracao"
+              options={{
+                presentation: 'fullScreenModal',
+                headerShown: false,
+                animation: 'fade',
+              }}
+            />
+            <Stack.Screen
+              name="reflexao-recaida"
+              options={{
+                presentation: 'fullScreenModal',
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="frases"
+              options={{
+                presentation: 'modal',
+                headerShown: true,
+                headerTitle: 'Biblioteca de frases',
+                headerShadowVisible: false,
+                headerTintColor: Colors.text,
+                headerStyle: { backgroundColor: Colors.background },
+              }}
+            />
+            <Stack.Screen
+              name="relatorio"
+              options={{
+                presentation: 'modal',
+                headerShown: true,
+                headerTitle: 'Relatório de progresso',
+                headerShadowVisible: false,
+                headerTintColor: Colors.text,
+                headerStyle: { backgroundColor: Colors.background },
+              }}
+            />
+            <Stack.Screen
+              name="streak-detalhe"
+              options={{
+                presentation: 'modal',
+                headerShown: true,
+                headerTitle: 'Sua jornada',
+                headerShadowVisible: false,
+                headerTintColor: Colors.text,
+                headerStyle: { backgroundColor: Colors.background },
+              }}
+            />
+            <Stack.Screen
+              name="termos-de-servico"
+              options={{
+                presentation: 'modal',
+                headerShown: true,
+                headerTitle: 'Termos de Serviço',
+                headerShadowVisible: false,
+                headerTintColor: Colors.text,
+                headerStyle: { backgroundColor: Colors.background },
+              }}
+            />
+          </Stack>
+        </AppDataProvider>
       )}
     </ThemeProvider>
   );

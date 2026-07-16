@@ -117,6 +117,12 @@ export default function PerfilScreen() {
 
   async function selecionarIdioma(idioma: AppLanguage) {
     await mudarIdioma(idioma);
+    // O texto da notificação é montado com i18n.t() no momento do
+    // agendamento — sem reagendar aqui, fica preso no idioma antigo até a
+    // próxima troca de horário ou reabertura do app.
+    if (dados?.notificationsEnabled) {
+      agendarLembreteDiario(dados.dailyQuoteHour, dados.dailyQuoteMinute);
+    }
   }
 
   function onMudarHora(event: DateTimePickerEvent, date?: Date) {
@@ -149,7 +155,18 @@ export default function PerfilScreen() {
       t('data.deleteAllConfirmMessage'),
       [
         { text: t('data.cancel'), style: 'cancel' },
-        { text: t('data.deleteAllConfirm'), style: 'destructive', onPress: () => resetarApp() },
+        {
+          text: t('data.deleteAllConfirm'),
+          style: 'destructive',
+          onPress: () => {
+            resetarApp();
+            // Sem isso, os campos de texto continuam mostrando os valores
+            // antigos (o buffer só sincroniza uma vez com o storage).
+            setCustoTexto('');
+            setTempoTexto('');
+            bufferEconomiaSincronizado.current = false;
+          },
+        },
       ],
     );
   }

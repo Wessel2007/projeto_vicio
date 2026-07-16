@@ -44,7 +44,7 @@ export function calcPatente(totalXP: number, isPro: boolean = true): InfoPatente
   if (proxNivel) {
     const diasNoNivel = diasEfetivos - nivelAtual.minDias;
     const diasParaProx = proxNivel.minDias - nivelAtual.minDias;
-    progressoPercent = Math.min(100, Math.floor((diasNoNivel / diasParaProx) * 100));
+    progressoPercent = Math.max(0, Math.min(100, Math.floor((diasNoNivel / diasParaProx) * 100)));
   }
 
   return { nivel: nivelAtual, proxNivel, diasEfetivos, progressoPercent, bloqueadoPorPlano };
