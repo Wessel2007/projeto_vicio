@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AmbientGlow } from '@/components/ambient-glow';
 import { EconomiaCard } from '@/components/economia-card';
 import { HorarioRiscoCard } from '@/components/horario-risco-card';
+import { MarcoProximoCard } from '@/components/marco-proximo-card';
 import { ProgressRing } from '@/components/progress-ring';
 import { SosButton } from '@/components/sos-button';
 import { ThemedText } from '@/components/themed-text';
@@ -20,6 +21,7 @@ import { useElapsedTime } from '@/hooks/useElapsedTime';
 import { useRankUpCelebration } from '@/hooks/useRankUpCelebration';
 import { calcEconomia } from '@/utils/economia';
 import { calcTaxaResistencia } from '@/utils/insights';
+import { calcMarcoProximo } from '@/utils/marco';
 import { calcularSemana, formatarCabecalhoData } from '@/utils/datas';
 
 const SUBLEVEL_LABEL = ['I', 'II', 'III'];
@@ -29,7 +31,7 @@ const HOME_GLOW = [
 
 export default function HomeScreen() {
   const { t } = useTranslation(['home', 'common']);
-  const { dados, derivado, carregando } = useAppData();
+  const { dados, derivado, perfil, carregando } = useAppData();
   const elapsed = useElapsedTime(dados?.streakStartDate ?? null);
   useRankUpCelebration(derivado?.patente, derivado?.streakDias ?? 0);
 
@@ -61,6 +63,7 @@ export default function HomeScreen() {
 
   const taxa = calcTaxaResistencia(dados.entries);
   const economia = calcEconomia(dados);
+  const marcoProximo = calcMarcoProximo(perfil?.marcoEsperado ?? null, derivado.streakDias, derivado.maiorStreak);
 
   return (
     <ThemedView style={styles.container}>
@@ -106,6 +109,11 @@ export default function HomeScreen() {
 
           {/* Horário de risco: bloco de 2h com mais gatilhos/recaídas registrados */}
           <HorarioRiscoCard entries={dados.entries} />
+
+          {/* Marco esperado (onboarding) prestes a ser alcançado */}
+          {marcoProximo && (
+            <MarcoProximoCard marco={marcoProximo.marco} diasRestantes={marcoProximo.diasRestantes} />
+          )}
 
           {/* Régua da semana */}
           <WeekRuler cumpridos={semana} hoje={hojeIdx} />

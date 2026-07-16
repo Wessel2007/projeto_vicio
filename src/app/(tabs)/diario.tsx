@@ -77,6 +77,15 @@ export default function DiarioScreen() {
   const [notas, setNotas] = useState('');
   const [resistedSelecionado, setResistedSelecionado] = useState<boolean | null>(null);
 
+  // Gatilhos escolhidos no onboarding aparecem primeiro — mais relevantes
+  // pra esse usuário que a ordem fixa da lista completa.
+  const gatilhosOrdenados = useMemo(() => {
+    const selecionados = dados?.selectedTriggers ?? [];
+    if (selecionados.length === 0) return GATILHOS_COMUNS;
+    const resto = GATILHOS_COMUNS.filter((g) => !selecionados.includes(g));
+    return [...selecionados, ...resto];
+  }, [dados?.selectedTriggers]);
+
   // Agrupa as entradas por dia, preservando a ordem (mais recente primeiro).
   const grupos = useMemo(() => {
     const out: { rotulo: string; entradas: TriggerEntry[] }[] = [];
@@ -216,7 +225,7 @@ export default function DiarioScreen() {
           <ScrollView contentContainerStyle={styles.modalContent}>
             <Text style={styles.campoLabel}>{t('modal.triggerLabel')}</Text>
             <View style={styles.gatilhosGrid}>
-              {GATILHOS_COMUNS.map((g) => {
+              {gatilhosOrdenados.map((g) => {
                 const sel = gatilhoSelecionado === g;
                 return (
                   <Pressable

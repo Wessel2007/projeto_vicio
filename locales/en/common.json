@@ -39,6 +39,8 @@
   "notifications": {
     "dailyReminderTitle": "🔥 Your discipline today",
     "dailyReminderBody": "Your quote of the day and your rank are waiting for you. Open FORJA.",
+    "dailyReminderTitle_acolhedor": "🔥 A moment for you",
+    "dailyReminderBody_acolhedor": "Your quote of the day is waiting. A minute in FORJA might help today.",
     "channelName": "Daily reminders"
   },
   "dates": {

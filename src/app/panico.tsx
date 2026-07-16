@@ -98,7 +98,8 @@ function Respiracao({ onConcluir, onFechar }: { onConcluir: () => void; onFechar
 
 export default function PanicoScreen() {
   const { t } = useTranslation('panicButton');
-  const { dados, adicionarEntrada } = useAppData();
+  const { dados, perfil, adicionarEntrada } = useAppData();
+  const tomContexto = perfil?.estiloMotivacional ?? undefined;
   const [step, setStep] = useState<Step>('respiracao');
   const [gatilhoSelecionado, setGatilhoSelecionado] = useState('');
   const [ferramentaAberta, setFerramentaAberta] = useState<Ferramenta>(null);
@@ -236,9 +237,9 @@ export default function PanicoScreen() {
             </BadgeHalo>
 
             <Text style={styles.eyebrowBronze}>{t('victory.eyebrow')}</Text>
-            <ThemedText type="titleBig" style={styles.centro}>{t('victory.title')}</ThemedText>
+            <ThemedText type="titleBig" style={styles.centro}>{t('victory.title', { context: tomContexto })}</ThemedText>
             <ThemedText type="body" themeColor="textSecondary" style={styles.cerimonialTexto}>
-              {t('victory.text')}
+              {t('victory.text', { context: tomContexto })}
             </ThemedText>
 
             <Pressable onPress={() => router.back()} style={styles.outlineBtn}>

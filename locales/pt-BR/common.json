@@ -39,6 +39,8 @@
   "notifications": {
     "dailyReminderTitle": "🔥 Sua disciplina de hoje",
     "dailyReminderBody": "Sua frase do dia e sua patente estão te esperando. Abra o FORJA.",
+    "dailyReminderTitle_acolhedor": "🔥 Um momento pra você",
+    "dailyReminderBody_acolhedor": "Sua frase do dia está esperando. Um minuto no FORJA pode ajudar hoje.",
     "channelName": "Lembretes diários"
   },
   "dates": {

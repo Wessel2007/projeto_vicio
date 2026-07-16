@@ -38,7 +38,7 @@ function SecaoHeader({ titulo, pro }: { titulo: string; pro?: boolean }) {
 
 export default function PerfilScreen() {
   const { t, i18n } = useTranslation('profile');
-  const { dados, atualizar, resetarApp, derivado, carregando } = useAppData();
+  const { dados, perfil, atualizar, resetarApp, derivado, carregando } = useAppData();
   const [mostrarSeletorHora, setMostrarSeletorHora] = useState(false);
   const [seletorIdiomaAberto, setSeletorIdiomaAberto] = useState(false);
   const [custoTexto, setCustoTexto] = useState('');
@@ -100,7 +100,7 @@ export default function PerfilScreen() {
   async function alternarNotificacoes(ativar: boolean) {
     if (!dados) return;
     if (ativar) {
-      const permitido = await ativarNotificacoes(dados.dailyQuoteHour, dados.dailyQuoteMinute);
+      const permitido = await ativarNotificacoes(dados.dailyQuoteHour, dados.dailyQuoteMinute, perfil?.estiloMotivacional);
       if (!permitido) {
         Alert.alert(
           t('settings.permissionDeniedTitle'),
@@ -121,7 +121,7 @@ export default function PerfilScreen() {
     // agendamento — sem reagendar aqui, fica preso no idioma antigo até a
     // próxima troca de horário ou reabertura do app.
     if (dados?.notificationsEnabled) {
-      agendarLembreteDiario(dados.dailyQuoteHour, dados.dailyQuoteMinute);
+      agendarLembreteDiario(dados.dailyQuoteHour, dados.dailyQuoteMinute, perfil?.estiloMotivacional);
     }
   }
 
@@ -132,7 +132,7 @@ export default function PerfilScreen() {
     const minute = date.getMinutes();
     atualizar({ dailyQuoteHour: hour, dailyQuoteMinute: minute });
     if (dados.notificationsEnabled) {
-      agendarLembreteDiario(hour, minute);
+      agendarLembreteDiario(hour, minute, perfil?.estiloMotivacional);
     }
   }
 

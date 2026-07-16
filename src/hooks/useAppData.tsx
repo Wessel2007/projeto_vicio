@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import { AppData, DEFAULT_DATA, RelapseReflection, TriggerEntry } from '@/types';
+import { DEFAULT_USER_PROFILE, UserProfile } from '@/types/perfil';
 import { carregarDados, salvarDados } from '@/storage';
-import { apagarPerfil } from '@/storage/perfil';
+import { apagarPerfil, carregarPerfil } from '@/storage/perfil';
 import { RECAIDA_PENALIDADE_PERCENT, REFLEXAO_XP_BONUS, XP_POR_DIA } from '@/constants/gamification';
 import { calcMaiorStreak, calcPatente, calcStreakDias, calcTotalXP } from '@/utils/gamification';
 import { agendarLembreteDiario, desativarNotificacoes } from '@/notifications';
@@ -13,6 +14,10 @@ function logFalhaStorage(origem: string) {
 
 interface AppDataContextValue {
   dados: AppData | null;
+  // Perfil sigiloso coletado no onboarding (comportamento-alvo, estilo
+  // motivacional, marco esperado etc.) — usado para adaptar copy, nunca
+  // exposto na UI. Ver src/types/perfil.ts.
+  perfil: UserProfile | null;
   carregando: boolean;
   atualizar: (patch: Partial<AppData>) => void;
   registrarReflexaoRecaida: (input: {
@@ -40,16 +45,18 @@ const AppDataContext = createContext<AppDataContextValue | null>(null);
 // modal, não desmontada) até o app ser fechado e reaberto.
 function useAppDataState(): AppDataContextValue {
   const [dados, setDados] = useState<AppData | null>(null);
+  const [perfil, setPerfil] = useState<UserProfile | null>(null);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    carregarDados().then((d) => {
+    Promise.all([carregarDados(), carregarPerfil()]).then(([d, p]) => {
       setDados(d);
+      setPerfil(p);
       setCarregando(false);
       // Re-agenda o lembrete a cada abertura do app: o Android pode limpar
       // notificações agendadas após reinício do aparelho.
       if (d.notificationsEnabled) {
-        agendarLembreteDiario(d.dailyQuoteHour, d.dailyQuoteMinute);
+        agendarLembreteDiario(d.dailyQuoteHour, d.dailyQuoteMinute, p.estiloMotivacional);
       }
     });
   }, []);
@@ -136,6 +143,7 @@ function useAppDataState(): AppDataContextValue {
     await apagarPerfil();
     await limparRankVisto();
     setDados(inicial);
+    setPerfil({ ...DEFAULT_USER_PROFILE });
   }, []);
 
   const derivado = dados
@@ -149,6 +157,7 @@ function useAppDataState(): AppDataContextValue {
 
   return {
     dados,
+    perfil,
     carregando,
     atualizar,
     registrarReflexaoRecaida,

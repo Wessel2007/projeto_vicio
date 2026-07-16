@@ -90,7 +90,7 @@ serializar as escritas (fila simples) ao mexer no Context da Fase 1.1.
 
 ---
 
-## Fase 2 — Personalização do onboarding (perfil sigiloso)
+## Fase 2 — Personalização do onboarding (perfil sigiloso) — ✅ concluída em 2026-07-16
 
 `src/storage/perfil.ts` salva o perfil (`comportamentoAlvo`,
 `tempoIncomoda`, `importanciaSobriedade`, `gatilhosDetalhes`,
@@ -105,22 +105,36 @@ conteúdo, não só de código — teria que escrever 2 variantes de cada frase.
 Escopo recomendado para este polimento (pragmático, sem trabalho de
 redação em massa):
 
-- 2.1. Carregar o perfil junto com `AppData` no novo `AppDataProvider`
-  (Fase 1.1), expondo `perfil` no contexto.
-- 2.2. Usar `estiloMotivacional` (`direto`/`acolhedor`) para escolher entre
-  duas variantes curtas e já dimensionadas de copy: texto da notificação
-  diária e mensagem de confirmação do botão de pânico (poucas strings,
-  viável escrever as 2 variantes em pt-BR/en/es).
-- 2.3. Usar `marcoEsperado` para destacar, na Home ou em
-  `streak-detalhe.tsx`, quando o marco escolhido pelo usuário no
-  onboarding está próximo ("faltam 2 dias para o fim de semana que você
-  marcou como meta").
-- 2.4. Usar `gatilhosDetalhes`/`areasMelhoria` para priorizar a ordem dos
-  gatilhos sugeridos no Diário e no Botão de Pânico (gatilhos já
-  selecionados no onboarding aparecem primeiro).
+- [x] 2.1. Perfil carregado junto com `AppData` no `AppDataProvider`
+  (Fase 1.1), exposto como `perfil` no contexto (`src/hooks/useAppData.tsx`).
+  `resetarApp()` também reseta `perfil` para `DEFAULT_USER_PROFILE` em
+  memória (senão ficaria com o perfil antigo até reabrir o app).
+- [x] 2.2. `estiloMotivacional` (`direto`/`acolhedor`) escolhe o tom via o
+  recurso de `context` do i18next (`t(chave, { context: estilo })` busca
+  `chave_acolhedor` antes de cair na chave padrão): texto da notificação
+  diária (`agendarLembreteDiario`/`ativarNotificacoes`, agora recebem o
+  estilo) e mensagem de vitória do botão de pânico (`panico.tsx`, step
+  "vitoria"). Variantes escritas em pt-BR/en/es (`common.json` e
+  `panicButton.json`).
+- [x] 2.3. `marcoEsperado` destacado na Home via `MarcoProximoCard`
+  (`src/components/marco-proximo-card.tsx`) quando o marco estiver a até 5
+  dias de distância (`calcMarcoProximo` em `src/utils/marco.ts`). Cobre os
+  marcos com alvo numérico claro (primeiras 24h, uma semana, um mês,
+  superar recorde); os comportamentais/subjetivos ("dizer não",
+  "acordar em paz", "outro") não têm cálculo de proximidade e não
+  disparam o card.
+- [x] 2.4. Gatilhos já selecionados no onboarding (`dados.selectedTriggers`,
+  estruturado — não o texto livre `gatilhosDetalhes`) agora aparecem
+  primeiro na grade de gatilhos do Diário (`diario.tsx`); o Botão de
+  Pânico já fazia isso antes (`panico.tsx` já filtrava por
+  `selectedTriggers`).
 
 Isso cumpre a promessa de personalização sem exigir reescrever todo o
-conteúdo de frases.
+conteúdo de frases. `gatilhosDetalhes` (elaboração livre) e `areasMelhoria`
+(áreas de vida) continuam salvos mas sem uso na UI — são texto livre/
+multi-seleção sem um encaixe natural e de baixo risco no polimento atual;
+ficam como candidato a uma futura tela de "reflexão" ou relatório mais
+rico, fora deste escopo.
 
 ---
 

@@ -112,7 +112,7 @@ export default function OnboardingScreen() {
     const trackingStartDate = new Date().toISOString();
 
     const notificationsEnabled = notificacoesAtivadas
-      ? await ativarNotificacoes(DEFAULT_DATA.dailyQuoteHour, DEFAULT_DATA.dailyQuoteMinute)
+      ? await ativarNotificacoes(DEFAULT_DATA.dailyQuoteHour, DEFAULT_DATA.dailyQuoteMinute, estilo)
       : false;
 
     const dados = await carregarDados();

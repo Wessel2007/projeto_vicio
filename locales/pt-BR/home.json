@@ -27,6 +27,11 @@
     "range": "{{inicio}}h–{{fim}}h",
     "empty": "Continue registrando no Diário para desbloquear seus insights."
   },
+  "milestoneCard": {
+    "label": "PRÓXIMA CONQUISTA",
+    "daysLeftSingular": "Falta 1 dia para:",
+    "daysLeftPlural": "Faltam {{dias}} dias para:"
+  },
   "quotes": {
     "0": { "texto": "Você não tem controle sobre o que acontece com você, mas tem controle sobre como responde.", "autor": "Epicteto" },
     "1": { "texto": "O homem que conquista a si mesmo é maior do que aquele que conquista mil batalhas.", "autor": "Buda" },
