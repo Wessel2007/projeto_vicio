@@ -213,9 +213,10 @@ não relacionados).
 (placeholder — trocar quando tiver conta de desenvolvedor/domínio
 definitivo). `eas.json` criado com perfis `development`/`preview`/
 `production` + `submit.production`.
-**Pendente (ação externa, exige login):** rodar `eas init` com uma conta
-Expo para gerar o `extra.eas.projectId` em `app.json` — não é algo que dá
-pra fazer sem a conta do Luiz.
+✅ `eas init` rodado em 2026-07-16 com a conta pessoal do Luiz
+(`wessel077`) — projeto criado em
+`@wessel077/projeto_vicio`, `app.json` ganhou `extra.eas.projectId` e
+`owner: "wessel077"` automaticamente.
 
 ### ✅ 4.2 Ícone adaptativo e splash
 `android-icon-foreground.png` e `splash-icon.png` eram bytes idênticos ao
@@ -270,7 +271,6 @@ validado, junto com o restante da localização de metadata de loja (item já
 listado como pendente na Fase 3).
 
 ### ⏳ Pendente (fora do alcance de mudança de código)
-- [ ] `eas init` com conta Expo do Luiz para gerar `extra.eas.projectId`.
 - [ ] Hospedar a Política de Privacidade em uma URL pública (fora do app).
 - [ ] Screenshots reais de loja — precisa rodar o app em simulador/
       dispositivo (iOS e Android); sequência recomendada já está em

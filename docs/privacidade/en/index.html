@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Privacy Policy — FORJA</title>
+<meta name="robots" content="index, follow" />
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #0D0B09;
+    color: #F4EFE9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: rgba(13,11,9,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  header .brand { font-weight: 700; letter-spacing: 0.04em; color: #E8B458; text-decoration: none; font-size: 15px; }
+  .switcher { display: flex; gap: 4px; }
+  .switcher a {
+    color: rgba(244,239,233,0.55);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 99px;
+  }
+  .switcher a.active { color: #0D0B09; background: #E8B458; }
+  main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+  h1 { color: #E8B458; font-size: 26px; margin: 0 0 4px; }
+  h2 { color: #F4EFE9; font-size: 17px; margin: 32px 0 8px; }
+  p { color: rgba(244,239,233,0.78); font-size: 15px; margin: 0 0 12px; }
+  ul { margin: 0 0 12px; padding-left: 20px; color: rgba(244,239,233,0.78); font-size: 15px; }
+  li { margin-bottom: 6px; }
+  strong { color: #F4EFE9; font-weight: 700; }
+  a.inline { color: #FF7A36; }
+  footer { text-align: center; padding: 24px 20px 40px; color: rgba(244,239,233,0.4); font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">FORJA</span>
+  <nav class="switcher"><a href="/projeto_vicio/privacidade/">PT</a><a href="/projeto_vicio/privacidade/en/" class="active">EN</a><a href="/projeto_vicio/privacidade/es/">ES</a></nav>
+</header>
+<main>
+<h1>Privacy Policy</h1>
+<p><strong>Last updated:</strong> July 16, 2026</p>
+<p>This Privacy Policy describes how the Forja app ("App"), developed by Luiz Henrique Wessel ("we", "our"), handles data related to your use of it. A sensitive topic and a vulnerable audience demand full transparency — please read carefully.</p>
+<h2>1. Summary in one sentence</h2>
+<p>Forja runs 100% on your device: there is no server, user account, or cloud sync in this version. None of the data you log ever leaves your device.</p>
+<h2>2. What data we collect</h2>
+<p>The App stores locally, only on your device:</p>
+<ul><li><strong>Progress:</strong> current streak, XP, rank, event history (relapses, days resisted).</li><li><strong>Trigger Journal:</strong> date, selected trigger, and optional text you write — it may contain <strong>sensitive data</strong> about mental health and sexual behavior, as defined by Brazil's LGPD (Law No. 13,709/2018).</li><li><strong>Onboarding personalization profile:</strong> the behavior you want to change, how long it has bothered you, the importance of sobriety, preferred motivational style, and expected milestone — used to tailor quotes and notifications to your profile.</li><li><strong>Preferences:</strong> language, daily notification time, rank visual theme, trusted contact (name/phone you register), optional savings data (habit cost/time).</li></ul>
+<p>We do not collect your full name, email, location, device contacts, camera, microphone, or any advertising identifier. We do not use cookies (the App is not a web page).</p>
+<h2>3. How data is stored and protected</h2>
+<ul><li>All data stays in the device's local storage (AsyncStorage), <strong>never sent to a server</strong> — because, in this version, the App has no backend.</li><li>The Trigger Journal and personalization profile are <strong>encrypted with AES-256-GCM</strong> before being saved. The encryption key is generated on the device itself and stored in the Keychain (iOS) or Keystore (Android) via expo-secure-store — a vault protected by the operating system, isolated from other apps.</li><li>We do not use any third-party analytics, behavior tracking, advertising, or crash-reporting service — the App makes no network calls at all.</li></ul>
+<h2>4. Who we share data with</h2>
+<p>No one. We do not sell, rent, or share your data with third parties, advertisers, or partners, because your data never leaves your device.</p>
+<p>The only exception is the app stores (Apple App Store / Google Play), which process subscription payments when you subscribe to the Pro plan — they receive only the data needed for payment, under Apple/Google's own privacy policies, unrelated to your journal content or progress.</p>
+<h2>5. Notifications</h2>
+<p>The daily reminder is scheduled locally on your device (we do not use remote push notifications, which would require sending a device identifier to a server). The notification content (quote of the day) is already bundled inside the App.</p>
+<h2>6. Your rights (LGPD)</h2>
+<p>Since your data lives only on your device, you already have full, immediate control over it, with no need to ask us for anything:</p>
+<ul><li><strong>Access:</strong> all your data is visible within the App's own screens.</li><li><strong>Export:</strong> a JSON data export feature, available under Profile &gt; Data.</li><li><strong>Delete:</strong> "Delete all data" under Profile &gt; Data permanently removes everything — streak, XP, journal, and profile — from your device.</li><li><strong>Uninstalling</strong> the App also removes all locally stored data (except, on some Android devices, the operating system's automatic backup to the user's own cloud, outside our control — see section 8).</li></ul>
+<p>Since we do not collect data on any server of our own, there is no data for us to correct, for you to revoke consent on, or for us to transfer on your behalf — the action is already yours, directly within the App.</p>
+<h2>7. Minors</h2>
+<p>The App is intended for users 18 or older (or the local age of legal majority). We do not knowingly collect data from minors.</p>
+<h2>8. Operating system backups</h2>
+<p>Some devices automatically back up apps to the user's own cloud account (iCloud on iOS, Google Drive on Android), outside our control. If that includes Forja's data, it becomes subject to Apple/Google's own privacy policies, not this one. You can disable that specific backup in your device settings.</p>
+<h2>9. Changes to this policy</h2>
+<p>If the App gains a backend, cloud sync, or community features in the future, this policy will be updated <strong>before</strong> the change takes effect, with a prominent notice inside the App.</p>
+<h2>10. Not a substitute for clinical treatment</h2>
+<p>Forja is a habit-support tool, not a health service. It does not replace therapy, psychological, or medical care. In case of crisis, seek CVV (188, Brazil) or emergency services (192/193, Brazil) or your local equivalent.</p>
+<h2>11. Contact</h2>
+<p>Questions about this Privacy Policy or your data: heyxist3r@gmail.com.</p>
+</main>
+<footer>FORJA — heyxist3r@gmail.com</footer>
+</body>
+</html>
