@@ -90,8 +90,15 @@ história do app, primeira imagem é a mais importante):
 
 ## Política de Privacidade (URL pública)
 
-**Pendente** — precisa de hospedagem externa (GitHub Pages, Notion público
-etc.); o conteúdo já existe em `locales/*/politica.json` e na tela
-`/politica-de-privacidade` dentro do app, mas App Store Connect e Play
-Console exigem uma URL pública própria no formulário, não uma tela dentro
-do app.
+**Pronta** — hospedada via GitHub Pages a partir de `docs/privacidade/`
+(gerado por `scripts/gerar-paginas-legais.js` a partir de
+`locales/*/politica.json`). URL a usar no formulário de submissão das duas
+lojas:
+
+```
+https://wessel2007.github.io/projeto_vicio/privacidade/
+```
+
+Versões em inglês e espanhol em `/en/` e `/es/`, mas o campo de URL única
+das lojas deve apontar para a versão em pt-BR acima (idioma de
+lançamento).

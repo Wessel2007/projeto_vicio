@@ -270,8 +270,14 @@ Conteúdo em pt-BR (idioma de lançamento); en/es ficam para depois do MVP
 validado, junto com o restante da localização de metadata de loja (item já
 listado como pendente na Fase 3).
 
+✅ Política de Privacidade hospedada publicamente em 2026-07-16 via GitHub
+Pages (`docs/privacidade/`, gerado a partir de `locales/*/politica.json`
+por `scripts/gerar-paginas-legais.js` — fonte única, sem duplicar texto).
+URL a usar no formulário de submissão das lojas:
+**https://wessel2007.github.io/projeto_vicio/privacidade/** (com
+`/en/`/`/es/` para as outras traduções).
+
 ### ⏳ Pendente (fora do alcance de mudança de código)
-- [ ] Hospedar a Política de Privacidade em uma URL pública (fora do app).
 - [ ] Screenshots reais de loja — precisa rodar o app em simulador/
       dispositivo (iOS e Android); sequência recomendada já está em
       `STORE_LISTING.md`. Só faz sentido depois da Fase 5.
