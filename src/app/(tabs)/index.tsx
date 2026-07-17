@@ -118,7 +118,7 @@ export default function HomeScreen() {
           {/* Régua da semana */}
           <WeekRuler cumpridos={semana} hoje={hojeIdx} />
 
-          {/* Grid: Batalhas + Frase do dia */}
+          {/* Batalhas */}
           <View style={styles.grid}>
             <Pressable style={styles.gridCard} onPress={() => router.push('/(tabs)/diario' as Href)}>
               <Text style={styles.cardLabel}>{t('grid.battlesLabel')}</Text>
@@ -128,14 +128,17 @@ export default function HomeScreen() {
               </Text>
               <Text style={styles.batalhasTaxa}>{t('grid.resistancePercent', { percent: taxa.percentResistencia })}</Text>
             </Pressable>
+          </View>
 
-            <View style={[styles.gridCard, styles.fraseCard]}>
-              <Text style={styles.cardLabel}>{t('grid.quoteLabel')}</Text>
-              <ThemedText type="quote" style={styles.fraseTexto} numberOfLines={3}>
-                &ldquo;{fraseTexto}&rdquo;
-              </ThemedText>
-              <Text style={styles.fraseAutor}>{fraseAutor}</Text>
-            </View>
+          {/* Frase do dia: card de largura cheia — precisa acomodar frases
+              longas por inteiro, sem cortar (ver histórico do bug: dentro do
+              grid de 2 colunas + numberOfLines={3} truncava a maioria delas). */}
+          <View style={styles.fraseCard}>
+            <Text style={styles.cardLabel}>{t('grid.quoteLabel')}</Text>
+            <ThemedText type="quote" style={styles.fraseTexto}>
+              &ldquo;{fraseTexto}&rdquo;
+            </ThemedText>
+            <Text style={styles.fraseAutor}>{fraseAutor}</Text>
           </View>
         </ScrollView>
 
@@ -223,7 +226,15 @@ const styles = StyleSheet.create({
     borderRadius: Radius.card,
     gap: 8,
   },
-  fraseCard: { gap: 6, justifyContent: 'center' },
+  fraseCard: {
+    gap: 8,
+    paddingVertical: 16,
+    paddingHorizontal: Radius.card,
+    backgroundColor: Colors.backgroundElement,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: Radius.card,
+  },
   cardLabel: {
     fontFamily: Fonts.data.semibold,
     fontSize: 10,
@@ -233,7 +244,7 @@ const styles = StyleSheet.create({
   batalhasNum: { fontFamily: Fonts.data.bold, fontSize: 30, color: Colors.text },
   batalhasTotal: { fontSize: 14, color: 'rgba(244,239,233,0.4)' },
   batalhasTaxa: { fontFamily: Fonts.body.bold, fontSize: 11, color: Accent.verde },
-  fraseTexto: { color: 'rgba(244,239,233,0.75)', fontSize: 11.5, lineHeight: 17 },
+  fraseTexto: { color: 'rgba(244,239,233,0.75)' },
   fraseAutor: {
     fontFamily: Fonts.data.bold,
     fontSize: 10,
