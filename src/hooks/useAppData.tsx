@@ -7,6 +7,7 @@ import { RECAIDA_PENALIDADE_PERCENT, REFLEXAO_XP_BONUS, XP_POR_DIA } from '@/con
 import { calcMaiorStreak, calcPatente, calcStreakDias, calcTotalXP } from '@/utils/gamification';
 import { agendarLembreteDiario, desativarNotificacoes } from '@/notifications';
 import { limparRankVisto } from '@/hooks/useRankUpCelebration';
+import { configurarCompras, sincronizarStatusPro } from '@/services/assinatura';
 
 function logFalhaStorage(origem: string) {
   return (erro: unknown) => console.error(`[FORJA] Falha ao salvar dados (${origem})`, erro);
@@ -65,8 +66,22 @@ function useAppDataState(): AppDataContextValue {
   }, []);
 
   useEffect(() => {
-    Promise.all([carregarDados(), carregarPerfil()]).then(([d, p]) => {
-      setDados(d);
+    configurarCompras();
+    Promise.all([carregarDados(), carregarPerfil()]).then(async ([d, p]) => {
+      // Revalida o entitlement Pro na loja a cada boot: cobre cancelamento/
+      // expiração que aconteceram fora do app. Retorna null se o RevenueCat
+      // não estiver configurado ainda (ver src/config/revenuecat.ts) — nesse
+      // caso não mexe no isPro salvo, preservando o toggle de simulação de
+      // Perfil > Modo de teste durante o desenvolvimento.
+      const statusPro = await sincronizarStatusPro();
+      const dadosSincronizados =
+        statusPro && statusPro.isPro !== d.isPro
+          ? { ...d, isPro: statusPro.isPro, proPlano: statusPro.isPro ? d.proPlano : null }
+          : d;
+      if (dadosSincronizados !== d) {
+        persistir(dadosSincronizados, 'sincronizarStatusPro');
+      }
+      setDados(dadosSincronizados);
       setPerfil(p);
       setCarregando(false);
       // Re-agenda o lembrete a cada abertura do app: o Android pode limpar
@@ -75,7 +90,7 @@ function useAppDataState(): AppDataContextValue {
         agendarLembreteDiario(d.dailyQuoteHour, d.dailyQuoteMinute, p.estiloMotivacional);
       }
     });
-  }, []);
+  }, [persistir]);
 
   const atualizar = useCallback((patch: Partial<AppData>) => {
     setDados((prev) => {
