@@ -1,5 +1,11 @@
 # Plano de Polimento — FORNALHA (pré-submissão)
 
+> **Arquivo histórico.** Registro das decisões e bugs do polimento de
+> 2026-07-16/17. Fases 1-4 concluídas; a Fase 5 (testes em dispositivo real)
+> segue como item aberto, já refletido em `CHECKLIST.md` (raiz do projeto),
+> que é a fonte viva de "o que falta". Mantido aqui como histórico de
+> decisões, não como checklist ativa.
+
 Gerado em 2026-07-16. Baseado em auditoria do código atual (TypeScript e
 lint limpos — os problemas abaixo são de lógica/integração e itens
 incompletos, não erros de sintaxe) + `CHECKLIST.md` já existente.

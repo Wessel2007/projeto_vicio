@@ -140,7 +140,7 @@ secundária:
 - **Pendente:** revisão humana final por falante nativo das strings
   sensíveis (Botão de Pânico e Diário de Gatilhos) antes de produção — a
   tradução automática já recebeu uma revisão de qualidade em 2026-07-16
-  (ver Fase 3 do `PLANO_POLIMENTO.md`). As telas adicionadas depois do MVP
+  (ver Fase 3 do `docs-projeto/historico/PLANO_POLIMENTO.md`). As telas adicionadas depois do MVP
   original (`celebracao`, `frases`, `patente-revelada`, `plano-gerado`,
   `reflexao-recaida`, `relatorio`, `streak-detalhe`, `termos-de-servico`)
   foram todas traduzidas nessa mesma rodada e não seguem mais hardcoded em
@@ -172,7 +172,34 @@ secundária:
       `src/storage/index.ts` e `src/storage/perfil.ts` cifram antes de
       `AsyncStorage.setItem` e decifram depois de `getItem`, com fallback
       automático para dado legado em texto puro)
-- [ ] Testes em dispositivo real
-- [ ] Monetização (paywall/IAP) — modelo definido, não implementado
-- [ ] Preparação para submissão nas lojas (política de privacidade,
-      screenshots, descrição)
+- [x] Internacionalização pt-BR/en/es de todas as telas (`src/i18n/`,
+      `locales/`)
+- [x] Termos de Serviço e Política de Privacidade (telas no app +
+      página pública em `docs/privacidade/`, ver `STORE_LISTING.md`)
+- [x] Monetização (paywall/IAP) — SDK RevenueCat integrado
+      (`src/services/assinatura.ts`); falta só preencher API keys e criar
+      os produtos no App Store Connect/dashboard RevenueCat (ver
+      `CHECKLIST.md`, seção Monetização)
+- [x] Preparação inicial para submissão nas lojas (`app.json`/`eas.json`,
+      ícone/splash finais, descrição e categoria em `STORE_LISTING.md`)
+- [ ] Testes em dispositivo real (iOS/Android físicos)
+- [ ] Screenshots reais de loja e revisão humana final das traduções
+      sensíveis (en/es)
+
+> Este bloco é só um resumo de marcos de alto nível. Para o estado
+> detalhado e sempre atualizado (o que falta, por camada Free/Pro/i18n/
+> build), a fonte viva é `CHECKLIST.md` e a seção "Status do projeto" do
+> `README.md` — atualize aqueles primeiro, e só reflita aqui mudanças de
+> marco.
+
+## Organização de arquivos do projeto
+
+- `docs/` — **página pública** hospedada via GitHub Pages (Política de
+  Privacidade linkada nas lojas). Não é o lugar para documentação interna.
+- `docs-projeto/historico/` — documentos internos encerrados/superados
+  (planos de polimento concluídos, rascunhos substituídos), mantidos como
+  registro histórico, não como referência ativa.
+- `design/referencias-concorrente/` — prints de apps concorrentes usados
+  como referência de UX (não são assets do FORNALHA).
+- `design_handoff_forja/` e `design/redesign/` — handoff de design vigente
+  e material visual anterior, ver `README.md` (seção Estrutura do projeto).

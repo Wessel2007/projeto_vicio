@@ -5,7 +5,7 @@ Play Console. Segue a restrição do CLAUDE.md: nenhuma menção a
 "pornografia" ou termos explícitos — o enquadramento é sempre autocontrole/
 disciplina/hábitos saudáveis. Conteúdo em pt-BR (idioma principal de
 lançamento); tradução de metadados para en/es fica para depois do MVP
-validado (ver Fase 3 do `PLANO_POLIMENTO.md`).
+validado (ver Fase 3 do `docs-projeto/historico/PLANO_POLIMENTO.md`).
 
 ## Categoria
 
@@ -85,7 +85,7 @@ autocontrole,disciplina,habitos,streak,vicio,foco,produtividade,motivacao,diario
 ## Screenshots
 
 **Pendente** — precisa rodar o app em simulador/dispositivo real (iOS e
-Android) para capturar. Ver Fase 5 do `PLANO_POLIMENTO.md`. Telas
+Android) para capturar. Ver Fase 5 do `docs-projeto/historico/PLANO_POLIMENTO.md`. Telas
 recomendadas para a sequência de screenshots (ordem pensada para contar a
 história do app, primeira imagem é a mais importante):
 

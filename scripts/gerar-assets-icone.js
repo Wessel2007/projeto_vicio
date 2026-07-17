@@ -1,4 +1,4 @@
-// Script utilitário one-off para a Fase 4 do PLANO_POLIMENTO.md — gera as
+// Script utilitário one-off para a Fase 4 do docs-projeto/historico/PLANO_POLIMENTO.md — gera as
 // variantes de ícone/splash a partir de assets/images/logo_oficial.png
 // (recorte com fundo transparente, ícone adaptativo Android respeitando a
 // safe-zone, e splash proporcional). Não faz parte do app em runtime.

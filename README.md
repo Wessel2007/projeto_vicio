@@ -103,6 +103,10 @@ design_handoff_forja/      # handoff de design vigente ("Aço & Brasa") —
                            # protótipo HTML, design tokens e specs de tela
 design/redesign/           # material de referência visual anterior
                            # ("dark-fogo"), mantido como histórico
+design/referencias-concorrente/  # prints de apps concorrentes (referência de UX)
+docs/                      # página pública (GitHub Pages) da Política de Privacidade
+docs-projeto/historico/    # documentos internos encerrados (planos concluídos,
+                           # rascunhos substituídos), mantidos só como registro
 ```
 
 ## Como rodar

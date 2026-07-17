@@ -95,7 +95,7 @@
 - [x] `bundleIdentifier` (iOS) e `package` (Android) — `com.fornalhaapp.fornalha`
       nos dois, em `app.json` (placeholder de identidade; trocar quando
       houver domínio/conta de desenvolvedor definitivos — ver Fase 4.1 do
-      `PLANO_POLIMENTO.md`)
+      `docs-projeto/historico/PLANO_POLIMENTO.md`)
 - [x] `eas.json` — perfis `development` (dev client, necessário pra testar
       módulos nativos como RevenueCat fora do Expo Go), `preview` e
       `production` configurados; `eas init` já rodado (`extra.eas.projectId`
@@ -151,7 +151,7 @@
       Gatilhos, Reflexão de Recaída, Política de Privacidade, Termos) em
       `locales/en/*` e `locales/es/*` antes de ir para produção — já
       recebeu uma revisão de qualidade via IA em 2026-07-16 (Fase 3 do
-      `PLANO_POLIMENTO.md`), mas isso não substitui revisão humana
+      `docs-projeto/historico/PLANO_POLIMENTO.md`), mas isso não substitui revisão humana
 - [ ] Localização de metadata da App Store/Play Store (nome, descrição,
       screenshots, palavras-chave) para en/es — `STORE_LISTING.md` está em
       pt-BR (idioma de lançamento) por decisão, fica para depois do MVP

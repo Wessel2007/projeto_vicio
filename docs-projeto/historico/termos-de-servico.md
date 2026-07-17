@@ -1,5 +1,10 @@
 # Termos de Serviço
 
+> **Arquivo histórico.** Este é o rascunho original — o conteúdo vigente foi
+> incorporado a `locales/*/termos.json` e é exibido pela tela
+> `src/app/termos-de-servico.tsx`. Se for atualizar os Termos, edite os
+> arquivos de locale, não este documento.
+
 **Última atualização:** 14 de julho de 2026
 
 ## 1. Aceitação dos Termos
