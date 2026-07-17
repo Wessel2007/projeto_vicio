@@ -45,6 +45,14 @@
     "Avisar alguém de confiança quando perceber o gatilho",
     "Ter um plano concreto pronto para o próximo momento difícil"
   ],
+  "compromissosPadrao": [
+    "Contar pra alguém de confiança o que aconteceu",
+    "Tirar o app ou site do alcance nas próximas 24h",
+    "Planejar algo pra fazer no meu horário de maior risco",
+    "Ativar modo foco ou não perturbe hoje",
+    "Deixar uma atividade de substituição pronta pro próximo gatilho",
+    "Marcar um horário fixo pra dormir hoje"
+  ],
   "sugestoes": {
     "Tédio": [
       "Ter algo pronto pra fazer nos momentos vazios",

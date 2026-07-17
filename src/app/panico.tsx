@@ -145,7 +145,12 @@ export default function PanicoScreen() {
   }
 
   function irParaReflexaoRecaida() {
-    router.push({
+    // replace (não push): reflexao-recaida também é fullScreenModal, e
+    // empilhar um modal em cima do outro fazia o iOS reportar o inset de
+    // safe area do topo como 0 no modal aninhado (comido pelo relógio/
+    // dynamic island). Como essa tela nunca precisa voltar ao pânico
+    // (sempre sai via dismissTo às abas), substituir é seguro.
+    router.replace({
       pathname: '/reflexao-recaida',
       params: gatilhoSelecionado ? { gatilho: gatilhoSelecionado } : {},
     } as unknown as Href);

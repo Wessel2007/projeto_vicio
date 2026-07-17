@@ -45,6 +45,14 @@
     "Tell someone I trust when I notice the trigger",
     "Have a concrete plan ready for the next tough moment"
   ],
+  "compromissosPadrao": [
+    "Tell someone I trust what happened",
+    "Remove the app or site from reach for the next 24h",
+    "Plan something to do during my highest-risk time",
+    "Turn on focus or do-not-disturb mode today",
+    "Have a replacement activity ready for the next trigger",
+    "Set a fixed bedtime for tonight"
+  ],
   "sugestoes": {
     "Tédio": [
       "Have something ready to do during empty moments",

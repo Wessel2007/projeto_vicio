@@ -45,6 +45,14 @@
     "Avisar a alguien de confianza cuando note el detonante",
     "Tener un plan concreto listo para el próximo momento difícil"
   ],
+  "compromissosPadrao": [
+    "Contarle a alguien de confianza lo que pasó",
+    "Sacar la app o el sitio de mi alcance en las próximas 24h",
+    "Planear algo para hacer en mi horario de mayor riesgo",
+    "Activar el modo enfoque o no molestar hoy",
+    "Tener lista una actividad de reemplazo para el próximo detonante",
+    "Fijar un horario para dormir hoy"
+  ],
   "sugestoes": {
     "Tédio": [
       "Tener algo listo para hacer en los momentos vacíos",

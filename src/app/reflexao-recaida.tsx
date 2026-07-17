@@ -3,20 +3,25 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BadgeHalo } from '@/components/badge-halo';
 import { GradientButton } from '@/components/gradient-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { GATILHOS_COMUNS } from '@/constants/gatilhos';
-import { getSugestoesPorGatilho } from '@/constants/reflexao';
+import { getCompromissosPadrao, getSugestoesPorGatilho } from '@/constants/reflexao';
 import { Accent, Colors, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
 
 type Step = 'acolhimento' | 'gatilho' | 'sentia' | 'virada' | 'compromisso' | 'fechamento';
 
 const OUTRO = '__outro__';
+// Piso mínimo de espaço pro topo (relógio/notch/dynamic island): esta tela é
+// um fullScreenModal que às vezes é aberto por cima de outro fullScreenModal
+// (ver panico.tsx), e nesse caso o inset de safe area do topo já veio
+// incorreto (0) do iOS. O piso garante espaço mesmo quando isso acontece.
+const TOPO_MINIMO = 44;
 
 function EscolhaComOutro({
   sugestoes,
@@ -68,6 +73,8 @@ export default function ReflexaoRecaidaScreen() {
   const { t } = useTranslation('reflexaoRecaida');
   const { derivado, registrarReflexaoRecaida } = useAppData();
   const params = useLocalSearchParams<{ gatilho?: string }>();
+  const insets = useSafeAreaInsets();
+  const paddingTopTopo = { paddingTop: Math.max(insets.top, TOPO_MINIMO) };
 
   const [step, setStep] = useState<Step>('acolhimento');
   const [triggerTags, setTriggerTags] = useState<string[]>(params.gatilho ? [params.gatilho] : []);
@@ -82,6 +89,7 @@ export default function ReflexaoRecaidaScreen() {
   const [streakFinal, setStreakFinal] = useState(0);
 
   const sugestoes = getSugestoesPorGatilho(triggerTags[0] ?? null);
+  const compromissos = getCompromissosPadrao();
 
   function alternarGatilho(g: string) {
     setTriggerTags((prev) => (prev.includes(g) ? prev.filter((t) => t !== g) : [...prev, g]));
@@ -108,9 +116,9 @@ export default function ReflexaoRecaidaScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+      <SafeAreaView style={styles.safe} edges={['bottom']}>
         {step === 'acolhimento' && (
-          <View style={styles.cerimonial}>
+          <View style={[styles.cerimonial, paddingTopTopo]}>
             <Text style={styles.eyebrowBronze}>{t('eyebrowBack')}</Text>
             <ThemedText type="titleBig" style={styles.centro}>
               {t('acolhimento.title')}
@@ -123,7 +131,7 @@ export default function ReflexaoRecaidaScreen() {
         )}
 
         {step === 'gatilho' && (
-          <ScrollView contentContainerStyle={styles.content}>
+          <ScrollView contentContainerStyle={[styles.content, paddingTopTopo]}>
             <Text style={styles.eyebrow}>{t('gatilho.eyebrow')}</Text>
             <ThemedText type="titleBig">{t('gatilho.title')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
@@ -151,7 +159,7 @@ export default function ReflexaoRecaidaScreen() {
         )}
 
         {step === 'sentia' && (
-          <ScrollView contentContainerStyle={styles.content}>
+          <ScrollView contentContainerStyle={[styles.content, paddingTopTopo]}>
             <Text style={styles.eyebrow}>{t('sentia.eyebrow')}</Text>
             <ThemedText type="titleBig">{t('sentia.title')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
@@ -175,7 +183,7 @@ export default function ReflexaoRecaidaScreen() {
         )}
 
         {step === 'virada' && (
-          <ScrollView contentContainerStyle={styles.content}>
+          <ScrollView contentContainerStyle={[styles.content, paddingTopTopo]}>
             <Text style={styles.eyebrow}>{t('virada.eyebrow')}</Text>
             <ThemedText type="titleBig">{t('virada.title')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
@@ -202,7 +210,7 @@ export default function ReflexaoRecaidaScreen() {
         )}
 
         {step === 'compromisso' && (
-          <ScrollView contentContainerStyle={styles.content}>
+          <ScrollView contentContainerStyle={[styles.content, paddingTopTopo]}>
             <Text style={styles.eyebrow}>{t('compromisso.eyebrow')}</Text>
             <ThemedText type="titleBig">{t('compromisso.title')}</ThemedText>
             <ThemedText type="small" themeColor="textSecondary">
@@ -210,7 +218,7 @@ export default function ReflexaoRecaidaScreen() {
             </ThemedText>
 
             <EscolhaComOutro
-              sugestoes={sugestoes}
+              sugestoes={compromissos}
               selecionado={compromissoSelecionado}
               onSelecionar={setCompromissoSelecionado}
               customTexto={compromissoCustom}
@@ -239,6 +247,7 @@ export default function ReflexaoRecaidaScreen() {
 function Fechamento({ streakFinal, onVoltar }: { streakFinal: number; onVoltar: () => void }) {
   const { t } = useTranslation('reflexaoRecaida');
   const { derivado } = useAppData();
+  const insets = useSafeAreaInsets();
   const [entrou, setEntrou] = useState(false);
   useEffect(() => {
     setEntrou(true);
@@ -250,7 +259,7 @@ function Fechamento({ streakFinal, onVoltar }: { streakFinal: number; onVoltar: 
   const patenteNome = derivado ? t(`common:ranks.${derivado.patente.nivel.nome}`) : '';
 
   return (
-    <View style={styles.cerimonial}>
+    <View style={[styles.cerimonial, { paddingTop: Math.max(insets.top, TOPO_MINIMO) }]}>
       <BadgeHalo size={140} rings={1} style={styles.vitoriaHalo}>
         <View style={styles.fechamentoIcone}>
           <Text style={styles.fechamentoIconeTxt}>✓</Text>
