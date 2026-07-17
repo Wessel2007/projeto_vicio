@@ -4,13 +4,13 @@
 
 ## 1. Aceitação dos Termos
 
-Estes Termos de Serviço ("Termos") regulam o uso do aplicativo Forja ("Aplicativo", "Serviço"), desenvolvido por Luiz Henrique Wessel ("nós", "nosso"). Ao criar uma conta ou usar o Aplicativo, você ("Usuário") declara que leu, entendeu e concorda com estes Termos e com nossa Política de Privacidade.
+Estes Termos de Serviço ("Termos") regulam o uso do aplicativo Fornalha ("Aplicativo", "Serviço"), desenvolvido por Luiz Henrique Wessel ("nós", "nosso"). Ao criar uma conta ou usar o Aplicativo, você ("Usuário") declara que leu, entendeu e concorda com estes Termos e com nossa Política de Privacidade.
 
 Você deve ter pelo menos 18 anos, ou a maioridade legal em seu local de residência, para usar o Aplicativo. Se não concordar com estes Termos, não utilize o Aplicativo.
 
 ## 2. Natureza do Serviço — Não é aconselhamento médico
 
-O Forja é uma ferramenta de acompanhamento pessoal e gamificação para apoiar o usuário na redução de hábitos compulsivos. **O Aplicativo não é um dispositivo médico, não oferece diagnóstico, tratamento ou aconselhamento profissional de saúde, e não substitui terapia, acompanhamento psicológico ou médico.**
+O Fornalha é uma ferramenta de acompanhamento pessoal e gamificação para apoiar o usuário na redução de hábitos compulsivos. **O Aplicativo não é um dispositivo médico, não oferece diagnóstico, tratamento ou aconselhamento profissional de saúde, e não substitui terapia, acompanhamento psicológico ou médico.**
 
 Não use o Aplicativo em situações de emergência. Em caso de crise, ideação suicida ou risco à sua saúde, procure imediatamente um serviço de emergência (192/193 no Brasil) ou o CVV (188).
 

@@ -187,7 +187,7 @@ export default function PerfilScreen() {
             <Ionicons name="chevron-forward" size={18} color={Accent.tabInativa} />
           </Pressable>
 
-          {/* FORJA PRO */}
+          {/* FORNALHA PRO */}
           {dados.isPro ? (
             <View style={styles.proAtivoCard}>
               <Ionicons name="star" size={15} color={Accent.bronze} />

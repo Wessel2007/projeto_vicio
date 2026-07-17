@@ -13,6 +13,6 @@ export const REVENUECAT_API_KEY_IOS = 'SUBSTITUA_PELA_CHAVE_IOS_DA_REVENUECAT';
 
 // Identificador do Entitlement criado no dashboard da RevenueCat
 // (Entitlements > + New) que representa o acesso Pro. Os dois produtos de
-// assinatura (forja_pro_mensal e forja_pro_anual, ver src/services/assinatura.ts)
+// assinatura (fornalha_pro_mensal e fornalha_pro_anual, ver src/services/assinatura.ts)
 // precisam estar anexados a este entitlement.
 export const ENTITLEMENT_PRO = 'pro';

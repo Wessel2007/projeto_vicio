@@ -43,7 +43,7 @@ export function IntroScreen() {
         <Image source={APP_ICON} style={styles.badgeImage} resizeMode="contain" />
       </Animated.View>
       <Animated.View style={contentStyle}>
-        <ThemedText type="title" style={styles.wordmark}>FORJA</ThemedText>
+        <ThemedText type="title" style={styles.wordmark}>FORNALHA</ThemedText>
         <ThemedText type="eyebrow" themeColor="textSecondary" style={styles.tagline}>
           Forje. Discipline. Ascenda.
         </ThemedText>

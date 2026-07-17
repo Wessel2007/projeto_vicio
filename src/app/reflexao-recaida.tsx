@@ -102,7 +102,7 @@ export default function ReflexaoRecaidaScreen() {
     setStep('fechamento');
   }
 
-  function voltarParaForja() {
+  function voltarParaFornalha() {
     router.dismissTo('/(tabs)' as Href);
   }
 
@@ -229,7 +229,7 @@ export default function ReflexaoRecaidaScreen() {
         )}
 
         {step === 'fechamento' && (
-          <Fechamento streakFinal={streakFinal} onVoltar={voltarParaForja} />
+          <Fechamento streakFinal={streakFinal} onVoltar={voltarParaFornalha} />
         )}
       </SafeAreaView>
     </ThemedView>

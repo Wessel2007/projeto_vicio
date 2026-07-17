@@ -10,7 +10,7 @@ import { limparRankVisto } from '@/hooks/useRankUpCelebration';
 import { configurarCompras, sincronizarStatusPro } from '@/services/assinatura';
 
 function logFalhaStorage(origem: string) {
-  return (erro: unknown) => console.error(`[FORJA] Falha ao salvar dados (${origem})`, erro);
+  return (erro: unknown) => console.error(`[FORNALHA] Falha ao salvar dados (${origem})`, erro);
 }
 
 interface AppDataContextValue {

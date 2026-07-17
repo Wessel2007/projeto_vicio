@@ -28,7 +28,7 @@ export type ThemeColor = keyof typeof Colors;
 // no _layout raiz. Como não são fontes variáveis, a seleção de peso é feita
 // trocando `fontFamily`, não `fontWeight`.
 export const Fonts = {
-  // Archivo — manchetes cerimoniais, marca FORJA, eyebrows, títulos atléticos.
+  // Archivo — manchetes cerimoniais, marca FORNALHA, eyebrows, títulos atléticos.
   display: {
     medium: 'Archivo_500Medium',
     semibold: 'Archivo_600SemiBold',
@@ -102,7 +102,7 @@ export const Accent = {
   orbMid: '#FF5A1E',
   orbEnd: '#A82708',
 
-  // Bronze/dourado — patente, marca FORJA, tudo PRO.
+  // Bronze/dourado — patente, marca FORNALHA, tudo PRO.
   bronze: '#E8B458',
   bronzeMuted: 'rgba(232,180,88,0.7)',
   bronzeBorda: 'rgba(232,180,88,0.28)',

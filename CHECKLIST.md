@@ -73,8 +73,8 @@
       (`configurarCompras`, `comprarPlano`, `restaurarCompras`,
       `sincronizarStatusPro` revalidando o entitlement Pro a cada boot via
       `useAppData`); falta preencher as API keys em `src/config/revenuecat.ts`
-      (placeholders `SUBSTITUA_...`) e criar os produtos `forja_pro_mensal`/
-      `forja_pro_anual` no Play Console (feito) + App Store Connect (pendente,
+      (placeholders `SUBSTITUA_...`) e criar os produtos `fornalha_pro_mensal`/
+      `fornalha_pro_anual` no Play Console (feito) + App Store Connect (pendente,
       depende de Apple Developer Program) + dashboard RevenueCat com o
       entitlement `pro`. Sem API key configurada, o app roda normalmente com o
       toggle de simulação em Perfil > Modo de teste. **Requer EAS dev build**
@@ -90,9 +90,9 @@
 
 ## Build e submissão nas lojas
 
-- [x] Nome/marca do app — FORJA (`app.json`)
+- [x] Nome/marca do app — FORNALHA (`app.json`)
 - [x] Paleta e redesign visual (dark-fogo, animações, Reanimated — ver `design/`)
-- [x] `bundleIdentifier` (iOS) e `package` (Android) — `com.forjaapp.forja`
+- [x] `bundleIdentifier` (iOS) e `package` (Android) — `com.fornalhaapp.fornalha`
       nos dois, em `app.json` (placeholder de identidade; trocar quando
       houver domínio/conta de desenvolvedor definitivos — ver Fase 4.1 do
       `PLANO_POLIMENTO.md`)

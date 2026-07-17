@@ -10,11 +10,11 @@
     "back": "Back"
   },
   "step1": {
-    "wordmark": "FORJA",
+    "wordmark": "FORNALHA",
     "title": "You're about to forge a new version of yourself",
     "subtitle": "Before we start, a few quick questions to shape your journey.",
     "privacyTitle": "Your data is private",
-    "privacyText": "Your answers are stored only on this device — never sent, synced, or shared with anyone. Your safety is always FORJA's top priority."
+    "privacyText": "Your answers are stored only on this device — never sent, synced, or shared with anyone. Your safety is always FORNALHA's top priority."
   },
   "step2": {
     "title": "Your starting point",
@@ -96,7 +96,7 @@
     "outro": "Other"
   },
   "plano": {
-    "eyebrow": "FORJA",
+    "eyebrow": "FORNALHA",
     "headline": "Forging your plan",
     "headlineDone": "Plan forged",
     "phraseDone": "Your journey has been shaped. Let's reveal your first rank.",

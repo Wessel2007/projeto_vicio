@@ -12,8 +12,8 @@ export type PlanoId = 'mensal' | 'anual';
 // Console e como "Product" anexado ao entitlement `pro` no dashboard da
 // RevenueCat (ver src/config/revenuecat.ts).
 export const PLANOS: Record<PlanoId, { precoLabel: string; produtoId: string }> = {
-  mensal: { precoLabel: 'R$19,90/mês', produtoId: 'forja_pro_mensal' },
-  anual: { precoLabel: 'R$149,90/ano', produtoId: 'forja_pro_anual' },
+  mensal: { precoLabel: 'R$19,90/mês', produtoId: 'fornalha_pro_mensal' },
+  anual: { precoLabel: 'R$149,90/ano', produtoId: 'fornalha_pro_anual' },
 };
 
 let configurado = false;
@@ -31,7 +31,7 @@ export function configurarCompras() {
   if (configurado) return;
   const apiKey = chaveDaPlataforma();
   if (!apiKey) {
-    console.warn('[FORJA] RevenueCat não configurado — defina a API key em src/config/revenuecat.ts');
+    console.warn('[FORNALHA] RevenueCat não configurado — defina a API key em src/config/revenuecat.ts');
     return;
   }
   if (__DEV__) {
@@ -57,28 +57,28 @@ export async function sincronizarStatusPro(): Promise<{ isPro: boolean } | null>
     const info = await Purchases.getCustomerInfo();
     return { isPro: statusProDoCliente(info) };
   } catch (erro) {
-    console.error('[FORJA] Falha ao consultar status da assinatura', erro);
+    console.error('[FORNALHA] Falha ao consultar status da assinatura', erro);
     return null;
   }
 }
 
 export async function comprarPlano(plano: PlanoId): Promise<{ sucesso: boolean }> {
   if (!configurado) {
-    console.warn('[FORJA] Tentativa de compra com RevenueCat não configurado');
+    console.warn('[FORNALHA] Tentativa de compra com RevenueCat não configurado');
     return { sucesso: false };
   }
   try {
     const produtoId = PLANOS[plano].produtoId;
     const [produto] = await Purchases.getProducts([produtoId], PURCHASE_TYPE.SUBS);
     if (!produto) {
-      console.error(`[FORJA] Produto ${produtoId} não encontrado (confira se existe na loja e no RevenueCat)`);
+      console.error(`[FORNALHA] Produto ${produtoId} não encontrado (confira se existe na loja e no RevenueCat)`);
       return { sucesso: false };
     }
     const { customerInfo } = await Purchases.purchaseStoreProduct(produto);
     return { sucesso: statusProDoCliente(customerInfo) };
   } catch (erro: any) {
     if (!erro?.userCancelled) {
-      console.error('[FORJA] Falha na compra', erro);
+      console.error('[FORNALHA] Falha na compra', erro);
     }
     return { sucesso: false };
   }
@@ -90,7 +90,7 @@ export async function restaurarCompras(): Promise<{ sucesso: boolean }> {
     const info = await Purchases.restorePurchases();
     return { sucesso: statusProDoCliente(info) };
   } catch (erro) {
-    console.error('[FORJA] Falha ao restaurar compras', erro);
+    console.error('[FORNALHA] Falha ao restaurar compras', erro);
     return { sucesso: false };
   }
 }

@@ -67,7 +67,7 @@ function renderPage({ blocks, htmlLang, activeCode }) {
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>${escapeHtml(blocks[0]?.text ?? 'Privacy Policy')} — FORJA</title>
+<title>${escapeHtml(blocks[0]?.text ?? 'Privacy Policy')} — FORNALHA</title>
 <meta name="robots" content="index, follow" />
 <style>
   :root { color-scheme: dark; }
@@ -118,13 +118,13 @@ function renderPage({ blocks, htmlLang, activeCode }) {
 </head>
 <body>
 <header>
-  <span class="brand">FORJA</span>
+  <span class="brand">FORNALHA</span>
   <nav class="switcher">${renderSwitcher(activeCode)}</nav>
 </header>
 <main>
 ${renderBlocks(blocks)}
 </main>
-<footer>FORJA — heyxist3r@gmail.com</footer>
+<footer>FORNALHA — heyxist3r@gmail.com</footer>
 </body>
 </html>
 `;

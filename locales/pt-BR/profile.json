@@ -4,16 +4,16 @@
     "streakAndXp": "{{dias}} dias de streak · {{xp}} XP"
   },
   "pro": {
-    "activeTitle": "FORJA PRO ativo",
+    "activeTitle": "FORNALHA PRO ativo",
     "activeBenef": "Você tem acesso a todas as patentes e ferramentas.",
     "activePlanMensal": "Plano mensal",
     "activePlanAnual": "Plano anual",
-    "brand": "FORJA PRO",
+    "brand": "FORNALHA PRO",
     "title": "Forje até o Imortal",
     "benef": "Patentes além do Guerreiro · insights do diário · ferramentas de crise expandidas",
     "price": "R$ 19,90/mês",
     "subscribe": "Assinar",
-    "paywallReason": "O plano FORJA PRO"
+    "paywallReason": "O plano FORNALHA PRO"
   },
   "sections": {
     "settings": "CONFIGURAÇÕES",
@@ -31,7 +31,7 @@
     "reminderTime": "Horário do lembrete",
     "proTag": "·PRO",
     "permissionDeniedTitle": "Permissão negada",
-    "permissionDeniedMessage": "Para receber lembretes diários, permita notificações para o FORJA nas configurações do aparelho.",
+    "permissionDeniedMessage": "Para receber lembretes diários, permita notificações para o FORNALHA nas configurações do aparelho.",
     "reminderPaywallReason": "Personalizar o horário do lembrete"
   },
   "aura": {
@@ -83,5 +83,5 @@
     "en": "English",
     "es": "Español"
   },
-  "footer": "O Forja é um apoio de hábito — não substitui acompanhamento terapêutico profissional."
+  "footer": "O Fornalha é um apoio de hábito — não substitui acompanhamento terapêutico profissional."
 }

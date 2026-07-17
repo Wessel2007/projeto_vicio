@@ -1,9 +1,9 @@
 {
   "header": {
-    "eyebrow": "TU FORJA · {{data}}"
+    "eyebrow": "TU FORNALHA · {{data}}"
   },
   "hero": {
-    "daysLabel": "DÍAS EN LA FORJA",
+    "daysLabel": "DÍAS EN LA FORNALHA",
     "hoursSuffix": "sin recaer",
     "daysToNextBold": "{{dias}} días",
     "daysToNextRest": "para {{proximo}} · {{xp}} XP",

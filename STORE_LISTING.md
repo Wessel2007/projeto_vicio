@@ -1,4 +1,4 @@
-# Metadados de loja — FORJA
+# Metadados de loja — FORNALHA
 
 Rascunho para o formulário de submissão da App Store Connect e do Google
 Play Console. Segue a restrição do CLAUDE.md: nenhuma menção a
@@ -20,11 +20,18 @@ validado (ver Fase 3 do `PLANO_POLIMENTO.md`).
 
 ## Nome do app
 
-**FORJA** — nome já definido, mantém-se igual nas duas lojas.
+**FORNALHA** — nome já definido. Nas duas lojas, o nome vem acompanhado da
+tagline, seguindo o padrão comum de apps do nicho (ex.: "Seed: Domine seus
+impulsos"):
+
+- **Apple App Store:** campo "Nome" = `Fornalha`; campo "Subtítulo" (separado,
+  mais 30 caracteres) = `Forje autocontrole`.
+- **Google Play:** só existe um campo de título (até 50 caracteres) — usar a
+  string combinada `Fornalha: Forje autocontrole` (29 caracteres).
 
 ## Subtítulo (App Store — máx. 30 caracteres)
 
-`Disciplina vira hábito`
+`Forje autocontrole`
 
 ## Descrição curta (Google Play — máx. 80 caracteres, mostrada na busca e no topo da ficha)
 
@@ -33,7 +40,7 @@ validado (ver Fase 3 do `PLANO_POLIMENTO.md`).
 ## Descrição completa
 
 ```
-FORJA transforma sua jornada de autocontrole em uma progressão real — não é
+FORNALHA transforma sua jornada de autocontrole em uma progressão real — não é
 só um contador de dias.
 
 Toda vez que você resiste, você avança. Toda recaída é registrada, mas seu
@@ -65,7 +72,7 @@ COMO FUNCIONA
   cifrados. Nada é enviado para servidores, não há conta, não há
   rastreamento.
 
-FORJA é uma ferramenta de apoio de hábito, não um serviço de saúde — não
+FORNALHA é uma ferramenta de apoio de hábito, não um serviço de saúde — não
 substitui terapia ou acompanhamento profissional.
 ```
 

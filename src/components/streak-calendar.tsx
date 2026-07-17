@@ -143,7 +143,7 @@ export function StreakCalendar({ trackingStartDate, relapseDates }: StreakCalend
       </View>
 
       <ThemedText type="small" themeColor="textTertiary" style={styles.nota}>
-        O calendário mostra os dias desde que você começou a usar o FORJA.
+        O calendário mostra os dias desde que você começou a usar o FORNALHA.
       </ThemedText>
     </GlassCard>
   );

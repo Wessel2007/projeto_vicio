@@ -1,4 +1,4 @@
-# FORJA
+# FORNALHA
 
 Projeto pessoal de um app mobile (iOS + Android) de recuperação e controle de
 vício em pornografia, no estilo "I am Sober", mas fortemente gamificado e
@@ -77,7 +77,7 @@ src/
     relatorio.tsx           # relatório semanal/mensal de progresso (PRO)
     streak-detalhe.tsx      # detalhe da jornada/streak atual
     termos-de-servico.tsx   # Termos de Serviço (acessível pelo Perfil)
-    pro.tsx                 # tela de upgrade/paywall FORJA PRO
+    pro.tsx                 # tela de upgrade/paywall FORNALHA PRO
     _layout.tsx             # layout raiz (fontes, splash, stack de modais)
   components/             # componentes de UI reutilizáveis (cards, botões,
                            # anéis de progresso, badges, efeitos de partícula...)
@@ -136,7 +136,7 @@ emulador Android, simulador iOS, ou no [Expo Go](https://expo.dev/go).
 - Fluxo de reflexão pós-recaída (substitui o reset seco de streak)
 - Tempo e dinheiro economizado na streak atual (opcional, configurável em
   Perfil)
-- Identidade visual FORJA ("Aço & Brasa": ícone, splash, animações,
+- Identidade visual FORNALHA ("Aço & Brasa": ícone, splash, animações,
   gradientes, glass cards — ver `design_handoff_forja/`)
 
 **PRO — implementado e funcional:**

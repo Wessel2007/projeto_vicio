@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "FORJA",
+    "name": "Fornalha",
     "slug": "projeto_vicio",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,10 +8,10 @@
     "scheme": "projetovicio",
     "userInterfaceStyle": "dark",
     "ios": {
-      "bundleIdentifier": "com.forjaapp.forja"
+      "bundleIdentifier": "com.fornalhaapp.fornalha"
     },
     "android": {
-      "package": "com.forjaapp.forja",
+      "package": "com.fornalhaapp.fornalha",
       "adaptiveIcon": {
         "backgroundColor": "#0D0F12",
         "foregroundImage": "./assets/images/android-icon-foreground.png"

@@ -1,4 +1,4 @@
-# Plano de Polimento — FORJA (pré-submissão)
+# Plano de Polimento — FORNALHA (pré-submissão)
 
 Gerado em 2026-07-16. Baseado em auditoria do código atual (TypeScript e
 lint limpos — os problemas abaixo são de lógica/integração e itens
@@ -11,7 +11,7 @@ Decisões já tomadas nesta rodada (confirmadas com o Luiz em 2026-07-16):
   uso real**, com escopo pragmático (ver item 5).
 - Integração de pagamento real (RevenueCat/IAP nativo) → **fora deste
   polimento**, fica para uma fase futura separada.
-- `bundleIdentifier`/`package` → usar placeholder `com.forjaapp.forja`
+- `bundleIdentifier`/`package` → usar placeholder `com.fornalhaapp.fornalha`
   (trocar depois quando houver conta de desenvolvedor/domínio definitivo).
 
 ---
@@ -209,7 +209,7 @@ não relacionados).
 ## Fase 4 — Preparação de build e submissão — parcialmente concluída em 2026-07-16
 
 ### ✅ 4.1 `app.json` e `eas.json`
-`ios.bundleIdentifier` e `android.package` = `com.forjaapp.forja`
+`ios.bundleIdentifier` e `android.package` = `com.fornalhaapp.fornalha`
 (placeholder — trocar quando tiver conta de desenvolvedor/domínio
 definitivo). `eas.json` criado com perfis `development`/`preview`/
 `production` + `submit.production`.

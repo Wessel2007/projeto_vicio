@@ -10,11 +10,11 @@
     "back": "Atrás"
   },
   "step1": {
-    "wordmark": "FORJA",
+    "wordmark": "FORNALHA",
     "title": "Estás a punto de forjar una nueva versión de ti mismo",
     "subtitle": "Antes de empezar, algunas preguntas rápidas para moldear tu camino.",
     "privacyTitle": "Tus datos son privados",
-    "privacyText": "Tus respuestas se guardan solo en este dispositivo — nunca se envían, sincronizan ni comparten con nadie. Tu seguridad es siempre la prioridad número uno de FORJA."
+    "privacyText": "Tus respuestas se guardan solo en este dispositivo — nunca se envían, sincronizan ni comparten con nadie. Tu seguridad es siempre la prioridad número uno de FORNALHA."
   },
   "step2": {
     "title": "Tu punto de partida",
@@ -96,7 +96,7 @@
     "outro": "Otro"
   },
   "plano": {
-    "eyebrow": "FORJA",
+    "eyebrow": "FORNALHA",
     "headline": "Forjando tu plan",
     "headlineDone": "Plan forjado",
     "phraseDone": "Tu camino fue moldeado. Vamos a revelar tu primera patente.",

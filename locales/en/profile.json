@@ -4,16 +4,16 @@
     "streakAndXp": "{{dias}}-day streak · {{xp}} XP"
   },
   "pro": {
-    "activeTitle": "FORJA PRO active",
+    "activeTitle": "FORNALHA PRO active",
     "activeBenef": "You have access to all ranks and tools.",
     "activePlanMensal": "Monthly plan",
     "activePlanAnual": "Annual plan",
-    "brand": "FORJA PRO",
+    "brand": "FORNALHA PRO",
     "title": "Forge your way to Immortal",
     "benef": "Ranks beyond Warrior · journal insights · expanded crisis tools",
     "price": "R$19.90/month",
     "subscribe": "Subscribe",
-    "paywallReason": "The FORJA PRO plan"
+    "paywallReason": "The FORNALHA PRO plan"
   },
   "sections": {
     "settings": "SETTINGS",
@@ -31,7 +31,7 @@
     "reminderTime": "Reminder time",
     "proTag": "·PRO",
     "permissionDeniedTitle": "Permission denied",
-    "permissionDeniedMessage": "To receive daily reminders, allow notifications for FORJA in your device settings.",
+    "permissionDeniedMessage": "To receive daily reminders, allow notifications for FORNALHA in your device settings.",
     "reminderPaywallReason": "Customizing the reminder time"
   },
   "aura": {
@@ -83,5 +83,5 @@
     "en": "English",
     "es": "Español"
   },
-  "footer": "FORJA is a habit-support tool — it doesn't replace professional therapeutic care."
+  "footer": "FORNALHA is a habit-support tool — it doesn't replace professional therapeutic care."
 }

@@ -152,7 +152,11 @@ secundária:
 - [x] Definição da árvore de patentes
 - [x] Escolha de stack (React Native + Expo)
 - [x] Esboço das telas do MVP
-- [x] Nome/marca do app — **FORJA**
+- [x] Nome/marca do app — **FORNALHA** (renomeado de "FORJA" em 2026-07-17:
+      já existia app publicado homônimo na mesma categoria de disciplina/
+      hábitos no Google Play; domínio principal escolhido é `appfornalha.com`;
+      título de loja combinado "Fornalha: Forje autocontrole", ver
+      `STORE_LISTING.md`)
 - [x] Setup inicial do projeto Expo (Expo Router, TypeScript, fontes)
 - [x] Implementação das telas (onboarding, home, pânico, diário, conquistas,
       perfil — as 6 telas do MVP existem em `src/app/`)
