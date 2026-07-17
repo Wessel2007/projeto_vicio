@@ -7,7 +7,7 @@ export const RECAIDA_PENALIDADE_PERCENT = 0.25;
 // Bônus fixo de XP por completar o fluxo de reflexão pós-recaída — recompensa
 // a honestidade/reflexão, nunca a recaída em si. Somado por cima da retenção
 // normal de XP da streak (RECAIDA_PENALIDADE_PERCENT), nunca no lugar dela.
-export const REFLEXAO_XP_BONUS = 15;
+export const REFLEXAO_XP_BONUS = 5;
 
 export interface NivelPatente {
   nome: string;
