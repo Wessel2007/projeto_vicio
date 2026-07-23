@@ -18,6 +18,7 @@ import { RippleRings } from '@/components/ripple-rings';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { GATILHOS_COMUNS, getAcaoPorGatilho } from '@/constants/gatilhos';
+import { RESISTENCIA_XP_BONUS } from '@/constants/gamification';
 import { Accent, Colors, Fonts, Radius, Spacing } from '@/constants/theme';
 import { useAppData } from '@/hooks/useAppData';
 import { falarFrase, pararFala } from '@/utils/audio-frases';
@@ -243,6 +244,7 @@ export default function PanicoScreen() {
 
             <Text style={styles.eyebrowBronze}>{t('victory.eyebrow')}</Text>
             <ThemedText type="titleBig" style={styles.centro}>{t('victory.title', { context: tomContexto })}</ThemedText>
+            <Text style={styles.vitoriaXp}>{t('victory.xpGained', { xp: RESISTENCIA_XP_BONUS })}</Text>
             <ThemedText type="body" themeColor="textSecondary" style={styles.cerimonialTexto}>
               {t('victory.text', { context: tomContexto })}
             </ThemedText>
@@ -476,6 +478,12 @@ const styles = StyleSheet.create({
     textShadowRadius: 14,
   },
   eyebrowBronze: { fontFamily: Fonts.display.bold, fontSize: 10, letterSpacing: 4, color: 'rgba(232,180,88,0.8)' },
+  vitoriaXp: {
+    marginTop: -Spacing.two,
+    fontFamily: Fonts.body.extrabold,
+    fontSize: 13,
+    color: Accent.brasaClara,
+  },
   outlineBtn: {
     alignSelf: 'stretch',
     height: 56,

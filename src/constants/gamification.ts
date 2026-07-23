@@ -9,6 +9,13 @@ export const RECAIDA_PENALIDADE_PERCENT = 0.25;
 // normal de XP da streak (RECAIDA_PENALIDADE_PERCENT), nunca no lugar dela.
 export const REFLEXAO_XP_BONUS = 5;
 
+// Bônus fixo de XP por registrar uma resistência (TriggerEntry com
+// resisted: true — Botão de Pânico ou lançamento manual no Diário). Antes,
+// XP só vinha da passagem do tempo (XP_POR_DIA); resistir ativamente a um
+// gatilho não tinha efeito nenhum na progressão, apesar de ser o momento de
+// maior mérito do usuário. Somado direto em savedXP (nunca reseta).
+export const RESISTENCIA_XP_BONUS = 5;
+
 export interface NivelPatente {
   nome: string;
   sublevel: 1 | 2 | 3 | null;

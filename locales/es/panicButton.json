@@ -27,6 +27,7 @@
   "victory": {
     "eyebrow": "OTRO GOLPE DE MARTILLO",
     "title": "Victoria forjada",
+    "xpGained": "+{{xp}} XP por resistir",
     "text": "Cada vez que resistes, construyes quién quieres ser. Esto quedó guardado en tu diario.",
     "title_acolhedor": "Cuidaste de ti mismo",
     "text_acolhedor": "Esto importa, aunque parezca pequeño. Quedó guardado en tu diario, contigo.",

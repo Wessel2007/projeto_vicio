@@ -3,7 +3,12 @@ import { AppData, DEFAULT_DATA, RelapseReflection, TriggerEntry } from '@/types'
 import { DEFAULT_USER_PROFILE, UserProfile } from '@/types/perfil';
 import { carregarDados, salvarDados } from '@/storage';
 import { apagarPerfil, carregarPerfil } from '@/storage/perfil';
-import { RECAIDA_PENALIDADE_PERCENT, REFLEXAO_XP_BONUS, XP_POR_DIA } from '@/constants/gamification';
+import {
+  RECAIDA_PENALIDADE_PERCENT,
+  REFLEXAO_XP_BONUS,
+  RESISTENCIA_XP_BONUS,
+  XP_POR_DIA,
+} from '@/constants/gamification';
 import { calcMaiorStreak, calcPatente, calcStreakDias, calcTotalXP } from '@/utils/gamification';
 import { agendarLembreteDiario, desativarNotificacoes } from '@/notifications';
 import { limparRankVisto } from '@/hooks/useRankUpCelebration';
@@ -153,6 +158,10 @@ function useAppDataState(): AppDataContextValue {
     [persistir],
   );
 
+  // Toda resistência registrada (Botão de Pânico ou lançamento manual no
+  // Diário com "resisti") rende um XP fixo somado em savedXP — recaídas
+  // nunca passam por aqui, elas têm seu próprio caminho em
+  // registrarReflexaoRecaida, então não há risco de premiar os dois lados.
   const adicionarEntrada = useCallback((entry: Omit<TriggerEntry, 'id' | 'date'>) => {
     setDados((prev) => {
       if (!prev) return prev;
@@ -161,7 +170,11 @@ function useAppDataState(): AppDataContextValue {
         id: Date.now().toString(),
         date: new Date().toISOString(),
       };
-      const next = { ...prev, entries: [nova, ...prev.entries] };
+      const next = {
+        ...prev,
+        entries: [nova, ...prev.entries],
+        savedXP: prev.savedXP + (entry.resisted ? RESISTENCIA_XP_BONUS : 0),
+      };
       persistir(next, 'adicionarEntrada');
       return next;
     });

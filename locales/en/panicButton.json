@@ -27,6 +27,7 @@
   "victory": {
     "eyebrow": "ANOTHER HAMMER STRIKE",
     "title": "Victory forged",
+    "xpGained": "+{{xp}} XP for resisting",
     "text": "Every time you resist, you build who you want to become. This has been saved to your journal.",
     "title_acolhedor": "You took care of yourself",
     "text_acolhedor": "This matters, even if it feels small. It's been saved to your journal, with you.",
